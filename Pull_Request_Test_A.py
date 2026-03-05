@@ -1,1 +1,1 @@
-#This file will be used to test the pull request in GitHub
+#THIS FILE HAS BEEN EDITED AND SHOULD CREATE A CONFLICT. file will be used to test the pull request in GitHub
