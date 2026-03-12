@@ -1,0 +1,59 @@
+Possible Names: SousChef/CookBook/...
+
+Summary: A website in which users are able to upload recipes and find and review the recipes of other users.
+
+
+Key:
+☐ = Feature Incomplete
+☑ = Feature Completed
+⮽ = Feature Discontinued/Removed
+
+Proposed Features (In Order of Importance):
+__________________________________________________________________________________________________________________________________________________
+1. Adding Your Own Recipes:                                         
+    ☐ The ability to add your own recipes to the database               
+    Extended Feature:
+        ☐ The ability to select who can view the recipes you have created
+__________________________________________________________________________________________________________________________________________________
+2. Searching For Recipes:
+    ☐ The ability to view other recipes in the database
+    ☐ The ability to search for recipes by keyword (e.g Pizza, Risotto etc)
+    Extended Feature:
+        ☐ The ability to filter recipes based on their features
+            ☐ Filter by dietary requirements (e.g Gluten Free, Vegetarian etc)
+            ☐ Filter based on ingredients you want to use (i.e Recipe Must Contain... e.g Cabbage, Cornflakes, Milk etc)
+            ☐ Filter by tag (e.g Healthy, High Protein etc)
+            ☐ Filter by meal type (e.g Dinner, Snacks, Drinks etc)
+__________________________________________________________________________________________________________________________________________________
+3. Reviewing Recipes:
+    ☐ The ability to leave a review on someone else's recipes
+    Extended Feature:
+        ☐ Be able to include a star review for taste, accuracy etc
+        ☐ Be able to include how long it took you to make the meal
+        ☐ Be able to include a picture
+        ☐ Be able to include other notes (e.g substituted x for y and it worked etc)
+__________________________________________________________________________________________________________________________________________________
+4. Shopping List:
+    ☐ Select recipes and it will compile you a shopping list of required ingredients
+    Extended Feature:
+        ☐ Be able to indicate how many you are serving and it adjusts quantities
+__________________________________________________________________________________________________________________________________________________
+5. Saving Recipes:
+    ☐ Be able to save recipes into the user's personal categories
+    ☐ Be able to Favourite Recipes or add them to a frequently used list
+    Extended Feature:
+        ☐ Be able to group recipes that you would cook all in the same week (e.g recipes that require similar ingredients)
+        ☐ Be able to select a weekly set of recipes to create a shopping list from
+__________________________________________________________________________________________________________________________________________________
+6. Following Other Users:
+    ☐ Be able to follow users you like, to get a notification when they add new recipes
+    ☐ Be able to have friends who will (optionally) be able to test and review your recipes before they go public
+__________________________________________________________________________________________________________________________________________________
+7. MyKitchen:
+    ☐ A section where a user stores details about their kitchen
+    ☐ Includes which appliances they have (e.g Air fryer, Oven etc)
+    ☐ Uses this information when searching to avoid recipes that require appliances they don't have
+    Extended Feature:
+        ☐ The ability to indicate which system of measurement you use (e.g turns all Oz measurements into g etc)
+        ☐ The ability to indicate power of things such as Microwaves (e.g Converts instructions for a 1000 watt microwave into a 1200 watt one)
+__________________________________________________________________________________________________________________________________________________
