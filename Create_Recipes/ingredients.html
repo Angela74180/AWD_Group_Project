@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang = "en">
+    <head>
+        <meta charset = "UTF-8">
+        <title>Create Recipe Form</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="custom.css">
+        <script src="editTags.js"></script>
+        <script src="editIngredients.js"></script>
+        <script src="editAppliances.js"></script>
+        <script src="previewRecipe.js"></script>
+    </head>
+    <body>
+        <div class = "div_main">
+            <h1>Create a Recipe</h1>
+            <form name = "Create Recipe" onsubmit="return validateForm()">
+                Recipe Name: <input id = "recipeName" type = "text" required>
+                <br>
+                <br>
+                Recipe Type:
+                <select>
+                    <option value = Breakfast>Breakfast</option>
+                    <option value = Lunch>Lunch</option>
+                    <option value = Dinner>Dinner</option>
+                    <option value = Dessert>Dessert</option>
+                    <option value = Sweet_treat>Sweet Treat</option>
+                    <option value = Baked_good>Baked Good</option>
+                    <option value = Drink>Drink</option>
+                    <option value = Snack>Snack</option>
+                    <option value = Side>Side</option>
+                    <option value = Meat>Meat</option>
+                    <option value = Other>Other</option>
+                </select>
+                <br>
+                <br>
+                Recipe Difficulty:
+                <select>
+                    <option value = Easy>Easy</option>
+                    <option value = Medium>Medium</option>
+                    <option value = Hard>Hard</option>
+                </select>
+                <br>
+                <br>
+                
+                <fieldset>
+                    <legend>Tags</legend>
+                    <div id="Add_Tags"></div>
+                    
+                    <fieldset class="tag">
+                        <button type="button" class="btn btn-remove" onclick="removeTag()">- Remove</button>
+                        <input id="tag1" type="text" placeholder = "(e.g Gluten Free, High Protein)" required>
+                    </fieldset>
+                    <br>
+                    <button type="button" class="btn btn-add" onclick="addTag()">+ Add Tag</button>
+                </fieldset>
+                <br>
+
+                Prep Time: <input id = "estimatedHours" type = "number" min = "0" required> hour/s <input id = "estimatedMins" type = "number" min = "0" required> min/s
+                <br>
+                <br>
+                Cooking Time: <input id = "estimatedHours" type = "number" min = "0" required> hour/s <input id = "estimatedMins" type = "number" min = "0" required> min/s
+                <br>
+                <br>
+
+                Description:
+                <br>
+                <textarea id = "Description" name = "Description" rows="8" cols="50"></textarea>
+                <br>
+                <br>
+
+                Cover Photo:
+                <br>
+                <input id = "coverPhoto" type = "file" accept="image/*">
+                <br>
+                <br>
+
+                <fieldset>
+                    <legend>Ingredients</legend>                    
+                    <div id="Add_Ingredients"></div>
+                    <button type="button" class="btn btn-add" onclick="addIngredient()">+ Add Ingredient</button>
+                </fieldset>
+                <br>
+
+                <fieldset>
+                    <legend>Appliances/Special Equipment</legend>
+                    <div id="Add_Appliances"></div>
+                    <fieldset class="appliance">
+                        <legend class = "applicance_num">Appliance 1:</legend>
+                        <button type="button" class="btn btn-remove" onclick="removeAppliance('${row.id}')">- Remove</button>
+                        <input id="appliance${appliance_id_counter}" class="equipment_input" list="equipment" placeholder = "Appliance/Equipment" required>
+                        <datalist id="equipment">
+                            <option value = "Oven"></option>
+                            <option value = "Stove"></option>
+                            <option value = "Microwave"></option>
+                            <option value = "Refrigerator"></option>
+                            <option value = "Freezer"></option>
+                            <option value = "Blender"></option>
+                            <option value = "Kettle"></option>
+                            <option value = "Toaster"></option>
+                            <option value = "Cutting Board"></option>
+                            <option value = "Mixer"></option>
+                            <option value = "BBQ Grill"></option>
+                            <option value = "Food Proccessor"></option>
+                            <option value = "Air Fryer"></option>
+                            <option value = "Slow Cooker"></option>
+                            <option value = "Deep Fryer"></option>
+                            <option value = "Coffee Grinder"></option>
+                            <option value = "Pressure Cooker"></option>
+                            <option value = "Rice Cooker"></option>
+                            <option value = "Sandwich Maker/Press"></option>
+                            <option value = "Waffle Maker"></option>
+                            <option value = "Juicer"></option>
+                            <option value = "Milk Frother"></option>
+                            <option value = "Ice Cream Maker"></option>
+                            <option value = "Bread Maker"></option>
+                            <option value = "Spiralizer"></option>
+                            <option value = "Pasta Maker"></option>
+                            <option value = "Sous Vide Cooker"></option>
+                            <option value = "Garlic Press"></option>
+                            <option value = "Meat Tenderizer"></option>
+                            <option value = "Sushi Roller"></option>
+                            <option value = "Kitchen Blowtorch"></option>
+                            <option value = "Thermometers"></option>
+                            <option value = "Digital Scales"></option>
+                            <option value = "Other"></option>
+                        </datalist>
+                    </fieldset>
+                    <br>
+                    <button type="button" class="btn btn-add" onclick="addAppliance()">+ Add Appliance</button>
+                </fieldset>
+                <br>
+
+                <fieldset>
+                    <legend>Method</legend>
+                    <fieldset class="step">
+                        <legend>Step 1:</legend>
+                        <button type="button" class="btn btn-remove" onclick="removeStep()">- Remove</button>
+                        <input type = "text" placeholder = "Name Step (e.g Prep)">
+                        <br>
+                        <textarea name = "Step1" rows="4" cols="45" required></textarea>
+                        [INCLUDE OPTION TO ADD A PHOTO]
+                    </fieldset>
+
+                    <br>
+                    <button type="button" class="btn btn-add" onclick="addStep()">+ Add Step</button>
+                    <script src="editSteps.js"></script>
+                </fieldset>
+                <br>
+                <br>
+
+                Visibility: 
+                <select>
+                    <option value = Private>Private</option>
+                    <option value = Friends_Only>Friends Only</option>
+                    <option value = Public>Public</option>
+                </select>
+                <br>
+                <br>
+                Allow Ratings: <input type = "checkbox" checked>
+                <br>
+                Allow Reviews: <input type = "checkbox" checked>
+                <br>
+                <br>
+                <br>
+                <button type="button" class="btn btn-primary" onclick="previewRecipe()">Preview Recipe</button>
+                <br>
+                <br>
+                <button type="button" class="btn btn-secondary">Save as Draft</button>
+                <br>
+                <br>
+                <button type="submit" class="btn btn-primary">Publish Recipe</button>
+            </form>
+        </div>
+    </body>
+</html>

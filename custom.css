@@ -1,0 +1,55 @@
+body {
+  background-color: rgb(255, 253, 244);
+  font-family: "Bahnschrift Light";
+  font-stretch: condensed;
+}
+
+.div_main{
+  padding: 5%; 
+}
+
+fieldset {
+  all: revert;
+  border-color: gray;
+  border-style: solid;
+  border-width: 1px;
+  padding: 2%;
+}
+legend {
+  all: revert;
+}
+
+input{
+  padding-top: 0px;
+  padding-bottom: 0px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+select {
+  background-color: rgb(240, 240, 240);
+  font-family: "Bahnschrift Light";
+  font-stretch: condensed;
+}
+
+.btn-remove {
+  background-color: rgb(255, 115, 115);
+  padding-top: 2px;
+  padding-bottom: 0px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.btn-remove:hover{
+  background-color: rgb(240, 100, 100);
+}
+
+.btn-add {
+  background-color: rgb(255, 210, 75);
+  padding-top: 2px;
+  padding-bottom: 0px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.btn-add:hover{
+  background-color: rgb(247, 195, 35);
+}
