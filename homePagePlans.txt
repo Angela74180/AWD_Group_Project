@@ -36,3 +36,10 @@ SPECIFIC FEATURES:
     - my reviews
     - my kitchen
     - settings
+
+
+
+[STYLISTIC NOTES]
+- pop out profile
+    - will pop out when the profile circle is clicked on
+    - will remain popped out until the user clicks off
