@@ -1,0 +1,38 @@
+GENERAL FEATURES:
+- search bar
+    - leads to explore page
+- pop out side profile section
+    - will pop out when you click on the profile circle
+    - will remain there until you click on a different part of the page
+
+
+
+SPECIFIC FEATURES:
+<LOGGED OUT>
+- interactive list of a few features of the website:
+    - save your favourite recipes!
+    - view other ppls recipes!
+    - leave reviews!
+    - something to do with appliances and ingredients specification to find recipes
+    etc...
+- "login to unlock all these features!"
+- most popular recipes this month
+- popular chefs this month?
+
+- pop out profile section
+    - sign up
+    - login
+
+
+<LOGGED IN>
+- recipes you've looked at recently
+- recent reviews on your recipes/your trending recipes
+- most popular recipes this month
+- popular chefs this month?
+
+- pop out profile section
+    - my recipes
+    - saved recipes
+    - my reviews
+    - my kitchen
+    - settings
