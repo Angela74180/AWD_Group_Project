@@ -14,8 +14,12 @@
         <script src="{{ url_for('static', filename='Create_Recipe/getRecipeInfo.js') }}"></script>
         <script src="{{ url_for('static', filename='Create_Recipe/previewRecipe.js') }}"></script>
         <script src="{{ url_for('static', filename='Create_Recipe/submitRecipeForm.js') }}"></script>
+        <script src="{{ url_for('static', filename='Create_Recipe/populateRecipeDetails.js') }}"></script>
+        <script>
+            let recipe_details_dict = {{ recipe_details_dict | tojson }};
+        </script>
     </head>
-    <body onload="console.log('You have navigated to the Create Recipe page')">
+    <body onload="populate(recipe_details_dict)">
         <div class = "div_main">
             <h1>Create a Recipe</h1>
             <form name = "Create Recipe" action="/" onsubmit="return handleRecipeForm()">

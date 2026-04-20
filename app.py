@@ -5,10 +5,10 @@ app = Flask(__name__)
 @app.route('/')
 @app.route('/index')
 def index():
-    return '<h1>Hello World!</h1>'
+    return '<h1>THIS WILL BE A HOME PAGE</h1>'
 
-@app.route('/create_recipe')
-def create_recipe():
+@app.route('/create_recipe/<recipe_num>')
+def create_recipe(recipe_num):
 
     recipe_details_dict = {
         "recipeName": "My Pancake Recipe",
@@ -43,7 +43,7 @@ def create_recipe():
         ]
     }
 
-    return render_template('create_recipe.html') 
+    return render_template('create_recipe.html', recipe_details_dict=recipe_details_dict) 
 
 
 

@@ -1,6 +1,6 @@
 let ingredient_id_counter = 0;
 
-document.addEventListener("DOMContentLoaded", addIngredient);
+// document.addEventListener("DOMContentLoaded", addIngredient);
 
 function addIngredient() {
     ingredient_id_counter++;

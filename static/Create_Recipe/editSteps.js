@@ -1,6 +1,6 @@
 let step_id_counter = 0;
 
-document.addEventListener("DOMContentLoaded", addStep);
+// document.addEventListener("DOMContentLoaded", addStep);
 
 function addStep(){
     step_id_counter++;

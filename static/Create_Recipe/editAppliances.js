@@ -1,6 +1,6 @@
 let appliance_id_counter = 0;
 
-document.addEventListener("DOMContentLoaded", addAppliance);
+// document.addEventListener("DOMContentLoaded", addAppliance);
 
 function chosenAppliance(appliance) {
     let details = appliance.parentElement.childNodes[7];

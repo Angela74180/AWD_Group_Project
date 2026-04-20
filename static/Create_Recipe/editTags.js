@@ -1,6 +1,6 @@
 let tag_id_counter = 0;
 
-document.addEventListener("DOMContentLoaded", addTag);
+// document.addEventListener("DOMContentLoaded", addTag);
 
 function addTag() {
     tag_id_counter++;
