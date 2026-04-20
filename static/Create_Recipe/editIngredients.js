@@ -2,7 +2,7 @@ let ingredient_id_counter = 0;
 
 // document.addEventListener("DOMContentLoaded", addIngredient);
 
-function addIngredient() {
+function addIngredient(ingredientDict) {
     ingredient_id_counter++;
 
     let container = document.getElementById("Ingredients");
@@ -12,9 +12,9 @@ function addIngredient() {
     newIngredient.setAttribute("class", "ingredient");
     newIngredient.innerHTML = `
         <button type="button" class="btn btn-remove" onclick="removeIngredient(event)">- Remove</button>
-        <input type = "text" placeholder = "Ingredient Name" required> 
-        <input type = "number" min = "0" placeholder = "Quantity (e.g 750, 0.25)">
-        <input list="units" placeholder = "Units" required>
+        <input type = "text" placeholder = "Ingredient Name" value = "${handleQuotes(ingredientDict["name"])}" required> 
+        <input type = "number" min = "0" placeholder = "Quantity (e.g 750, 0.25)" value = "${ingredientDict["quantity"]}" required>
+        <input list="units" placeholder = "Units" value = "${handleQuotes(ingredientDict["units"])}" required>
         <datalist id="units">
             <option value = '"Whole"'>(For ingredients that aren't to be divided, e.g eggs)</option>
             <option value = "mL">Millilitres</option>
@@ -40,7 +40,7 @@ function addIngredient() {
             <option value = '"To Taste"'>(Quantity will not be included when published)</option>
         </datalist>
         <br>
-        <textarea placeholder="(Optional) Notes: 500 Character Limit" rows = "2" maxlength="500" style="margin-top: 2%"></textarea>
+        <textarea placeholder="(Optional) Notes: 500 Character Limit" rows = "2" maxlength="500" style="margin-top: 2%">${handleQuotes(ingredientDict["desc"])}</textarea>
     `;
 
     container.appendChild(newIngredient);

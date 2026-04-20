@@ -34,7 +34,7 @@ def create_recipe(recipe_num):
 
         "appliances": [
             {"name": "Stove", "extraData": "", "desc": ""},
-            {"name": "Microwave", "extraData": "850", "desc": ""}
+            {"name": "Microwave", "extraData": "850", "desc": "For warming butter"}
         ],
 
         "steps": [

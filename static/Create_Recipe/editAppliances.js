@@ -2,24 +2,26 @@ let appliance_id_counter = 0;
 
 // document.addEventListener("DOMContentLoaded", addAppliance);
 
-function chosenAppliance(appliance) {
-    let details = appliance.parentElement.childNodes[7];
+function chosenAppliance(appliance, extraData) {
+    console.log(appliance);
+
+    let details = appliance.parentElement.getElementsByTagName("div")[0];
     details.innerHTML = "";
 
     if (appliance.value == "Microwave") {
         details.innerHTML = `
-        Wattage: <input type = "number" style="margin-top: 2%" placeholder = "(e.g 850, 1000, 1200)" min = "400" required> W</input>
+        Wattage: <input type = "number" style="margin-top: 2%" placeholder = "(e.g 850, 1000, 1200)" min = "400" value = "${handleQuotes(extraData)}" required> W</input>
         `;
     }
 
     if (appliance.value == "Other") {
         details.innerHTML = `
-        Appliance/Special Equipment Name: <input type = "text" style="margin-top: 2%" required></input>
+        Appliance/Special Equipment Name: <input type = "text" style="margin-top: 2%" value = "${handleQuotes(extraData)}" required></input>
         `;
     }
 }
 
-function addAppliance() {
+function addAppliance(applianceDict) {
     appliance_id_counter++;
 
     let container = document.getElementById("Appliances");
@@ -29,7 +31,7 @@ function addAppliance() {
     newAppliance.setAttribute("class", "appliance");
     newAppliance.innerHTML = `
         <button type="button" class="btn btn-remove" onclick="removeAppliance(event)">- Remove</button>
-        <input class="equipment_input" list="equipment" placeholder = "Appliance/Equipment" onchange="chosenAppliance(event.target)" required>
+        <input class="equipment_input" list="equipment" placeholder = "Appliance/Equipment" onchange="chosenAppliance(event.target, '')" value = "${handleQuotes(applianceDict["name"])}" required>
         <datalist id="equipment">
             <option value = "Other"></option>
             <option value = "Oven"></option>
@@ -67,10 +69,11 @@ function addAppliance() {
             <option value = "Digital Scales"></option>
         </datalist>
         <div id="applianceDetails"></div>
-        <textarea placeholder="(Optional) Notes: 500 Character Limit" rows = "2" maxlength="500" style="margin-top: 2%"></textarea>
+        <textarea placeholder="(Optional) Notes: 500 Character Limit" rows = "2" maxlength="500" style="margin-top: 2%">${handleQuotes(applianceDict["desc"])}</textarea>
     `;
-
     container.appendChild(newAppliance);
+
+    chosenAppliance(newAppliance);
 }
 
 function removeAppliance(removeButton) {

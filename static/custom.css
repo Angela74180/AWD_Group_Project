@@ -107,6 +107,7 @@ select {
   justify-content: space-between;
   align-items: center;
   background-color: #ffbb94;
+  background-color: rgb(255, 204, 75);
   padding: 10px 20px;
   color: white;
   position: sticky;

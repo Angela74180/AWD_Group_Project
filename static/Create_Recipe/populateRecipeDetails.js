@@ -16,14 +16,16 @@ function populate(recipe_details_dict) {
     document.getElementById("timeCheckbox").checked = recipe_details_dict["timeSplit"];
     splitTime(recipe_details_dict["timeList"]);
 
+    // DO PHOTO!!
 
+    document.getElementById("Description").value = recipe_details_dict["recipeDescription"];
 
-    for (let i = 0; i < recipe_details_dict["ingredients"].length; i++){
-        addIngredient();
+    for (ingredient of recipe_details_dict["ingredients"]){
+        addIngredient(ingredient);
     }
 
-    for (let i = 0; i < recipe_details_dict["appliances"].length; i++){
-        addAppliance();
+    for (appliance of recipe_details_dict["appliances"]){
+        addAppliance(appliance);
     }
 
     for (let i = 0; i < recipe_details_dict["steps"].length; i++){
