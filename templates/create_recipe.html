@@ -4,16 +4,16 @@
         <meta charset = "UTF-8">
         <title>Create Recipe Form</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-        <link rel="stylesheet" href="../custom.css">
-        <script src="editTags.js"></script>
-        <script src="editIngredients.js"></script>
-        <script src="editAppliances.js"></script>
-        <script src="editSteps.js"></script>
-        <script src="editTime.js"></script>
-        <script src="timeCalculation.js"></script>
-        <script src="getRecipeInfo.js"></script>
-        <script src="previewRecipe.js"></script>
-        <script src="submitRecipeForm.js"></script>
+        <link rel="stylesheet" href="{{ url_for('static', filename='custom.css') }}">
+        <script src="{{ url_for('static', filename='Create_Recipe/editTags.js') }}"></script>
+        <script src="{{ url_for('static', filename='Create_Recipe/editIngredients.js') }}"></script>
+        <script src="{{ url_for('static', filename='Create_Recipe/editAppliances.js') }}"></script>
+        <script src="{{ url_for('static', filename='Create_Recipe/editSteps.js') }}"></script>
+        <script src="{{ url_for('static', filename='Create_Recipe/editTime.js') }}"></script>
+        <script src="{{ url_for('static', filename='Create_Recipe/timeCalculation.js') }}"></script>
+        <script src="{{ url_for('static', filename='Create_Recipe/getRecipeInfo.js') }}"></script>
+        <script src="{{ url_for('static', filename='Create_Recipe/previewRecipe.js') }}"></script>
+        <script src="{{ url_for('static', filename='Create_Recipe/submitRecipeForm.js') }}"></script>
     </head>
     <body onload="console.log('You have navigated to the Create Recipe page')">
         <div class = "div_main">
