@@ -12,11 +12,11 @@ def create_recipe(recipe_num):
 
     recipe_details_dict = {
         "recipeName": "My Pancake Recipe",
-        "recipeType": "Breakfast",
-        "recipeDifficulty": "Simple",
+        "recipeType": "Dessert",
+        "recipeDifficulty": "Challenging",
         "tagList": ["Vegetarian", "YAY"],
         "timeSplit": False,
-        "timeList": {"totalTime": [1, 20], "prepTime": [0, 0], "cookingTime": [0, 0]},
+        "timeList": {"totalTime": [1, 20], "prepTime": [0, 30], "cookingTime": [0, 50]},
         "recipeDescription": "YOU WILL LOVE THIS. I SWEAR.",
         "recipeCoverImage": "",
         "visibility": "Friends_Only",

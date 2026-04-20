@@ -2,7 +2,7 @@ let tag_id_counter = 0;
 
 // document.addEventListener("DOMContentLoaded", addTag);
 
-function addTag() {
+function addTag(tagName) {
     tag_id_counter++;
 
     let container = document.getElementById("Tags");
@@ -12,7 +12,7 @@ function addTag() {
     newTag.setAttribute("class", "tag");
     newTag.innerHTML = `
         <button type="button" class="btn btn-remove" onclick="removeTag(event)">- Remove</button>
-        # <input type="text" placeholder = "(e.g Gluten Free, High Protein)" required>
+        # <input type="text" placeholder = "(e.g Gluten Free, High Protein)" value = "${handleQuotes(tagName)}" required>
     `;
 
     container.appendChild(newTag);
