@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Explore - CookBook</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">CookBook</div>
+
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="explore.html">Explore</a></li>
+            <li><a href="my_recipes.html">My Recipes</a></li>
+            <li><a href="saved.html">Saved</a></li>
+            <li><a href="my_kitchen.html">MyKitchen</a></li>
+            <li><a href="profile.html">Profile</a></li>
+        </ul>
+    </nav>
+
+    <h1>Explore Page</h1>
+
+    <input type="search" id="searchBar" placeholder="Search recipes...">
+
+<div id="recipeList"></div>
+
+<script>
+const recipes = [ //Front-end database for the meantime 
+    { title: "Spaghetti Bolognese"},
+    { title: "Chicken Curry"},
+    { title: "Beef Tacos"},
+    { title: "Sushi Rolls"}
+];
+
+const recipeList = document.getElementById("recipeList");
+const searchBar = document.getElementById("searchBar");
+
+function displayRecipes(filteredRecipes) {
+    recipeList.innerHTML = "";
+
+    filteredRecipes.forEach(recipe => {
+        const div = document.createElement("div");
+        div.textContent = recipe.title;
+        recipeList.appendChild(div);
+    });
+}
+
+searchBar.addEventListener("input", () => {
+    const searchTerm = searchBar.value.toLowerCase();
+
+    if (searchTerm == ""){
+        recipeList.innerHTML = "";
+        return;
+    }
+
+    const filtered = recipes.filter(recipe =>
+        recipe.title.toLowerCase().startsWith(searchTerm)
+        );
+
+    displayRecipes(filtered);
+});
+</script>
+
+</body>
+</html>
