@@ -3,7 +3,6 @@ let appliance_id_counter = 0;
 // document.addEventListener("DOMContentLoaded", addAppliance);
 
 function chosenAppliance(appliance, extraData) {
-    console.log(appliance);
 
     let details = appliance.parentElement.getElementsByTagName("div")[0];
     details.innerHTML = "";
@@ -73,7 +72,7 @@ function addAppliance(applianceDict) {
     `;
     container.appendChild(newAppliance);
 
-    chosenAppliance(newAppliance);
+    chosenAppliance(newAppliance.getElementsByTagName("input")[0], applianceDict["extraData"]);
 }
 
 function removeAppliance(removeButton) {
