@@ -28,7 +28,7 @@ function populate(recipe_details_dict) {
         addAppliance(appliance);
     }
 
-    for (let i = 0; i < recipe_details_dict["steps"].length; i++){
-        addStep();
+    for (step of recipe_details_dict["steps"]){
+        addStep(step);
     }
 }

@@ -2,7 +2,7 @@ let step_id_counter = 0;
 
 // document.addEventListener("DOMContentLoaded", addStep);
 
-function addStep(){
+function addStep(stepDict){
     step_id_counter++;
 
     let container = document.getElementById("Steps");
@@ -15,9 +15,9 @@ function addStep(){
     newStep.innerHTML = `
         <legend>Step ${step_num}</legend>
         <button type="button" class="btn btn-remove" onclick="removeStep(event)">- Remove</button>
-        <input type = "text" placeholder = "Name Step (e.g Prep)">
+        <input type = "text" placeholder = "Name Step (e.g Prep)" value = "${handleQuotes(stepDict["name"])}">
         <br>
-        <textarea placeholder="500 Character Limit" rows = "2" maxlength="500" style="margin-top: 2%" required></textarea>
+        <textarea placeholder="500 Character Limit" rows = "2" maxlength="500" style="margin-top: 2%" required>${handleQuotes(stepDict["desc"])}</textarea>
         (Optional) Step Picture: <input id = "coverPhoto" type = "file" accept="image/*">
     `;
 
