@@ -4,7 +4,24 @@ function previewRecipe() {
   // Make page initially empty so that if there was already content there from a previous call, it is removed
   previewPage.document.body.innerHTML = "";
 
-  previewPage.document.write('<html><head><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"><link rel="stylesheet" href="static/custom.css"><title>Recipe Preview</title></head><body>');
+  previewPage.document.write('<html><head>');
+  previewPage.document.write('<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">');
+  previewPage.document.write('<link rel="stylesheet" href="static/custom.css">');
+  previewPage.document.write('</head><body>');
+  previewPage.document.write(`
+    <nav class="navbar">
+        <div class="logo">CookBook</div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="explore.html">Explore</a></li>
+            <li><a href="my-recipes.html">My Recipes</a></li>
+            <li><a href="saved.html">Saved</a></li>
+            <li><a href="mykitchen.html">MyKitchen</a></li>
+            <li><a href="profile.html">Profile</a></li>
+        </ul>
+    </nav>`
+  );
+    
   previewPage.document.write('<div class = "div_main">');
 
   let recipe_details_dict = getRecipeInfo()
