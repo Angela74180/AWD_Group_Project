@@ -11,17 +11,18 @@ def index():
 def create_recipe(recipe_num):
 
     recipe_details_dict = {
+        "author": "Angela74180",
         "recipeName": "My Pancake Recipe",
         "recipeType": "Dessert",
         "recipeDifficulty": "Challenging",
         "tagList": ["Vegetarian", "YAY"],
-        "timeSplit": False,
+        "timeSplit": True,
         "timeList": {"totalTime": [1, 20], "prepTime": [0, 30], "cookingTime": [0, 50]},
         "recipeDescription": "YOU WILL LOVE THIS. I SWEAR.",
         "recipeCoverImage": "",
         "visibility": "Friends_Only",
-        "allowRatings": True,
-        "allowReviews": True,
+        "allowRatings": False,
+        "allowReviews": False,
         "status": "Draft",
 
         "ingredients": [

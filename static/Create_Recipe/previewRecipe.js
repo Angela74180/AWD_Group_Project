@@ -13,7 +13,7 @@ function previewRecipe() {
   previewPage.document.write('<h1 style="border-bottom: 0px;"> ~ ' + recipe_details_dict["recipeName"] + ' ~ </h1>');
 
   // Author
-  previewPage.document.write('<p>- AUTHOR NAME • Version NUM</p>');
+  previewPage.document.write('<p>- '+ recipe_details_dict["author"] +'</p>');
 
   // Tags
   if (recipe_details_dict["tagList"].length > 0) {

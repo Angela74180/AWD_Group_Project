@@ -31,4 +31,9 @@ function populate(recipe_details_dict) {
     for (step of recipe_details_dict["steps"]){
         addStep(step);
     }
+
+    document.getElementById("visibility").value = handleQuotes(recipe_details_dict["visibility"]);
+    document.getElementById("allowRatings").checked = recipe_details_dict["allowRatings"];
+    document.getElementById("allowReviews").checked = recipe_details_dict["allowReviews"];
+
 }

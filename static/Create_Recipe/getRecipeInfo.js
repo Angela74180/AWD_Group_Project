@@ -1,6 +1,9 @@
 function getRecipeInfo(){
     let recipe_details_dict = {}
 
+    alert("Author is currently hardcoded");
+    // NEED TO MAKE THE AUTHOR CHANGE DYNAMICALLY
+    recipe_details_dict["author"] = "Angela";
     recipe_details_dict["recipeName"] = document.getElementById("recipeName").value;
     recipe_details_dict["recipeType"] =  document.getElementById("recipeType").value;
     recipe_details_dict["recipeDifficulty"] = document.getElementById("recipeDifficulty").value;
