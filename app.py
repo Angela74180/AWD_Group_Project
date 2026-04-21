@@ -10,7 +10,28 @@ def index():
 @app.route('/create_recipe/<recipe_num>')
 def create_recipe(recipe_num):
 
-    recipe_details_dict = {
+    recipes_dict = {}
+
+    empty_dict = {
+        "author": "",
+        "recipeName": "",
+        "recipeType": "Breakfast",
+        "recipeDifficulty": "Simple",
+        "tagList": [""],
+        "timeSplit": False,
+        "timeList": {"totalTime": ["", ""], "prepTime": ["", ""], "cookingTime": ["", ""]},
+        "recipeDescription": "",
+        "recipeCoverImage": "",
+        "visibility": "Private",
+        "allowRatings": True,
+        "allowReviews": True,
+        "status": "Draft",
+        "ingredients": [{"name": "", "quantity": "", "units": "", "desc": ""}],
+        "appliances": [{"name": "", "extraData": "", "desc": ""}],
+        "steps": [{"name": "", "desc": ""}]
+    }
+
+    pancake_dict = {
         "author": "Angela74180",
         "recipeName": "My Pancake Recipe",
         "recipeType": "Dessert",
@@ -45,7 +66,12 @@ def create_recipe(recipe_num):
         ]
     }
 
-    return render_template('create_recipe.html', recipe_details_dict=recipe_details_dict) 
+    recipes_dict = {
+        "0": empty_dict,
+        "1": pancake_dict
+    }
+
+    return render_template('create_recipe.html', recipe_details_dict=recipes_dict[recipe_num]) 
 
 
 
