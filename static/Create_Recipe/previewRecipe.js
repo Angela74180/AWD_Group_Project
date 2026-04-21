@@ -59,7 +59,7 @@ function previewRecipe() {
     }
 
     // Units of measurement directly follow the quantity
-    if (ingredientUnits[0] != '"') {
+    if (["mL", "L", "g", "kg", "fl oz", "oz", "lb"].includes(ingredientUnits)) {
       previewPage.document.write(ingredientUnits)
     }
     // If the unit is whole or to taste, we do not state this here

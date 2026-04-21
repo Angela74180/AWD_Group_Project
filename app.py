@@ -35,34 +35,35 @@ def create_recipe(recipe_num):
         "author": "Angela74180",
         "recipeName": "My Pancake Recipe",
         "recipeType": "Dessert",
-        "recipeDifficulty": "Challenging",
-        "tagList": ["Vegetarian", "YAY"],
-        "timeSplit": True,
-        "timeList": {"totalTime": [1, 20], "prepTime": [0, 30], "cookingTime": [0, 50]},
-        "recipeDescription": "YOU WILL LOVE THIS. I SWEAR.",
+        "recipeDifficulty": "Simple",
+        "tagList": ["Vegetarian"],
+        "timeSplit": False,
+        "timeList": {"totalTime": [1, 0], "prepTime": [0, 0], "cookingTime": [0, 0]},
+        "recipeDescription": "This is a recipe that create approximately 12 crepe like pancakes. They are great to have with your favourite toppings. I would recommend topping them with a sprinkle of sugar and a drizzle of lemon if you aren't sure what to add.",
         "recipeCoverImage": "",
         "visibility": "Friends_Only",
         "allowRatings": False,
         "allowReviews": False,
         "status": "Draft",
-
         "ingredients": [
-            {"name": "Plain Flour", "quantity": 750, "units": "g", "desc": "NOT SELF RAISING OR IT WILL EXPLODE"},
-            {"name": "Eggs", "quantity": 3, "units": '"Whole"', "desc": ""},
+            {"name": "Plain Flour", "quantity": 115, "units": "g", "desc": ""},
+            {"name": "Eggs", "quantity": 1, "units": '"Whole"', "desc": ""},
             {"name": "Milk", "quantity": 250, "units": "mL", "desc": ""},
-            {"name": "Salt", "quantity": 1, "units": '"To Taste"' , "desc": "Please do not taste the batter before it is cooked"},
-            {"name": "Butter", "quantity": 2, "units": "tbsp", "desc": ""}
+            {"name": "Salt", "quantity": 1, "units": '"Pinch"' , "desc": ""},
+            {"name": "Butter", "quantity": 20, "units": "g", "desc": ""},
+            {"name": "Castor Sugar", "quantity": 0.25, "units": "Cup", "desc": ""},
+            {"name": "Lemon", "quantity": 1, "units": '"Whole"', "desc": "This is optional and is only required if you want to use it as a topping."}
         ],
-
         "appliances": [
             {"name": "Stove", "extraData": "", "desc": ""},
-            {"name": "Microwave", "extraData": "850", "desc": "For warming butter"},
-            {"name": "Other", "extraData": "Trangea", "desc": ""}
         ],
-
         "steps": [
-            {"name": "Prepare The Batter", "desc": "COMBINE ALL INGREDIENTS"},
-            {"name": "", "desc": "COOK it in a fryingpan"}
+            {"name": "Preparing The Batter", "desc": "Sift flour and salt into a bowl. Create a well in the centre and drop in the egg."},
+            {"name": "Preparing The Batter", "desc": "Add half the liquids (includes butter) in small increments at a time and mix until smooth."},
+            {"name": "Preparing The Batter", "desc": "Beat in the remaining liquid and stir until it has the consistency of thin cream."},
+            {"name": "Cooking", "desc": "Pour a small amount (only enough to coat the bottom of the pan) into a frypan over medium heat."},
+            {"name": "Cooking", "desc": "Flip the pancake over once the underside is mostly cooked."},
+            {"name": "Cooking", "desc": "Once the pancake is cooked, serve it with your choice of toppings."}
         ]
     }
 

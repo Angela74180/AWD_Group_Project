@@ -34,6 +34,7 @@ function addIngredient(ingredientDict) {
             <option value = '"Pinch"'></option>
             <option value = '"Dash"'></option>
             <option value = '"Sprinkle"'></option>
+            <option value = '"Drizzle"'></option>
             <option value = '"Splash"'></option>
             <option value = '"Stick"'></option>
             <option value = '"Pat"'></option>
