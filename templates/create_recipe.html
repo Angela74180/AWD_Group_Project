@@ -10,6 +10,7 @@
         <script src="{{ url_for('static', filename='Create_Recipe/editAppliances.js') }}"></script>
         <script src="{{ url_for('static', filename='Create_Recipe/editSteps.js') }}"></script>
         <script src="{{ url_for('static', filename='Create_Recipe/editTime.js') }}"></script>
+        <script src="{{ url_for('static', filename='Create_Recipe/editPhotos.js') }}"></script>
         <script src="{{ url_for('static', filename='Create_Recipe/timeCalculation.js') }}"></script>
         <script src="{{ url_for('static', filename='Create_Recipe/getRecipeInfo.js') }}"></script>
         <script src="{{ url_for('static', filename='Create_Recipe/previewRecipe.js') }}"></script>
@@ -89,9 +90,11 @@
 
                 Cover Photo:
                 <br>
-                <input id = "coverPhoto" type = "file" accept="image/*">
+                <input id = "coverPhoto" type = "file" accept=".jpg, .png, .jpeg, .webp" onchange='validatePhoto(event.target)'>
+                <div></div>
                 <br>
                 <br>
+
 
                 <fieldset class="outer_fieldset">
                     <legend>Ingredients</legend>                    
