@@ -123,7 +123,7 @@ select {
 
 .nav-barButtons {
   display: flex;
-  gap: 20px;
+  gap: 10px;
   margin-left: 900px;
 }
 
@@ -141,6 +141,13 @@ select {
   font-weight:bold;
   font-size:1.75em;
   letter-spacing:-0.02em;
+}
+
+.profile-btn{
+  width:40px;
+  height:40px;
+
+  margin-left: 20px;
 }
 
 
