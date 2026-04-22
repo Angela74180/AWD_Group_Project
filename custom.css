@@ -132,3 +132,29 @@ select {
 .nav-links li a:hover {
   text-decoration: underline;
 }
+
+#spotlight {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.recipe-card {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 15px;
+    width: 180px;
+    background-color: #f9f9f9;
+
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.recipe-card h3 {
+    margin: 10px 0 5px;
+}
+
+.recipe-card p {
+    color: #666;
+    font-size: 14px;
+}
