@@ -99,18 +99,27 @@ select {
 }
 
 
-
-
-
 .navbar {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  background-color: #ffbb94;
-  padding: 10px 20px;
-  color: white;
+  gap: 20px;
+
+  background-color: #ffdecb;
+  padding: 12px 20px;
+
   position: sticky;
   top: 0;
+}
+
+.navbar button{
+  font-size: 15px;
+  padding: 8px 14px;
+  border-radius: 6px; 
+}
+
+.nav-bar button:hover {
+  background-color: #f5cbb3;
 }
 
 .logo {
