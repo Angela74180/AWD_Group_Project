@@ -99,20 +99,25 @@ select {
 }
 
 
-.navbar {
+.nav-bar {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 20px;
+  gap: 40px;
 
-  background-color: #ffdecb;
+  background-color: #ffffff;
   padding: 12px 20px;
 
   position: sticky;
   top: 0;
 }
 
-.navbar button{
+.nav-bar button{
+  background: white;
+  border: 1px solid #625d5b;
+  
+
+  font-family:'DM Sans',sans-serif;
   font-size: 15px;
   padding: 8px 14px;
   border-radius: 6px; 
@@ -122,10 +127,18 @@ select {
   background-color: #f5cbb3;
 }
 
+.nav-barLogo{
+  font-family:'Playfair Display',serif;
+  color:brown;
+  font-weight:bold;
+}
+
+
 .logo {
   font-size: 20px;
   font-weight: bold;
 }
+
 
 .nav-links {
   list-style: none;
