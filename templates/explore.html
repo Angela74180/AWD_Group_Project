@@ -4,6 +4,12 @@
     <title>Explore - CookBook</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='custom.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+
+    <script src="{{ url_for('static', filename='Explore/data.js') }}"></script>
+    <script src="{{ url_for('static', filename='Explore/getRandomRecipes.js') }}"></script>
+    <script src="{{ url_for('static', filename='Explore/displayRecipes.js') }}"></script>
+    <script src="{{ url_for('static', filename='Explore/displaySpotlight.js') }}"></script>
+
 </head>
 <body>
 
@@ -20,6 +26,7 @@
         </ul>
     </nav>
 
+    <div class = "div_main">
     <h1>Explore Page</h1>
 
     <input type="search" id="searchBar" placeholder="Search recipes...">
@@ -27,69 +34,10 @@
 
     <h2>Spotlight Recipes</h2>
     <div id="spotlight"></div>
+    </div>
 
 
 <script>
-const recipes = [ //Front-end database for the meantime 
-    { title: "Spaghetti Bolognese"},
-    { title: "Chicken Curry"},
-    { title: "Beef Tacos"},
-    { title: "Sushi Rolls"}
-];
-
-const recipeList = document.getElementById("recipeList");
-const searchBar = document.getElementById("searchBar");
-const spotlightDiv = document.getElementById("spotlight");
-
-function displayRecipes(filteredRecipes) {
-    recipeList.innerHTML = "";
-
-    filteredRecipes.forEach(recipe => {
-        const div = document.createElement("div");
-        div.textContent = recipe.title;
-        recipeList.appendChild(div);
-    });
-}
-
-function getRandomRecipes(arr, count) {
-    return arr
-        .sort(() => 0.5 - Math.random())
-        .slice(0, count);
-}
-
-function displaySpotlight() {
-    const selected = getRandomRecipes(recipes, 3);
-    spotlightDiv.innerHTML = "";
-
-    selected.forEach(recipe => {
-        const card = document.createElement("div");
-        card.className = "recipe-card";
-
-        card.innerHTML = `
-            <h3>${recipe.title}</h3>
-        `;
-
-        spotlightDiv.appendChild(card);
-    });
-}
-
-searchBar.addEventListener("input", () => {
-    const searchTerm = searchBar.value.toLowerCase();
-
-    if (searchTerm == ""){
-        recipeList.innerHTML = "";
-        return;
-    }
-
-    const filtered = recipes.filter(recipe =>
-        recipe.title.toLowerCase().startsWith(searchTerm)
-        );
-
-    displayRecipes(filtered);
-});
-
-displaySpotlight();
-
 </script>
 
 </body>
