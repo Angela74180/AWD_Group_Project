@@ -171,3 +171,15 @@ select {
 .nav-links li a:hover {
   text-decoration: underline;
 }
+
+
+.intro button{
+  background: white;
+  border: 1px solid #625d5b;
+  
+
+  font-family:'DM Sans',sans-serif;
+  font-size: 15px;
+  padding: 8px 14px;
+  border-radius: 6px; 
+}

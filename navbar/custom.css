@@ -1,0 +1,43 @@
+.nav-bar {
+  display: flex;
+  align-items: center;
+  background-color:  rgb(255, 204, 75);
+  padding: 12px 20px;
+  position: sticky;
+  top: 0;
+}
+
+
+.nav-barLogo{
+  justify-content: left;
+
+  font-family:'Playfair Display',serif;
+  color:white;
+  
+  font-weight:bold;
+  font-size:1.75em;
+  letter-spacing:-0.02em;
+}
+
+.profile-btn{
+  width:40px;
+  height:40px;
+
+  margin-left: 20px;
+}
+
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 100px;
+}
+
+.nav-links li a {
+  text-decoration: none;
+  color: white;
+}
+
+.nav-links li a:hover {
+  text-decoration: underline;
+}
