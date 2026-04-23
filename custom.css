@@ -190,6 +190,17 @@ select {
   width:100%;
 }
 
+.intro{
+  background:brown;
+  border-radius:22px;
+  padding:15px 30px;
+  display:flex;
+  gap:20px;
+  align-items:center;
+  margin-bottom:20px;
+  position:relative;
+}
+
 .offcanvas-body{
   font-family:'DM Sans',sans-serif;
 }

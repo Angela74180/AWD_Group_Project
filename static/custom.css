@@ -104,8 +104,41 @@ select {
 }
 
 
+.intro{
+  background:rgb(247, 195, 35);
+  border-radius:22px;
+  padding:15px 30px;
+  display:flex;
+  gap:20px;
+  align-items:center;
+  margin-bottom:20px;
+  position:relative;
+}
 
+.explore-bar {
+  display: flex;
+  align-items: center;
+  gap: 30px;
 
+  background-color: rgb(247, 195, 35);
+  padding: 20px;
+}
+
+.explore-bar h3 {
+  font-family:'Playfair Display';
+  color: white;
+  margin: 0;
+}
+
+.search-bar {
+  flex: 1;
+
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: none;
+
+  font-size: 14px;
+}
 
 .navbar {
   display: flex;

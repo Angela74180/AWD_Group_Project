@@ -9,17 +9,17 @@
     </head>
     
     <body onload="console.log('You have navigated to the home page')">
-        <nav class="navbar">
-            <div class="logo">CookBook</div>
-            <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="explore.html">Explore</a></li>
-                <li><a href="my-recipes.html">My Recipes</a></li>
-                <li><a href="saved.html">Saved</a></li>
-                <li><a href="mykitchen.html">MyKitchen</a></li>
-                <li><a href="profile.html">Profile</a></li>
-            </ul>
-        </nav>
+      <nav class="navbar">
+          <div class="logo">CookBook</div>
+          <ul class="nav-links">
+              <li><a href="index.html">Home</a></li>
+              <li><a href="explore.html">Explore</a></li>
+              <li><a href="my-recipes.html">My Recipes</a></li>
+              <li><a href="saved.html">Saved</a></li>
+              <li><a href="mykitchen.html">MyKitchen</a></li>
+              <li><a href="profile.html">Profile</a></li>
+          </ul>
+      </nav>
         <!-- <div class="nav-bar">
           <div class="nav-barLogo" id="navHome">chefbook</div>
           <div class="nav-barButtons">
@@ -31,36 +31,40 @@
           <button class="profile-btn" data-bs-toggle="offcanvas" data-bs-target="#profilePanel" aria-controls="profilePanel">?</button>
         </div> -->
 
-        <div class = "div_main"></div>
+      <div class = "div_main">
 
-          <!-- <div class="explore-bar"> -->
-            <h3>Explore</h3>
-            <input type="text" class="search-bar" placeholder="Search recipes, ingredients, chefs...">
-          <!-- </div> -->
-
-
-              <div class="offcanvas offcanvas-end" tabindex="-1" id="profilePanel" aria-labelledby="profilePanelLabel">
-                <div class="offcanvas-header">
-                  <h5 class="offcanvas-title" id="profilePanelLabel">Profile</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
-                </div>
-
-                <div class="offcanvas-body">
-                  <p><strong>Account</strong></p>
-                  <p>My Recipes</p>
-                  <p>Saved Recipes</p>
-                  <p>Settings</p>
-                  <hr>
-                  <button class="log-outbtn">Logout</button>
-                </div>
-              </div>
-
-
-
-        
-
-
+        <div class="explore-bar">
+        <h3>Explore</h3>
+        <input type="text" class="search-bar" placeholder="Search recipes, ingredients, chefs...">
         </div>
+
+        <div class = "intro">
+          <h1>Find recipes you'll <em>actually</em> love</h1>
+          <p>Discover dishes tailored to your kitchen, your ingredients, and the appliances you actually own.</p>
+          <div>
+            <button>Get started free</button>
+            <button>Browse recipes</button>
+          </div>
+        </div>
+
+
+
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="profilePanel" aria-labelledby="profilePanelLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="profilePanelLabel">Profile</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+          </div>
+
+          <div class="offcanvas-body">
+            <p><strong>Account</strong></p>
+            <p>My Recipes</p>
+            <p>Saved Recipes</p>
+            <p>Settings</p>
+            <hr>
+            <button class="log-outbtn">Logout</button>
+          </div>
+        </div>
+      </div>
 
       
 
