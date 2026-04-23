@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang = "en">
+    <head>
+        <meta charset = "UTF-8">
+        <title>Create Recipe Form</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="{{ url_for('static', filename='custom.css') }}">
+        <script src="{{ url_for('static', filename='Create_Recipe/editTags.js') }}"></script>
+        <script src="{{ url_for('static', filename='Create_Recipe/editIngredients.js') }}"></script>
+        <script src="{{ url_for('static', filename='Create_Recipe/editAppliances.js') }}"></script>
+        <script src="{{ url_for('static', filename='Create_Recipe/editSteps.js') }}"></script>
+        <script src="{{ url_for('static', filename='Create_Recipe/editTime.js') }}"></script>
+        <script src="{{ url_for('static', filename='Create_Recipe/editPhotos.js') }}"></script>
+        <script src="{{ url_for('static', filename='Create_Recipe/timeCalculation.js') }}"></script>
+        <script src="{{ url_for('static', filename='Create_Recipe/getRecipeInfo.js') }}"></script>
+        <script src="{{ url_for('static', filename='Create_Recipe/previewRecipe.js') }}"></script>
+        <script src="{{ url_for('static', filename='Create_Recipe/submitRecipeForm.js') }}"></script>
+        <script src="{{ url_for('static', filename='Create_Recipe/populateRecipeDetails.js') }}"></script>
+        <script>
+            let recipe_details_dict = {{ recipe_details_dict | tojson }};
+        </script>
+    </head>
+    <body onload="populate(recipe_details_dict)">
+        <nav class="navbar">
+            <div class="logo">CookBook</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="explore.html">Explore</a></li>
+                <li><a href="my-recipes.html">My Recipes</a></li>
+                <li><a href="saved.html">Saved</a></li>
+                <li><a href="mykitchen.html">MyKitchen</a></li>
+                <li><a href="profile.html">Profile</a></li>
+            </ul>
+        </nav>
+        
+        <div class = "div_main">
+            <h1>Create a Recipe</h1>
+            <form name = "Create Recipe" action="/" onsubmit="return handleRecipeForm()">
+                <br>
+                Recipe Name: <input id = "recipeName" name="recipe_name" type = "text" required>
+                <br>
+                <br>
+
+                Recipe Type:
+                <select id="recipeType">
+                    <option value = Breakfast>Breakfast</option>
+                    <option value = Lunch>Lunch</option>
+                    <option value = Dinner>Dinner</option>
+                    <option value = Dessert>Dessert</option>
+                    <option value = Sweet_treat>Sweet Treat</option>
+                    <option value = Baked_good>Baked Good</option>
+                    <option value = Drink>Drink</option>
+                    <option value = Snack>Snack</option>
+                    <option value = Side>Side</option>
+                    <option value = Other>Other</option>
+                </select>
+                <br>
+                <br>
+                
+                Recipe Difficulty:
+                <select id="recipeDifficulty">
+                    <option value = Simple>Simple</option>
+                    <option value = Intermediate>Intermediate</option>
+                    <option value = Challenging>Challenging</option>
+                </select>
+                <br>
+                <br>
+                
+                <fieldset class="outer_fieldset">
+                    <legend>Tags</legend>
+                    <div id="Tags"></div>
+                    <button type="button" class="btn btn-add" onclick='addTag("")'>+ Add Tag</button>
+                </fieldset>
+                <br>
+
+                <fieldset class="outer_fieldset">
+                    <legend>Time</legend>
+                    <b>Split Time into Prep and Cooking: </b><input id = "timeCheckbox" type = "checkbox" onchange='splitTime({"totalTime": ["", ""], "prepTime": ["", ""], "cookingTime": ["", ""]})'>
+                    <div id="Time">
+                        <span style="display: inline-block; width: 90px; margin-top: 2%">Total Time: </span><input type = "number" min = "0" style="width: 60px; height: 25px;" required> hour/s <input type = "number" min = "0" style="width: 60px; height: 25px;" required> min/s
+                    </div>
+                </fieldset>
+                <br>
+
+                Description:
+                <br>
+                <textarea id = "Description" name = "Description" rows = "5" maxlength="1000" placeholder = "1000 Character Limit"></textarea>
+                <br>
+                <br>
+
+                Cover Photo:
+                <br>
+                <input id = "coverPhoto" type = "file" accept=".jpg, .png, .jpeg, .webp" onchange='validatePhoto(event.target)'>
+                <div></div>
+                <br>
+                <br>
+
+
+                <fieldset class="outer_fieldset">
+                    <legend>Ingredients</legend>                    
+                    <div id="Ingredients"></div>
+                    <button type="button" class="btn btn-add" onclick='addIngredient({"name": "", "quantity": "", "units": "", "desc": ""})'>+ Add Ingredient</button>
+                </fieldset>
+                <br>
+
+                <fieldset class="outer_fieldset">
+                    <legend>Appliances/Special Equipment</legend>
+                    <div id="Appliances"></div>
+                    <button type="button" class="btn btn-add" onclick='addAppliance({"name": "", "extraData": "", "desc": ""})'>+ Add Appliance</button>
+                </fieldset>
+                <br>
+
+                <fieldset class="outer_fieldset">
+                    <legend>Method</legend>
+                    <div id="Steps"></div>
+                    <button type="button" class="btn btn-add" onclick='addStep({"name": "", "desc": ""})'>+ Add Step</button>
+                </fieldset>
+                <br>
+                <br>
+
+                Visibility: 
+                <select id="visibility">
+                    <option value = Private>Private</option>
+                    <option value = Friends_Only>Friends Only</option>
+                    <option value = Public>Public</option>
+                </select>
+                <br>
+                <br>
+                <span style="display: inline-block; width: 100px">Allow Ratings: </span><input type = "checkbox" id="allowRatings" checked>
+                <br>
+                <span style="display: inline-block; width: 100px">Allow Reviews: </span><input type = "checkbox" id="allowReviews" vertical-align = "middle" checked>
+                <br>
+                <br>
+                <br>
+                <button type="button" class="btn btn-primary" onclick="previewRecipe()">Preview Recipe</button>
+                <br>
+                <br>
+                <button type="button" class="btn btn-secondary" onclick="getRecipeInfo()">Save as Draft</button>
+                <br>
+                <br>
+                <button type="submit" id="publishRecipe"class="btn btn-primary">Publish Recipe</button>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <p>Allow Inserting between steps in Method</p>
+                <p>Prevent submission if no ingredients or no steps or time == 0</p>
+                <p>Make images show up when selected</p>
+                <p>Make Emulation Sizes Work</p>
+                <p>Add headings in the method</p>
+            </form>
+        </div>
+    </body>
+</html>
