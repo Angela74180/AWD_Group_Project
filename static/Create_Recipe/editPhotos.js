@@ -4,11 +4,12 @@ function validatePhoto(photo) {
 
     if (photo.value != "") {
 
-
+        // .jpg, .png, .jpeg, .webp
 
         // Read and display the image
         let reader = new FileReader();
         let image = document.createElement("img");
+        let source = "";
 
         reader.onload = function (e) {
             image.setAttribute("src", e.target.result);
