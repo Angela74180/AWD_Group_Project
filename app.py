@@ -1,11 +1,17 @@
 from flask import Flask, render_template
 app = Flask(__name__)
 
+if __name__ == "__main__":
+    app.run(debug=True)
 
 @app.route('/')
 @app.route('/index')
 def index():
     return '<h1>THIS WILL BE A HOME PAGE</h1>'
+
+@app.route("/explore")
+def home():
+    return render_template("explore.html")
 
 @app.route('/create_recipe/<recipe_num>')
 def create_recipe(recipe_num):
@@ -73,6 +79,3 @@ def create_recipe(recipe_num):
     }
 
     return render_template('create_recipe.html', recipe_details_dict=recipes_dict[recipe_num]) 
-
-
-
