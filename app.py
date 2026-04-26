@@ -75,4 +75,11 @@ def create_recipe(recipe_num):
     return render_template('create_recipe.html', recipe_details_dict=recipes_dict[recipe_num]) 
 
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    return render_template('loginPage.html')
 
+
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    return render_template('signupPage.html')
