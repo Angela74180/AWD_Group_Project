@@ -98,8 +98,10 @@ select {
   padding-top: 1%
 }
 
-
-
+.preview_image {
+  margin-top: 10px;
+  width: 300px;
+}
 
 
 .navbar {
@@ -107,6 +109,7 @@ select {
   justify-content: space-between;
   align-items: center;
   background-color: #ffbb94;
+  background-color: rgb(255, 204, 75);
   padding: 10px 20px;
   color: white;
   position: sticky;
@@ -134,27 +137,27 @@ select {
 }
 
 #spotlight {
-    display: flex;
-    gap: 20px;
-    margin-top: 20px;
+  display: flex;
+  gap: 20px;
+  margin-top: 20px;
 }
 
 .recipe-card {
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    padding: 15px;
-    width: 180px;
-    background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 15px;
+  width: 180px;
+  background-color: #f9f9f9;
 
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
 }
 
 .recipe-card h3 {
-    margin: 10px 0 5px;
+  margin: 10px 0 5px;
 }
 
 .recipe-card p {
-    color: #666;
-    font-size: 14px;
+  color: #666;
+  font-size: 14px;
 }
