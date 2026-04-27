@@ -1,42 +1,20 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Explore - CookBook</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='custom.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+{% extends "base.html" %}
 
-    <script src="{{ url_for('static', filename='Explore/data.js') }}"></script>
-    <script src="{{ url_for('static', filename='Explore/getRandomRecipes.js') }}"></script>
-    <script src="{{ url_for('static', filename='Explore/displayRecipes.js') }}"></script>
-    <script src="{{ url_for('static', filename='Explore/displaySpotlight.js') }}"></script>
+{% block title %}Explore - CookBook{% endblock %}
 
-</head>
-<body>
-    <nav class="navbar">
-        <div class="logo">CookBook</div>
-        <ul class="nav-links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="explore.html">Explore</a></li>
-            <li><a href="my_recipes.html">My Recipes</a></li>
-            <li><a href="saved.html">Saved</a></li>
-            <li><a href="my_kitchen.html">MyKitchen</a></li>
-            <li><a href="profile.html">Profile</a></li>
-        </ul>
-    </nav>
+{% block content %}
+<h1>Explore Page</h1>
 
-    <div class = "div_main">
-    <h1>Explore Page</h1>
+<input type="search" id="searchBar" placeholder="Search recipes...">
+<div id="recipeList"></div>
 
-    <input type="search" id="searchBar" placeholder="Search recipes...">
-    <div id="recipeList"></div>
+<h2>Spotlight Recipes</h2>
+<div id="spotlight"></div>
+{% endblock %}
 
-    <h2>Spotlight Recipes</h2>
-    <div id="spotlight"></div>
-    </div>
-
-
-<script>
-</script>
-
-</body>
-</html>
+{% block scripts %}
+<script src="{{ url_for('static', filename='Explore/data.js') }}"></script>
+<script src="{{ url_for('static', filename='Explore/getRandomRecipes.js') }}"></script>
+<script src="{{ url_for('static', filename='Explore/displayRecipes.js') }}"></script>
+<script src="{{ url_for('static', filename='Explore/displaySpotlight.js') }}"></script>
+{% endblock %}
