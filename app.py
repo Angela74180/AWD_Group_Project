@@ -16,8 +16,6 @@ def home():
 @app.route('/create_recipe/<recipe_num>')
 def create_recipe(recipe_num):
 
-    recipes_dict = {}
-
     empty_dict = {
         "author": "",
         "recipeName": "",
@@ -73,9 +71,11 @@ def create_recipe(recipe_num):
         ]
     }
 
-    recipes_dict = {
-        "0": empty_dict,
-        "1": pancake_dict
-    }
+    recipes_dict = {}
 
-    return render_template('create_recipe.html', recipe_details_dict=recipes_dict[recipe_num]) 
+    if recipe_num == "0":
+        recipes_dict = empty_dict
+    else:
+        recipes_dict = pancake_dict
+
+    return render_template('create_recipe.html', recipe_details_dict=recipes_dict) 
