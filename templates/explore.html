@@ -5,6 +5,48 @@
 {% block content %}
 <h1>Explore Page</h1>
 
+<div class="filter-bar">
+
+    <div class="filter-group">
+        <span>Cuisine:</span>
+        <button data-filter="cuisine" data-value="All">All</button>
+        <button data-filter="cuisine" data-value="Italian">Italian</button>
+        <button data-filter="cuisine" data-value="Thai">Thai</button>
+        <button data-filter="cuisine" data-value="Japanese">Japanese</button>
+        <button data-filter="cuisine" data-value="Indian">Indian</button>
+        <button data-filter="cuisine" data-value="Mexican">Mexican</button>
+        <button data-filter="cuisine" data-value="Chinese">Chinese</button>
+        <button data-filter="cuisine" data-value="French">French</button>
+    </div>
+
+    <div class="filter-group">
+        <span>Difficulty:</span>
+        <button data-filter="difficulty" data-value="All">All</button>
+        <button data-filter="difficulty" data-value="Easy">Easy</button>
+        <button data-filter="difficulty" data-value="Medium">Medium</button>
+        <button data-filter="difficulty" data-value="Hard">Hard</button>
+    </div>
+
+    <div class="filter-group">
+        <span>Time:</span>
+        <button data-filter="time" data-value="All">All</button>
+        <button data-filter="time" data-value="Under 15 min">Under 15 min</button>
+        <button data-filter="time" data-value="15-30 min">15-30 min</button>
+        <button data-filter="time" data-value="30-60 min">30-60 min</button>
+        <button data-filter="time" data-value="60+">60+</button>
+    </div>
+
+    <div class="filter-group">
+        <span>Diet/Dietary Type:</span>
+        <button data-filter="diet" data-value="All">All</button>
+        <button data-filter="diet" data-value="Vegetarian">Vegetarian</button>
+        <button data-filter="diet" data-value="Vegan">Vegan</button>
+        <button data-filter="diet" data-value="Gluten-free">Gluten-free</button>
+        <button data-filter="diet" data-value="Dairy-free">Dairy-free</button>
+    </div>
+
+</div>
+
 <input type="search" id="searchBar" placeholder="Search recipes...">
 <div id="recipeList"></div>
 
