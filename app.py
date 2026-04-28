@@ -7,7 +7,7 @@ if __name__ == "__main__":
 @app.route('/')
 @app.route('/index')
 def index():
-    return '<h1>THIS WILL BE A HOME PAGE</h1>'
+    return render_template("homePage.html")
 
 @app.route("/explore")
 def home():
