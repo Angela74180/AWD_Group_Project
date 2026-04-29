@@ -8,41 +8,44 @@
 <div class="filter-bar">
 
     <div class="filter-group">
-        <span>Cuisine:</span>
-        <button data-filter="cuisine" data-value="All">All</button>
-        <button data-filter="cuisine" data-value="Italian">Italian</button>
-        <button data-filter="cuisine" data-value="Thai">Thai</button>
-        <button data-filter="cuisine" data-value="Japanese">Japanese</button>
-        <button data-filter="cuisine" data-value="Indian">Indian</button>
-        <button data-filter="cuisine" data-value="Mexican">Mexican</button>
-        <button data-filter="cuisine" data-value="Chinese">Chinese</button>
-        <button data-filter="cuisine" data-value="French">French</button>
+        <label>Cuisine:</label>
+        <select data-filter="cuisine">
+            <option value="All">All</option>
+            <option value="Asian">Asian</option> 
+            <option value="Mediterranean">Mediterranean</option>
+            <option value="Western">Western</option>               
+        </select>
     </div>
 
     <div class="filter-group">
-        <span>Difficulty:</span>
-        <button data-filter="difficulty" data-value="All">All</button>
-        <button data-filter="difficulty" data-value="Easy">Easy</button>
-        <button data-filter="difficulty" data-value="Medium">Medium</button>
-        <button data-filter="difficulty" data-value="Hard">Hard</button>
+        <label>Difficulty</label>
+        <select data-filter="difficulty">
+            <option value="All">All</option>
+            <option value="Easy">Easy</option>
+            <option value="Medium">Medium</option>
+            <option value="Hard">Hard</option>
+        </select>
     </div>
 
     <div class="filter-group">
-        <span>Time:</span>
-        <button data-filter="time" data-value="All">All</button>
-        <button data-filter="time" data-value="Under 15 min">Under 15 min</button>
-        <button data-filter="time" data-value="15-30 min">15-30 min</button>
-        <button data-filter="time" data-value="30-60 min">30-60 min</button>
-        <button data-filter="time" data-value="60+">60+</button>
+        <label>Time</label>
+        <select data-filter="time">
+            <option value="All">All</option>
+            <option value="Under 15 min">Under 15 min</option>
+            <option value="15-30 min">15-30 min</option>
+            <option value="30-60 min">30-60 min</option>
+            <option value="60+">60+</option>
+        </select>
     </div>
 
     <div class="filter-group">
-        <span>Diet/Dietary Type:</span>
-        <button data-filter="diet" data-value="All">All</button>
-        <button data-filter="diet" data-value="Vegetarian">Vegetarian</button>
-        <button data-filter="diet" data-value="Vegan">Vegan</button>
-        <button data-filter="diet" data-value="Gluten-free">Gluten-free</button>
-        <button data-filter="diet" data-value="Dairy-free">Dairy-free</button>
+        <label>Diet</label>
+        <select data-filter="diet">
+            <option value="Vegetarian">Vegetarian</option>
+            <option value="Vegan">Vegan</option>
+            <option value="Gluten-free">Gluten-free</option>
+            <option value="Dairy-free">Dairy-free</option>
+        </select>
     </div>
 
 </div>
