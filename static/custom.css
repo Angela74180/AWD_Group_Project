@@ -161,3 +161,14 @@ select {
   color: #666;
   font-size: 14px;
 }
+
+.filter-bar {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 15px;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+}
