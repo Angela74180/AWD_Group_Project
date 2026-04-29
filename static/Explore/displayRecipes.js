@@ -22,6 +22,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function filterRecipes() {
         const searchTerm = searchBar.value.toLowerCase();
+        if (searchTerm === "") {
+            recipeList.innerHTML = "";
+            return;
+        }
 
         const filtered = recipes.filter(recipe => {
 
@@ -55,10 +59,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     searchBar.addEventListener("input", filterRecipes);
 
-    document.querySelectorAll(".filter-bar button").forEach(button => {
-        button.addEventListener("click", () => {
-            const type = button.dataset.filter;
-            const value = button.dataset.value;
+    document.querySelectorAll(".filter-bar select").forEach(select => {
+        select.addEventListener("change", () => {
+            const type = select.dataset.filter;
+            const value = select.value;
 
             selectedFilters[type] = value;
 
