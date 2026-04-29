@@ -1,17 +1,33 @@
 from flask import Flask, render_template
 app = Flask(__name__)
 
+<<<<<<< HEAD
+=======
+if __name__ == "__main__":
+    app.run(debug=True)
+>>>>>>> 7c14de0a469f89613828b8994249121f055870b3
 
 @app.route('/')
 @app.route('/index')
 def index():
+<<<<<<< HEAD
     return render_template('homePage.html')
+=======
+    return render_template("homePage.html")
+
+@app.route("/explore")
+def home():
+    return render_template("explore.html")
+>>>>>>> 7c14de0a469f89613828b8994249121f055870b3
 
 @app.route('/create_recipe/<recipe_num>')
 def create_recipe(recipe_num):
 
+<<<<<<< HEAD
     recipes_dict = {}
 
+=======
+>>>>>>> 7c14de0a469f89613828b8994249121f055870b3
     empty_dict = {
         "author": "",
         "recipeName": "",
@@ -67,6 +83,7 @@ def create_recipe(recipe_num):
         ]
     }
 
+<<<<<<< HEAD
     recipes_dict = {
         "0": empty_dict,
         "1": pancake_dict
@@ -76,3 +93,22 @@ def create_recipe(recipe_num):
 
 
 
+=======
+    recipes_dict = {}
+
+    if recipe_num == "0":
+        recipes_dict = empty_dict
+    else:
+        recipes_dict = pancake_dict
+
+    return render_template('create_recipe.html', recipe_details_dict=recipes_dict) 
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    return render_template('loginPage.html')
+
+
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    return render_template('signupPage.html')
+>>>>>>> 7c14de0a469f89613828b8994249121f055870b3

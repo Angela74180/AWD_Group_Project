@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Explore - CookBook{% endblock %}
+
+{% block content %}
+<h1>Explore Page</h1>
+
+<input type="search" id="searchBar" placeholder="Search recipes...">
+<div id="recipeList"></div>
+
+<h2>Spotlight Recipes</h2>
+<div id="spotlight"></div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='Explore/data.js') }}"></script>
+<script src="{{ url_for('static', filename='Explore/getRandomRecipes.js') }}"></script>
+<script src="{{ url_for('static', filename='Explore/displayRecipes.js') }}"></script>
+<script src="{{ url_for('static', filename='Explore/displaySpotlight.js') }}"></script>
+{% endblock %}
