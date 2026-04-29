@@ -79,3 +79,12 @@ def create_recipe(recipe_num):
         recipes_dict = pancake_dict
 
     return render_template('create_recipe.html', recipe_details_dict=recipes_dict) 
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    return render_template('loginPage.html')
+
+
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    return render_template('signupPage.html')
