@@ -15,9 +15,9 @@ function addStep(stepDict){
     newStep.innerHTML = `
         <legend>Step ${step_num}</legend>
         <button type="button" class="btn btn-remove" onclick="removeStep(event)">- Remove</button>
-        <input type = "text" placeholder = "Name Step (e.g Prep)" value = "${handleQuotes(stepDict["name"])}">
+        <input type = "text" style="margin-bottom: 2%" placeholder = "Name Step (e.g Prep)" value = "${handleQuotes(stepDict["name"])}">
         <br>
-        <textarea placeholder="500 Character Limit" rows = "2" maxlength="500" style="margin-top: 2%" required>${handleQuotes(stepDict["desc"])}</textarea>
+        <textarea placeholder="500 Character Limit" rows = "2" maxlength="500" required>${handleQuotes(stepDict["desc"])}</textarea>
         (Optional) Step Picture: <input type = "file" accept=".jpg, .png, .jpeg, .webp" onchange="validatePhoto(event.target)">
         <div></div>
     `;

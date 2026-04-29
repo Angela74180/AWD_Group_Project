@@ -7,7 +7,7 @@ if __name__ == "__main__":
 @app.route('/')
 @app.route('/index')
 def index():
-    return '<h1>THIS WILL BE A HOME PAGE</h1>'
+    return render_template("homePage.html")
 
 @app.route("/explore")
 def home():
@@ -15,8 +15,6 @@ def home():
 
 @app.route('/create_recipe/<recipe_num>')
 def create_recipe(recipe_num):
-
-    recipes_dict = {}
 
     empty_dict = {
         "author": "",
@@ -73,13 +71,14 @@ def create_recipe(recipe_num):
         ]
     }
 
-    recipes_dict = {
-        "0": empty_dict,
-        "1": pancake_dict
-    }
+    recipes_dict = {}
 
-    return render_template('create_recipe.html', recipe_details_dict=recipes_dict[recipe_num]) 
+    if recipe_num == "0":
+        recipes_dict = empty_dict
+    else:
+        recipes_dict = pancake_dict
 
+    return render_template('create_recipe.html', recipe_details_dict=recipes_dict) 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
