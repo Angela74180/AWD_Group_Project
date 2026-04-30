@@ -39,6 +39,7 @@ function addIngredient(ingredientDict) {
             <option value = '"Splash"'></option>
             <option value = '"Stick"'></option>
             <option value = '"Pat"'></option>
+            <option value = '"Slices"'></option>
             <option value = '"To Taste"'>(Quantity will not be included when published)</option>
         </datalist>
         <br>
