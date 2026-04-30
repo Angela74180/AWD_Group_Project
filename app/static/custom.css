@@ -104,27 +104,114 @@ select {
 }
 
 
+.intro{
+  background:rgb(247, 195, 35);
+  border-radius:22px;
+  padding:15px 30px;
+  display:flex;
+  gap:20px;
+  align-items:center;
+  margin-bottom:20px;
+  position:relative;
+}
+
+.intro button{
+  margin-top: 20px;
+  margin-right: 10px;
+
+  background: white;
+  border: 1px solid #625d5b;
+
+  font-family:'DM Sans',sans-serif;
+  font-size: 15px;
+  padding: 8px 14px;
+  border-radius: 6px; 
+  transition: all 0.2s ease;
+}
+
+.intro button:hover {
+  background: #fff3e0;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .intro {
+    flex-direction: column;
+    text-align: center;
+    padding: 30px;
+  }
+
+  .intro h1 {
+    font-size: 2rem;
+  }
+
+  .explore-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+}
+
+.profile-btn{
+  border: 0.25px solid rgb(255, 255, 255);
+  border-radius: 50%;
+  width:40px;
+  height:40px;
+
+  margin-left: 20px;
+}
+
+.explore-bar {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+
+  background-color: rgb(247, 195, 35);
+  padding: 20px;
+}
+
+.explore-bar h3 {
+  font-family:'Playfair Display';
+  color: white;
+  margin: 0;
+}
+
+.search-bar {
+  flex: 1;
+
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: none;
+
+  font-size: 14px;
+}
+
 .navbar {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  background-color: #ffbb94;
   background-color: rgb(255, 204, 75);
   padding: 10px 20px;
   color: white;
   position: sticky;
+  z-index: 1000;
   top: 0;
 }
 
 .logo {
+  font-family:'Playfair Display',serif;
   font-size: 20px;
   font-weight: bold;
+  font-size:175%;
+  letter-spacing:-2%;
 }
 
 .nav-links {
   list-style: none;
   display: flex;
   gap: 20px;
+
+  margin-left: auto;
+  margin-bottom: 0;
 }
 
 .nav-links li a {
@@ -160,4 +247,58 @@ select {
 .recipe-card p {
   color: #666;
   font-size: 14px;
+}
+
+#latestRecipes {
+  display: grid;
+
+  grid-template-columns: repeat(3, auto);
+  grid-template-rows: repeat(2, auto);
+
+  gap: 25px;
+  justify-content: right;
+  margin-top: 40px;
+}
+
+.latest-recipe-card {
+  display: block;
+  width: 300px;
+
+  border: none;
+  background: rgb(255, 244, 217);
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+
+  border-radius: 12px;
+  overflow: hidden;
+
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+
+.latest-recipe-card:focus {
+  outline: none;
+}
+
+.latest-recipe-card:focus-visible {
+  outline: 3px solid #ffcc4b;
+  outline-offset: 2px;
+}
+
+.latest-recipe-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.latest-recipe-card h3 {
+  padding: 10px;
+  font-size: 16px;
+  margin: 0;
+}
+
+.latest-recipe-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.1);
 }
