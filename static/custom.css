@@ -43,7 +43,7 @@ select {
 
 
 .div_main{
-  padding: 2.5%; 
+  padding: 5%; 
 }
 
 .btn-remove {
@@ -115,6 +115,43 @@ select {
   position:relative;
 }
 
+.intro button{
+  margin-top: 20px;
+  margin-right: 10px;
+
+  background: white;
+  border: 1px solid #625d5b;
+
+  font-family:'DM Sans',sans-serif;
+  font-size: 15px;
+  padding: 8px 14px;
+  border-radius: 6px; 
+  transition: all 0.2s ease;
+}
+
+.intro button:hover {
+  background: #fff3e0;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .intro {
+    flex-direction: column;
+    text-align: center;
+    padding: 30px;
+  }
+
+  .intro h1 {
+    font-size: 2rem;
+  }
+
+  .explore-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+}
+
 .profile-btn{
   border: 0.25px solid rgb(255, 255, 255);
   border-radius: 50%;
@@ -152,7 +189,6 @@ select {
 .navbar {
   display: flex;
   align-items: center;
-  background-color: #ffbb94;
   background-color: rgb(255, 204, 75);
   padding: 10px 20px;
   color: white;
@@ -186,17 +222,6 @@ select {
   text-decoration: underline;
 }
 
-
-.intro button{
-  background: white;
-  border: 1px solid #625d5b;
-  
-
-  font-family:'DM Sans',sans-serif;
-  font-size: 15px;
-  padding: 8px 14px;
-  border-radius: 6px; 
-}
 #spotlight {
   display: flex;
   gap: 20px;
