@@ -51,7 +51,7 @@ function previewRecipe() {
       timing += calcTime(recipe_details_dict["timeList"]["totalTime"][0], recipe_details_dict["timeList"]["totalTime"][1]) + "</b>";
     }
   timing += ".";
-  previewPage.document.write('<p>A <b>' + recipe_details_dict["recipeDifficulty"] + ' ' + recipe_details_dict["recipeType"] + '</b> recipe that is estimated to take a total of' + timing + '</p>');
+  previewPage.document.write('<p>A <b>' + recipe_details_dict["recipeDifficulty"] + ' ' + recipe_details_dict["recipeType"] + '</b> recipe that serves <b>' + recipe_details_dict["serves"] + '</b>. It is estimated to take a total of' + timing + '</p>');
 
   // Description
   previewPage.document.write(recipe_details_dict["recipeDescription"]);

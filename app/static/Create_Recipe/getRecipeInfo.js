@@ -3,10 +3,18 @@ function getRecipeInfo(){
 
     alert("Author is currently hardcoded");
     // NEED TO MAKE THE AUTHOR CHANGE DYNAMICALLY
-    recipe_details_dict["author"] = "Angela";
+    recipe_details_dict["author"] = "Angela74180";
     recipe_details_dict["recipeName"] = document.getElementById("recipeName").value;
     recipe_details_dict["recipeType"] =  document.getElementById("recipeType").value;
     recipe_details_dict["recipeDifficulty"] = document.getElementById("recipeDifficulty").value;
+
+    // FIX THIS PLEASE ANG????????????????? SOMETIMES REDUCES NUMBER FOR NO REASON
+    let serves = document.getElementById("serves").value;
+    if (serves == ""){
+        serves = "0";
+    }
+    recipe_details_dict["serves"] = parseInt(serves);
+
 
     recipe_details_dict["tagList"] = []
     if (document.getElementById("Tags").childNodes.length > 0) {

@@ -1,15 +1,17 @@
 {% extends "base.html" %}
 
-<!-- Replace The PAGE NAME with whatever the name of your page is -->
-{% block title %}PAGE NAME - CookBook{% endblock %}
+{% block title %}Shopping List - CookBook{% endblock %}
 
 {% block scripts %}
-<!-- Include and scripts here. Like This...
- <script src="{{ url_for('static', filename='Create_Recipe/editTags.js') }}"></script>
- <script src="{{ url_for('static', filename='Create_Recipe/editIngredients.js') }}"></script>
- -->
 {% endblock %}
 
 {% block content %}
-<!-- Include any HTML content here -->
+<h1>Shopping List</h1>
+<br>
+<fieldset>
+    <legend>Selected Recipes</legend>
+    <div id="recipes_for_shopping_list">
+        <p>Recipes that you have selected to have a shopping list made from of will appear here</p>
+    </div>
+</fieldset>
 {% endblock %}
