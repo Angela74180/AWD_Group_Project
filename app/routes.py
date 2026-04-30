@@ -10,6 +10,10 @@ def index():
 def home():
     return render_template("explore.html")
 
+@app.route("/shopping_list")
+def shopping_list():
+    return render_template("shopping_list.html")
+
 @app.route('/create_recipe/<recipe_num>')
 def create_recipe(recipe_num):
 
