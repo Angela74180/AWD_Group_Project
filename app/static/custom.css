@@ -302,3 +302,12 @@ select {
   transform: translateY(-1px);
   box-shadow: 0 6px 14px rgba(0,0,0,0.1);
 }
+
+.recipe-block {
+  background: white;
+  border: 3px solid rgb(247, 195, 35);
+  padding: 10px 15px; 
+  margin-top: 20px;
+  border-radius:22px;
+  display:flex;
+}
