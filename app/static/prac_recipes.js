@@ -77,7 +77,7 @@ pancake_dict = {
         ]
     },
     "recipeDescription": "This is a recipe that create approximately 12 crepe like pancakes. They are great to have with your favourite toppings. I would recommend topping them with a sprinkle of sugar and a drizzle of lemon if you aren't sure what to add.",
-    "recipeCoverImage": "",
+    "recipeCoverImage": "https://www.jocooks.com/wp-content/uploads/2018/12/crepes-1-8.jpg",
     "visibility": "Friends_Only",
     "allowRatings": false,
     "allowReviews": false,
@@ -248,7 +248,7 @@ tuna_mornay_dict = {
             "units": "\"Slices\""
         }
     ],
-    "recipeCoverImage": "",
+    "recipeCoverImage": "https://tse1.mm.bing.net/th/id/OIP.Z5_7sbpWkaWZJkN6qd17GgHaE8?rs=1&pid=ImgDetMain&o=7&rm=3",
     "recipeDescription": "This is a recipe that serves approximately 8. It is great to have with a side of vegetables or is fine on its own.",
     "recipeDifficulty": "Intermediate",
     "recipeName": "Tuna Mornay",

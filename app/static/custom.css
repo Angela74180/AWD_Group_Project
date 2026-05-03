@@ -108,7 +108,6 @@ select {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #ffbb94;
   background-color: rgb(255, 204, 75);
   padding: 10px 20px;
   color: white;
@@ -165,8 +164,24 @@ select {
 .recipeBanner {
   background-color: white;
   margin-top: 2%;
+  height: 150px;
 }
 .recipeBanner:hover{
   background-color: rgb(245, 245, 245);
   margin-top: 2%;
+}
+.recipeBannerImage{
+  max-height: 100%;
+  max-width: 30%;
+  margin-left: 2%;
+}
+.recipeBannerText {
+  height: 100%;
+  overflow: hidden;
+}
+
+
+
+.recipeImage{
+  float: right;
 }

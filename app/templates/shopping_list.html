@@ -8,7 +8,8 @@
 <script src="{{ url_for('static', filename='makeRecipeBanner.js') }}"></script>
 <script src="{{ url_for('static', filename='Shopping_List/timeCalculation.js') }}"></script>
 <script>
-    console.log(tuna_mornay_dict);
+    // console.log(tuna_mornay_dict);
+    // console.log(pancake_dict);
 </script>
 {% endblock %}
 
@@ -19,7 +20,8 @@
     <legend>Selected Recipes</legend>
     <div id="recipes_for_shopping_list">
         <p>Recipes that you have selected to have a shopping list made from will appear here...</p>
-        <button type="button" class="btn btn-add" onclick='makeRecipeBanner(tuna_mornay_dict)'>TEMP</button>
+        <button type="button" class="btn btn-add" onclick='makeRecipeBanner(tuna_mornay_dict)'>TEMP TUNA MORNAY</button>
+        <button type="button" class="btn btn-add" onclick='makeRecipeBanner(pancake_dict)'>TEMP PANCAKES</button>
     </div>
 </fieldset>
 {% endblock %}
