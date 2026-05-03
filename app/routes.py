@@ -323,10 +323,15 @@ def create_recipe(recipe_num):
         recipes_dict = empty_dict
     elif recipe_num == "1":
         recipes_dict = pancake_dict
-    else:
+    elif recipe_num == "2":
         recipes_dict = tuna_mornay_dict
+    else:
+        return "Recipe not found", 404
 
     return render_template('create_recipe.html', recipe_details_dict=recipes_dict) 
+    # return render_template('create_recipe.html', recipe_num=recipe_num) 
+
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

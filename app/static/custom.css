@@ -35,7 +35,7 @@ textarea {
 }
 
 select {
-  background-color: rgb(240, 240, 240);
+  background-color: rgb(245, 245, 245);
   font-family: "Bahnschrift Light";
   font-stretch: condensed;
 }
@@ -160,4 +160,13 @@ select {
 .recipe-card p {
   color: #666;
   font-size: 14px;
+}
+
+.recipeBanner {
+  background-color: white;
+  margin-top: 2%;
+}
+.recipeBanner:hover{
+  background-color: rgb(245, 245, 245);
+  margin-top: 2%;
 }

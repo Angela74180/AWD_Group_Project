@@ -3,6 +3,13 @@
 {% block title %}Shopping List - CookBook{% endblock %}
 
 {% block scripts %}
+<!-- THIS WILL NEED TO BE GOTTEN FROM SOMEWHERE NOT JUST HARDCODED -->
+<script src="{{ url_for('static', filename='prac_recipes.js') }}"></script>
+<script src="{{ url_for('static', filename='makeRecipeBanner.js') }}"></script>
+<script src="{{ url_for('static', filename='Shopping_List/timeCalculation.js') }}"></script>
+<script>
+    console.log(tuna_mornay_dict);
+</script>
 {% endblock %}
 
 {% block content %}
@@ -11,7 +18,8 @@
 <fieldset>
     <legend>Selected Recipes</legend>
     <div id="recipes_for_shopping_list">
-        <p>Recipes that you have selected to have a shopping list made from of will appear here</p>
+        <p>Recipes that you have selected to have a shopping list made from will appear here...</p>
+        <button type="button" class="btn btn-add" onclick='makeRecipeBanner(tuna_mornay_dict)'>TEMP</button>
     </div>
 </fieldset>
 {% endblock %}
