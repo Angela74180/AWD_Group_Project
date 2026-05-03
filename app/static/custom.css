@@ -106,14 +106,14 @@ select {
 
 .navbar {
   display: flex;
-  flex-wrap: wrap;      /* allows multiple rows */
+  flex-wrap: wrap;
   align-items: center;
   background-color: rgb(255, 204, 75);
   padding: 10px 20px;
   color: white;
   position: sticky;
   top: 0;
-  gap: 10px;
+  gap: 5px;
 }
 
 .logo {
@@ -124,7 +124,7 @@ select {
 .nav-links {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 5px 20px;
   padding: 0;
   margin: 0;
   list-style: none;
