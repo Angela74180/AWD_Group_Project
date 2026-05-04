@@ -16,6 +16,9 @@
 <script src="{{ url_for('static', filename='Create_Recipe/populateRecipeDetails.js') }}"></script>
 <script>
     let recipe_details_dict = {{ recipe_details_dict | tojson }};
+    // let recipe_num = {{ recipe_num }};
+    // alert(recipe_num);
+
 </script>
 {% endblock %}
 
@@ -49,6 +52,11 @@
             <option value = Intermediate>Intermediate</option>
             <option value = Challenging>Challenging</option>
         </select>
+        <br>
+        <br>
+
+        Serves:
+        <input id="serves" type = "number" min = "0" style="width: 60px;" required>
         <br>
         <br>
         

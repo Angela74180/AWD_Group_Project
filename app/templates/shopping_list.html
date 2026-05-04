@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Shopping List - CookBook{% endblock %}
+
+{% block scripts %}
+<!-- THIS WILL NEED TO BE GOTTEN FROM SOMEWHERE NOT JUST HARDCODED -->
+<script src="{{ url_for('static', filename='prac_recipes.js') }}"></script>
+<script src="{{ url_for('static', filename='Recipe_Banners/makeRecipeBanner.js') }}"></script>
+<script src="{{ url_for('static', filename='Shopping_List/timeCalculation.js') }}"></script>
+<script src="{{ url_for('static', filename='Shopping_List/populateShoppingList.js') }}"></script>
+<script>
+    // console.log(tuna_mornay_dict);
+    // console.log(pancake_dict);
+</script>
+{% endblock %}
+
+{% block content %}
+<h1>Shopping List</h1>
+<br>
+<fieldset>
+    <legend>Selected Recipes</legend>
+    <div id="recipes_for_shopping_list">
+    </div>
+</fieldset>
+{% endblock %}

@@ -30,6 +30,7 @@ function addIngredient(ingredientDict) {
             <option value = "Pint"></option>
             <option value = "Quart"></option>
             <option value = "Gallon"></option>
+            <option value = '"Tin"'></option>
             <option value = '"Handfull"'></option>
             <option value = '"Pinch"'></option>
             <option value = '"Dash"'></option>
@@ -38,6 +39,7 @@ function addIngredient(ingredientDict) {
             <option value = '"Splash"'></option>
             <option value = '"Stick"'></option>
             <option value = '"Pat"'></option>
+            <option value = '"Slices"'></option>
             <option value = '"To Taste"'>(Quantity will not be included when published)</option>
         </datalist>
         <br>
