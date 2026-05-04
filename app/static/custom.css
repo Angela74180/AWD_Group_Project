@@ -179,7 +179,6 @@ select {
 .navbar {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
   background-color: rgb(255, 204, 75);
   padding: 10px 20px;
   color: white;
