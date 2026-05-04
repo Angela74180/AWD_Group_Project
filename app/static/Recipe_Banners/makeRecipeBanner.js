@@ -20,8 +20,35 @@ function makeRecipeBanner(recipe_details_dict){
     </fieldset>
     `;
 
-    document.getElementById("recipes_for_shopping_list").appendChild(newRecipeBanner);
+    return adjustRecipeBanner(newRecipeBanner);
 }
+
+function adjustRecipeBanner(newRecipeBanner) {
+    console.log(shopping_list_dict)
+    
+    return newRecipeBanner;
+}
+
+
+
+function addToCart(cart) {
+    cart.target.setAttribute("class", "bi bi-cart-fill");
+    cart.target.setAttribute("onclick", "removeFromCart(event)");
+}
+function removeFromCart(cart) {
+    cart.target.setAttribute("class", "bi bi-cart");
+    cart.target.setAttribute("onclick", "addToCart(event)");
+}
+
+function addBookmark(bookmark) {
+    bookmark.target.setAttribute("class", "bi bi-bookmark-fill");
+    bookmark.target.setAttribute("onclick", "removeBookmark(event)");
+}
+function removeBookmark(bookmark) {
+    bookmark.target.setAttribute("class", "bi bi-bookmark");
+    bookmark.target.setAttribute("onclick", "addBookmark(event)");
+}
+
 
 
 

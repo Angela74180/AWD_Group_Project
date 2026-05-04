@@ -297,3 +297,12 @@ tuna_mornay_dict = {
     "timeSplit": false,
     "visibility": "Private"
 }
+
+shopping_list_dict = {
+    "tuna_mornay_dict" : tuna_mornay_dict, 
+    "pancake_dict" : pancake_dict 
+}
+
+bookmarked_dict = {
+    "tuna_mornay_dict" : tuna_mornay_dict, 
+}
