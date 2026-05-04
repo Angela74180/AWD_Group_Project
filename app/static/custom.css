@@ -151,15 +151,6 @@ select {
   }
 }
 
-.profile-btn{
-  border: 0.25px solid rgb(255, 255, 255);
-  border-radius: 50%;
-  width:40px;
-  height:40px;
-
-  margin-left: 20px;
-}
-
 .explore-bar {
   display: flex;
   align-items: center;
@@ -218,6 +209,14 @@ select {
 
 .nav-links li a:hover {
   text-decoration: underline;
+}
+
+.profile-btn{
+  border: 1px solid rgb(255, 255, 255);
+  border-radius: 50%;
+  width:40px;
+  height:40px;
+  margin-left: 20px;
 }
 
 #spotlight {
