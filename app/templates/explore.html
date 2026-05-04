@@ -5,6 +5,51 @@
 {% block content %}
 <h1>Explore Page</h1>
 
+<div class="filter-bar">
+
+    <div class="filter-group">
+        <label>Cuisine:</label>
+        <select data-filter="cuisine">
+            <option value="All">All</option>
+            <option value="Asian">Asian</option> 
+            <option value="Mediterranean">Mediterranean</option>
+            <option value="Western">Western</option>               
+        </select>
+    </div>
+
+    <div class="filter-group">
+        <label>Difficulty</label>
+        <select data-filter="difficulty">
+            <option value="All">All</option>
+            <option value="Easy">Easy</option>
+            <option value="Medium">Medium</option>
+            <option value="Hard">Hard</option>
+        </select>
+    </div>
+
+    <div class="filter-group">
+        <label>Time</label>
+        <select data-filter="time">
+            <option value="All">All</option>
+            <option value="Under 15 min">Under 15 min</option>
+            <option value="15-30 min">15-30 min</option>
+            <option value="30-60 min">30-60 min</option>
+            <option value="60+">60+</option>
+        </select>
+    </div>
+
+    <div class="filter-group">
+        <label>Diet</label>
+        <select data-filter="diet">
+            <option value="Vegetarian">Vegetarian</option>
+            <option value="Vegan">Vegan</option>
+            <option value="Gluten-free">Gluten-free</option>
+            <option value="Dairy-free">Dairy-free</option>
+        </select>
+    </div>
+
+</div>
+
 <input type="search" id="searchBar" placeholder="Search recipes...">
 <div id="recipeList"></div>
 
