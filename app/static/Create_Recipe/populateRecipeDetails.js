@@ -1,3 +1,7 @@
+document.addEventListener("DOMContentLoaded", function () {
+    populate(recipe_details_dict);
+});
+
 function handleQuotes(str) {
   return str.replace(/&/g, "&amp;").replace(/"/g, "&quot;");
 }
