@@ -7,9 +7,11 @@ function addRecipeBanner(recipe_details_dict){
 function makeRecipeBanner(recipe_details_dict){
     let newRecipeBanner = document.createElement("fieldset");
     newRecipeBanner.setAttribute("class", "outerRecipeBanner");
+
+    let div = document.createElement("div");
     let time = calcTime(recipe_details_dict["timeList"]["totalTime"][0], recipe_details_dict["timeList"]["totalTime"][1]);
-    newRecipeBanner.innerHTML = `
-    <i class="bi bi-bookmark" onclick="addBookmark(event)"></i>&nbsp;&nbsp;&nbsp;<i class="bi bi-cart" onclick="addToCart(event)"></i>
+    
+    div.innerHTML = `
     <fieldset class="recipeBanner">
         <img src=${recipe_details_dict["recipeCoverImage"]} class = "recipeImage recipeBannerImage">
         <div class="recipeBannerText">
@@ -20,12 +22,29 @@ function makeRecipeBanner(recipe_details_dict){
     </fieldset>
     `;
 
-    return adjustRecipeBanner(newRecipeBanner);
-}
+    let bookmark = document.createElement("i");
+    if (Object.values(bookmarked_dict).includes(recipe_details_dict)){
+        bookmark.setAttribute("class", "bi bi-bookmark-fill");
+        bookmark.setAttribute("onclick", "removeBookmark(event)");
+    }
+    else{
+        bookmark.setAttribute("class", "bi bi-bookmark");
+        bookmark.setAttribute("onclick", "addBookmark(event)");
+    }
 
-function adjustRecipeBanner(newRecipeBanner) {
-    console.log(shopping_list_dict)
-    
+    let cart = document.createElement("i");
+    if (Object.values(shopping_list_dict).includes(recipe_details_dict)){
+        cart.setAttribute("class", "bi bi-cart-fill");
+        cart.setAttribute("onclick", "removeFromCart(event)");
+    }
+    else{
+        cart.setAttribute("class", "bi bi-cart");
+        cart.setAttribute("onclick", "addToCart(event)");
+    }
+    newRecipeBanner.appendChild(bookmark);
+    newRecipeBanner.appendChild(cart);
+    newRecipeBanner.appendChild(div);
+
     return newRecipeBanner;
 }
 
