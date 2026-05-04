@@ -244,14 +244,15 @@ select {
   font-size: 14px;
 }
 
+.outerRecipeBanner {
+  border-color: rgba(255, 255, 255, 0);
+}
 .recipeBanner {
   background-color: white;
-  margin-top: 2%;
   height: 150px;
 }
 .recipeBanner:hover{
   background-color: rgb(245, 245, 245);
-  margin-top: 2%;
 }
 .recipeBannerImage{
   max-height: 100%;
