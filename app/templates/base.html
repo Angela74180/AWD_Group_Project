@@ -25,7 +25,21 @@
                 <li><a href="/shopping_list"><i class="bi bi-cart3"></i></a></li>
                 <li><a href="/notifications"><i class="bi bi-bell-fill"></i></a></li>
             </ul>
-            <a href="/profile"><img src ="https://gleephoria.in/wp-content/uploads/2024/10/WhatsApp-Image-2023-07-14-at-6.04.12-PM.jpeg" class="profile-btn"></a>
+            {% if current_user.is_authenticated %}
+
+                <li><a href="/profile">
+                    <img src="https://gleephoria.in/wp-content/uploads/2024/10/WhatsApp-Image-2023-07-14-at-6.04.12-PM.jpeg"
+                        class="profile-btn">
+                </a></li>
+
+                <li><a href="/logout">Logout</a></li>
+
+            {% else %}
+
+                <li><a href="/login">Login</a></li>
+                <li><a href="/signup">Sign Up</a></li>
+
+            {% endif %}
         </nav>
 
         {% block header %}{% endblock %}
