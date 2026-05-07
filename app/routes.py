@@ -1,5 +1,8 @@
-from flask import render_template
+from flask import render_template, request, redirect, url_for
 from app import app
+from flask_login import login_user, logout_user
+from app.models import User
+from app import db
 
 @app.route('/')
 @app.route('/index')
@@ -335,12 +338,55 @@ def create_recipe(recipe_num):
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+
+    if request.method == 'POST':
+
+        username = request.form['username']
+        password = request.form['password']
+
+        user = User.query.filter_by(username=username).first()
+
+        if user and user.check_password(password):
+            login_user(user)
+            return redirect(url_for('index'))
+
+        return render_template('loginPage.html', error="Invalid credentials")
+
     return render_template('loginPage.html')
 
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
+
+    if request.method == 'POST':
+
+        username = request.form['username']
+        email = request.form['email']
+        password = request.form['password']
+
+        existing_user = User.query.filter_by(username=username).first()
+
+        if existing_user:
+            return render_template('signupPage.html', error="User already exists")
+
+        user = User(
+            username=username,
+            email=email
+        )
+
+        user.set_password(password)
+
+        db.session.add(user)
+        db.session.commit()
+
+        return redirect(url_for('login'))
+
     return render_template('signupPage.html')
+
+@app.route("/logout")
+def logout():
+    logout_user()
+    return redirect(url_for("index"))
 
 
 @app.route("/profile")
