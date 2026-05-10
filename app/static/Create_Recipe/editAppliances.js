@@ -9,13 +9,13 @@ function chosenAppliance(appliance, extraData) {
 
     if (appliance.value == "Microwave") {
         details.innerHTML = `
-        Wattage: <input type = "number" style="margin-top: 2%" placeholder = "(e.g 850, 1000, 1200)" min = "400" value = "${handleQuotes(extraData)}" required> W</input>
+        Wattage: <input name="extraData" type = "number" style="margin-top: 2%" placeholder = "(e.g 850, 1000, 1200)" min = "400" value = "${handleQuotes(extraData)}" required> W</input>
         `;
     }
 
     if (appliance.value == "Other") {
         details.innerHTML = `
-        Appliance/Special Equipment Name: <input type = "text" style="margin-top: 2%" value = "${handleQuotes(extraData)}" required></input>
+        Appliance/Special Equipment Name: <input name="extraData" type = "text" style="margin-top: 2%" value = "${handleQuotes(extraData)}" required></input>
         `;
     }
 }
@@ -30,7 +30,7 @@ function addAppliance(applianceDict) {
     newAppliance.setAttribute("class", "appliance");
     newAppliance.innerHTML = `
         <button type="button" class="btn btn-remove" onclick="removeAppliance(event)">- Remove</button>
-        <input class="equipment_input" list="equipment" style="margin-bottom: 2%" placeholder = "Appliance/Equipment" onchange="chosenAppliance(event.target, '')" value = "${handleQuotes(applianceDict["name"])}" required>
+        <input name="applianceName" class="equipment_input" list="equipment" style="margin-bottom: 2%" placeholder = "Appliance/Equipment" onchange="chosenAppliance(event.target, '')" value = "${handleQuotes(applianceDict["name"])}" required>
         <datalist id="equipment">
             <option value = "Other"></option>
             <option value = "Oven"></option>
@@ -68,7 +68,7 @@ function addAppliance(applianceDict) {
             <option value = "Digital Scales"></option>
         </datalist>
         <div id="applianceDetails"></div>
-        <textarea placeholder="(Optional) Notes: 500 Character Limit" rows = "2" maxlength="500">${handleQuotes(applianceDict["desc"])}</textarea>
+        <textarea name="applianceDescription"placeholder="(Optional) Notes: 500 Character Limit" rows = "2" maxlength="500">${handleQuotes(applianceDict["desc"])}</textarea>
     `;
     container.appendChild(newAppliance);
 

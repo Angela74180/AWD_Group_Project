@@ -396,6 +396,8 @@ def signup():
 
     return render_template('signupPage.html')
 
+
+
 @app.route("/logout")
 def logout():
     logout_user()

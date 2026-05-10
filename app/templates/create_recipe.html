@@ -9,7 +9,7 @@
 <script src="{{ url_for('static', filename='Create_Recipe/editSteps.js') }}"></script>
 <script src="{{ url_for('static', filename='Create_Recipe/editTime.js') }}"></script>
 <script src="{{ url_for('static', filename='Create_Recipe/editPhotos.js') }}"></script>
-<script src="{{ url_for('static', filename='Create_Recipe/timeCalculation.js') }}"></script>
+<script src="{{ url_for('static', filename='timeCalculation.js') }}"></script>
 <script src="{{ url_for('static', filename='Create_Recipe/getRecipeInfo.js') }}"></script>
 <script src="{{ url_for('static', filename='Create_Recipe/previewRecipe.js') }}"></script>
 <script src="{{ url_for('static', filename='Create_Recipe/submitRecipeForm.js') }}"></script>
@@ -25,13 +25,13 @@
 {% block content %}
 <h1>Create a Recipe</h1>
 <br>
-    <form name = "Create Recipe" action="/" onsubmit="return handleRecipeForm()">
+    <form name = "Create Recipe" action="/publish_recipe" method="POST" ZZZonsubmit="return handleRecipeForm()">
         <input id = "recipeName" name="recipe_name" type = "text" style="width: 100%" maxlength="100" placeholder="Recipe Name (100 character Limit)"required>
         <br>
         <br>
 
         Recipe Type:
-        <select id="recipeType">
+        <select id="recipeType" name="recipeType">
             <option value = Breakfast>Breakfast</option>
             <option value = Lunch>Lunch</option>
             <option value = Dinner>Dinner</option>
@@ -47,7 +47,7 @@
         <br>
         
         Recipe Difficulty:
-        <select id="recipeDifficulty">
+        <select id="recipeDifficulty" name="recipeDifficulty">
             <option value = Simple>Simple</option>
             <option value = Intermediate>Intermediate</option>
             <option value = Challenging>Challenging</option>
@@ -56,7 +56,7 @@
         <br>
 
         Serves:
-        <input id="serves" type = "number" min = "0" style="width: 60px;" required>
+        <input id="serves" name="serves" type = "number" min = "0" style="width: 60px;" required>
         <br>
         <br>
         
@@ -86,6 +86,7 @@
         <br>
         <input id = "coverPhoto" type = "file" accept=".jpg, .png, .jpeg, .webp" onchange='validatePhoto(event.target)'>
         <div></div>
+        <input name="coverPhoto" type = "hidden">
         <br>
         <br>
 
@@ -113,16 +114,16 @@
         <br>
 
         Visibility: 
-        <select id="visibility">
+        <select name="visibility" id="visibility">
             <option value = Private>Private</option>
             <option value = Friends_Only>Friends Only</option>
             <option value = Public>Public</option>
         </select>
         <br>
         <br>
-        <span style="display: inline-block; width: 100px">Allow Ratings: </span><input type = "checkbox" id="allowRatings" checked>
+        <span style="display: inline-block; width: 100px">Allow Ratings: </span><input name="allowRatings" type = "checkbox" id="allowRatings" checked>
         <br>
-        <span style="display: inline-block; width: 100px">Allow Reviews: </span><input type = "checkbox" id="allowReviews" vertical-align = "middle" checked>
+        <span style="display: inline-block; width: 100px">Allow Reviews: </span><input name="allowReviews" type = "checkbox" id="allowReviews" vertical-align = "middle" checked>
         <br>
         <br>
         <br>

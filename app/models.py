@@ -35,6 +35,7 @@ class Recipe(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     author_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    prev_version_id = db.Column(db.Integer, db.ForeignKey("recipe.id"))
     name = db.Column(db.String(200), nullable=False)
     recipe_type = db.Column(db.String(30), nullable=False)
     difficulty = db.Column(db.String(20), nullable=False)
@@ -45,18 +46,15 @@ class Recipe(db.Model):
     prep_minutes = db.Column(db.Integer, nullable=False, default=0)
     cook_minutes = db.Column(db.Integer, nullable=False, default=0)
     total_minutes = db.Column(db.Integer, nullable=False, default=0)
+    prep_hours = db.Column(db.Integer, nullable=False, default=0)
+    cook_hours = db.Column(db.Integer, nullable=False, default=0)
+    total_hours = db.Column(db.Integer, nullable=False, default=0)
     visibility = db.Column(db.String(20), nullable=False)
     allow_ratings = db.Column(db.Boolean, nullable=False, default=True)
     allow_reviews = db.Column(db.Boolean, nullable=False, default=True)
     status = db.Column(db.String(20), nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    updated_at = db.Column(
-        db.DateTime,
-        nullable=False,
-        default=datetime.utcnow,
-        onupdate=datetime.utcnow,
-    )
-    prev_version = db.Column(db.Integer, db.ForeignKey("recipe.id"))
+    updated_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
 
 
     author = db.relationship("User", back_populates="recipes")
