@@ -149,13 +149,13 @@ function view_recipe(recipe_details_dict) {
     div_main.innerHTML += `<br><br>`;
 
     if (recipe_details_dict["allowRatings"] && !recipe_details_dict["allowReviews"]){
-        div_main.innerHTML += `<button></button>`;
+        div_main.innerHTML += `<button type="button" class="btn btn-add" onclick="rate(event)">Leave a Rating</button>`;
     }
-    else if (recipe_details_dict["allowReviews"] && !recipe_details_dict["allowRatings"]){
-        div_main.innerHTML += `<button></button>`;
+    else if (!recipe_details_dict["allowRatings"] && recipe_details_dict["allowReviews"]){
+        div_main.innerHTML += `<button type="button" class="btn btn-add" onclick="review(event)">Leave a Review</button>`;
     }
-    else if (recipe_details_dict["allowRatings"] && !recipe_details_dict["allowReviews"]){
-        div_main.innerHTML += `<button></button>`;
+    else if (recipe_details_dict["allowRatings"] && recipe_details_dict["allowReviews"]){
+        div_main.innerHTML += `<button type="button" class="btn btn-add" onclick="review_rate(event)">Leave a Review</button>`;
     }
 
     
