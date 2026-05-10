@@ -26,19 +26,17 @@
                 <li><a href="/notifications"><i class="bi bi-bell-fill"></i></a></li>
             </ul>
             {% if current_user.is_authenticated %}
-
-                <li><a href="/profile">
+                <a href="/profile">
                     <img src="https://gleephoria.in/wp-content/uploads/2024/10/WhatsApp-Image-2023-07-14-at-6.04.12-PM.jpeg"
                         class="profile-btn">
-                </a></li>
-
-                <li><a href="/logout">Logout</a></li>
+                </a>
+                <!-- Normally If you want to Logout that will be an option on the profile -->
+                <!-- <li><a href="/logout">Logout</a></li> -->
 
             {% else %}
-
-                <li><a href="/login">Login</a></li>
-                <li><a href="/signup">Sign Up</a></li>
-
+                <ul class="nav-links">
+                    <li><a href="/login">Login</a></li>
+                </ul>
             {% endif %}
         </nav>
 
