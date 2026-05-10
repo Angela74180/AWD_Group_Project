@@ -1,8 +1,7 @@
 from flask import render_template, request, redirect, url_for
-from app import app
+from app import app, db
 from flask_login import login_user, logout_user
-from app.models import User
-from app import db
+from app.models import User, Recipe
 
 @app.route('/')
 @app.route('/index')
