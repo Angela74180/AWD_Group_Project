@@ -1,8 +1,8 @@
-"""initial schema
+"""Initial Migration
 
-Revision ID: d1a6e11625b1
+Revision ID: aa7b1db52270
 Revises: 
-Create Date: 2026-05-08 16:37:39.030528
+Create Date: 2026-05-10 20:28:19.725390
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'd1a6e11625b1'
+revision = 'aa7b1db52270'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -65,7 +65,9 @@ def upgrade():
     sa.Column('status', sa.String(length=20), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.Column('updated_at', sa.DateTime(), nullable=False),
+    sa.Column('prev_version', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['author_id'], ['user.id'], ),
+    sa.ForeignKeyConstraint(['prev_version'], ['recipe.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('shopping_list',
