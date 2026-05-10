@@ -3,9 +3,12 @@
 {% block title %}View Recipe - CookBook{% endblock %}
 
 {% block scripts %}
+<script src="{{ url_for('static', filename='prac_recipes.js') }}"></script>
 <script src="{{ url_for('static', filename='View_Recipe/view_recipe.js') }}"></script>
 <script src="{{ url_for('static', filename='timeCalculation.js') }}"></script>
 <script src="{{ url_for('static', filename='Review/review.js') }}"></script>
+<script src="{{ url_for('static', filename='Shopping_List/cart.js') }}"></script>
+<script src="{{ url_for('static', filename='Save_Recipes/bookmark.js') }}"></script>
 <script>
     let recipe_details_dict = {{ recipe_details_dict | tojson }};
 </script>

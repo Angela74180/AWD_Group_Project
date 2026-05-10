@@ -287,7 +287,7 @@ tuna_mornay_dict = {
         {
             "desc": "Cook at 400 degrees F for 20 mins.",
             "name": "Cooking It",
-            "photo": ""
+            "photo": "https://tse1.mm.bing.net/th/id/OIP.Z5_7sbpWkaWZJkN6qd17GgHaE8?rs=1&pid=ImgDetMain&o=7&rm=3"
         }
     ],
     "tagList": [
