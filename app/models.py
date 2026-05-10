@@ -55,6 +55,8 @@ class Recipe(db.Model):
         default=datetime.utcnow,
         onupdate=datetime.utcnow,
     )
+    prev_version = db.Column(db.Integer, db.ForeignKey("recipe.id"))
+
 
     author = db.relationship("User", back_populates="recipes")
     ingredients = db.relationship(

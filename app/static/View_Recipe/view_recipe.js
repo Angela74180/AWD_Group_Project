@@ -8,7 +8,8 @@ function handleQuotes(str) {
 
 function view_recipe(recipe_details_dict) {
     let div_main = document.getElementsByClassName("div_main")[0]
-
+    div_main.innerHTML += ``;
+    
     div_main.innerHTML += `<img src=${recipe_details_dict["recipeCoverImage"]} class = "recipeImage recipeBannerImage">`;
     div_main.innerHTML += `<h1>~ ${recipe_details_dict["recipeName"]} ~</h1>`;
 
