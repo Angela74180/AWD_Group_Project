@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}View Recipe - CookBook{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='View_Recipe/view_recipe.js') }}"></script>
+<script src="{{ url_for('static', filename='timeCalculation.js') }}"></script>
+<script>
+    let recipe_details_dict = {{ recipe_details_dict | tojson }};
+</script>
+{% endblock %}
+
+{% block content %}
+{% endblock %}

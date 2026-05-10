@@ -269,7 +269,11 @@ select {
   float: right;
 }
 
-
+.recipeStepImage{
+  max-height: 15%;
+  max-width: 15%;
+  margin-left: 2%;
+}
 
 
 #latestRecipes {

@@ -27,7 +27,8 @@ empty_dict = {
     "steps": [
         {
             "desc": "",
-            "name": ""
+            "name": "",
+            "photo": ""
         }
     ],
     "tagList": [
@@ -137,27 +138,34 @@ pancake_dict = {
     "steps": [
         {
             "name": "Preparing The Batter",
-            "desc": "Sift flour and salt into a bowl. Create a well in the centre and drop in the egg."
+            "desc": "Sift flour and salt into a bowl. Create a well in the centre and drop in the egg.",
+            "photo": ""
         },
         {
             "name": "Preparing The Batter",
-            "desc": "Add half the liquids (includes butter) in small increments at a time and mix until smooth."
+            "desc": "Add half the liquids (includes butter) in small increments at a time and mix until smooth.",
+            "photo": ""
         },
         {
             "name": "Preparing The Batter",
-            "desc": "Beat in the remaining liquid and stir until it has the consistency of thin cream."
+            "desc": "Beat in the remaining liquid and stir until it has the consistency of thin cream.",
+            "photo": ""
         },
         {
             "name": "Cooking",
-            "desc": "Pour a small amount (only enough to coat the bottom of the pan) into a frypan over medium heat."
+            "desc": "Pour a small amount (only enough to coat the bottom of the pan) into a frypan over medium heat.",
+            "photo": ""
         },
         {
             "name": "Cooking",
-            "desc": "Flip the pancake over once the underside is mostly cooked."
+            "desc": "Flip the pancake over once the underside is mostly cooked.",
+            "photo": ""
         },
         {
             "name": "Cooking",
-            "desc": "Once the pancake is cooked, serve it with your choice of toppings."
+            "desc": "Once the pancake is cooked, serve it with your choice of toppings.",
+            "photo": "https://www.jocooks.com/wp-content/uploads/2018/12/crepes-1-8.jpg"
+
         }
     ]
 }
@@ -258,27 +266,33 @@ tuna_mornay_dict = {
     "steps": [
         {
             "desc": "Combine Drained and flaked tuna, onion flakes, lemon juice, parsley and garlic salt. ",
-            "name": ""
+            "name": "",
+            "photo": ""
         },
         {
             "desc": "In a pot over the stove, melt the marg and blend in flour and seasonings. Add the milk very gradually and cook until it is thick and smooth, stirring constantly.",
-            "name": "White Sauce"
+            "name": "White Sauce",
+            "photo": ""
         },
         {
             "desc": "Fold in the tuna mixture and breadcrumbs and place the mixture in a casserole dish.",
-            "name": ""
+            "name": "",
+            "photo": ""
         },
         {
             "desc": "Cover with potato crisps.",
-            "name": ""
+            "name": "",
+            "photo": ""
         },
         {
             "desc": "Cook at 400 degrees F for 20 mins.",
-            "name": "Cooking It"
+            "name": "Cooking It",
+            "photo": ""
         }
     ],
     "tagList": [
-        "Pescatarian"
+        "Pescatarian",
+        "OTHER"
     ],
     "timeList": {
         "cookingTime": [
