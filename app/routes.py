@@ -1,6 +1,7 @@
 from flask import render_template, request, redirect, url_for, session
 from app import app, db
 from flask_login import login_user, logout_user
+from sqlalchemy.exc import SQLAlchemyError #############################################################
 from app.models import User, Recipe
 
 @app.route('/')
@@ -16,29 +17,45 @@ def home():
 def shopping_list():
     return render_template("shopping_list.html")
 
-@app.route('/publish_recipe', methods["POST"])
+@app.route('/publish_recipe', methods=["POST"])
 def publish_recipe():
     if request.method == "POST":
+        if request.form.get("publishButton"):
+            status = "Published"
+        else:
+            status = "Draft"
+
         recipe = Recipe(
-            author_id = session.get('authorId'),
-            name = request.form["recipe_name"],
-            recipe_type = request.form["recipeType"],
-            difficulty = request.form["recipeDifficulty"],
-            serves = request.form["serves"],
-            description = request.form["Description"],
-            # cover_image_url****************
-            time_split = request.form["timeSplit"],
-            prep_minutes = request.form[""],
-            cook_minutes = request.form[""],
-            total_minutes = request.form[""],
-            prep_hours = request.form[""],
-            cook_hours = request.form[""],
-            total_hours = request.form[""],
-            visibility = request.form["visibility"],
-            allow_ratings = request.form["allowRatings"],
-            allow_reviews = request.form["allowReviews"],
-            # status = request.form[""]
+            author_id     = session.get('authorId'),
+            # prev_version_id = db.Column(db.Integer, db.ForeignKey("recipe.id")) ####this column needs to be nullable ######
+            name          = request.form["recipe_name"],
+            recipe_type   = request.form["recipeType"],
+            difficulty    = request.form["recipeDifficulty"],
+            serves        = request.form["serves"],
+            description   = request.form["Description"],
+            cover_image   = request.form["coverPhoto"],
+            time_split    = bool(request.form.get("timeSplit")),
+            prep_minutes  = request.form.get("prepMins", 0),
+            cook_minutes  = request.form.get("cookMins", 0),
+            total_minutes = request.form.get("totalMins", 0),
+            prep_hours    = request.form.get("prepHours", 0),
+            cook_hours    = request.form.get("cookHours", 0),
+            total_hours   = request.form.get("totalHours", 0),
+            visibility    = request.form["visibility"],
+            allow_ratings = bool(request.form.get("allowRatings")),
+            allow_reviews = bool(request.form.get("allowReviews")),
+            status        = status
         )
+        
+        try:
+            db.session.add(recipe)
+            db.session.commit()
+            return redirect(url_for("index"))
+        
+        except Exception as e:
+            db.session.rollback()
+            error = "Recipe could not be saved."
+            return render_template("/create_recipe", error=error)
 
 
 @app.route('/create_recipe/<recipe_num>')
