@@ -1,0 +1,21 @@
+If you have already done any migrations:!!!
+You need to downgrade your database to nothing to ensure that your database is strating from scratch before running the upgrade command.
+
+To open the Database, type into a command window  sqlite3 app.db
+
+To clear the Database
+delete from recipe_appliance;
+delete from appliance;
+delete from recipe_ingredient;
+delete from ingredient;
+delete from recipe_tag;
+delete from tag;
+delete from step;
+delete from recipe;
+delete from user;
+delete from shopping_list_item;
+delete from shopping_list;
+delete from bookmark;
+
+To Populate the Database with the test content
+.read database_contents.sql
