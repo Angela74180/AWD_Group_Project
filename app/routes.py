@@ -2,7 +2,7 @@ from flask import render_template, request, redirect, url_for, session
 from app import app, db
 from flask_login import login_user, logout_user
 from sqlalchemy.exc import SQLAlchemyError #############################################################
-from app.models import User, Recipe
+from app.models import User, Recipe, Ingredient, RecipeIngredient, Tag, RecipeTag, Appliance, RecipeAppliance
 
 @app.route('/')
 @app.route('/index')
@@ -20,6 +20,100 @@ def shopping_list():
 @app.route('/publish_recipe', methods=["POST"])
 def publish_recipe():
     if request.method == "POST":
+
+        ingredient_names        = request.form.getlist("ingredientName")
+        ingredient_quantities   = request.form.getlist("ingredientQuantity")
+        ingredient_units        = request.form.getlist("ingredientUnits")
+        ingredient_descriptions = request.form.getlist("ingredientDescription")
+
+        if len(ingredient_names) != len(ingredient_quantities) or len(ingredient_quantities) != len(ingredient_units) or len(ingredient_units) != len(ingredient_descriptions):
+            raise Exception("Unequal number of ingredient parameters")
+
+        ingredients_list = []
+
+        for i in range(len(ingredient_names)):
+            ingredient_name = ingredient_names[i]
+            ingredient_quantity = ingredient_quantities[i]
+            ingredient_unit = ingredient_units[i]
+            ingredient_description = ingredient_descriptions[i]
+
+            ingredient = Ingredient.query.filter_by(name=ingredient_name).first()
+
+            if ingredient == None:
+                ingredient = Ingredient(
+                    name = ingredient_name
+                )
+                db.session.add(ingredient)
+                db.session.commit()
+                
+            
+            recipe_ingredient = RecipeIngredient(
+                ingredient_id = ingredient.id,
+                quantity      = ingredient_quantity,
+                units         = ingredient_unit,
+                desc          = ingredient_description,
+                sort_order    = i
+            )
+
+            ingredients_list.append(recipe_ingredient)
+
+
+
+        tag_names = request.form.getlist("tagName")
+        tag_list = []
+        for tag_name in (tag_names):
+            tag = Tag.query.filter_by(name=tag_name).first()
+
+            if tag == None:
+                tag = Tag(
+                    name = tag_name
+                )
+                db.session.add(tag)
+                db.session.commit()
+
+            recipe_tag = RecipeTag(
+                tag_id = tag.id
+                ###################################################################################### DO I NEED RECIPE_ID ?
+            )
+
+            tag_list.append(recipe_tag)
+
+
+
+
+        appliance_names        = request.form.getlist("applianceName")
+        appliance_extra_details   = request.form.getlist("extraData")
+        appliance_descriptions = request.form.getlist("applianceDescription")
+
+        if len(appliance_names) != len(appliance_extra_details) or len(appliance_extra_details) != len(appliance_descriptions):
+            raise Exception("Unequal number of appliance parameters")
+        
+        appliance_list = []
+
+        for i in range(len(appliance_names)):
+            appliance_name = appliance_names[i]
+            appliance_extra_data = appliance_extra_details[i]
+            appliance_description = appliance_descriptions[i]
+
+            appliance = Appliance.query.filter_by(name=appliance_name).first()
+
+            if appliance == None:
+                appliance = Appliance(
+                    name = appliance_name
+                )
+                db.session.add(appliance)
+                db.session.commit()
+
+            recipe_appliance = RecipeAppliance(
+                appliance_id = appliance.id,
+                extra_data   = appliance_extra_data,
+                desc         = appliance_description,
+                sort_order   = i
+            )
+
+            appliance_list.append(recipe_appliance)
+
+
         if request.form.get("publishButton"):
             status = "Published"
         else:
@@ -44,7 +138,10 @@ def publish_recipe():
             visibility    = request.form["visibility"],
             allow_ratings = bool(request.form.get("allowRatings")),
             allow_reviews = bool(request.form.get("allowReviews")),
-            status        = status
+            status        = status,
+            ingredients   = ingredients_list,
+            tags          = tag_list,
+            appliances    = appliance_list
         )
         
         try:
@@ -53,6 +150,7 @@ def publish_recipe():
             return redirect(url_for("index"))
         
         except Exception as e:
+            app.logger.error(e)
             db.session.rollback()
             error = "Recipe could not be saved."
             return render_template("/create_recipe", error=error)
