@@ -2,7 +2,7 @@ from flask import render_template, request, redirect, url_for, session
 from app import app, db
 from flask_login import login_user, logout_user
 from sqlalchemy.exc import SQLAlchemyError #############################################################
-from app.models import User, Recipe, Ingredient, RecipeIngredient, Tag, RecipeTag, Appliance, RecipeAppliance
+from app.models import User, Recipe, Ingredient, RecipeIngredient, Tag, RecipeTag, Appliance, RecipeAppliance, Step
 
 @app.route('/')
 @app.route('/index')
@@ -73,7 +73,6 @@ def publish_recipe():
 
             recipe_tag = RecipeTag(
                 tag_id = tag.id
-                ###################################################################################### DO I NEED RECIPE_ID ?
             )
 
             tag_list.append(recipe_tag)
@@ -81,9 +80,9 @@ def publish_recipe():
 
 
 
-        appliance_names        = request.form.getlist("applianceName")
-        appliance_extra_details   = request.form.getlist("extraData")
-        appliance_descriptions = request.form.getlist("applianceDescription")
+        appliance_names         = request.form.getlist("applianceName")
+        appliance_extra_details = request.form.getlist("extraData")
+        appliance_descriptions  = request.form.getlist("applianceDescription")
 
         if len(appliance_names) != len(appliance_extra_details) or len(appliance_extra_details) != len(appliance_descriptions):
             raise Exception("Unequal number of appliance parameters")
@@ -114,6 +113,31 @@ def publish_recipe():
             appliance_list.append(recipe_appliance)
 
 
+
+        step_names = request.form.getlist("stepName")
+        step_descriptions = request.form.getlist("stepDescription")
+        step_photos = request.form.getlist("stepPhoto")
+
+        if len(step_names) != len(step_descriptions) or len(step_descriptions) != len(step_photos):
+            raise Exception("Unequal number of step parameters")
+        
+        step_list = []
+
+        for i in range(len(step_names)):
+            step_name = step_names[i]
+            step_description = step_descriptions[i]
+            step_photo = step_photos[i]
+
+            step = Step(
+                name        = step_name,
+                desc        = appliance_description,
+                photo       = step_photo,
+                step_number = i
+            )
+
+            step_list.append(step)
+
+
         if request.form.get("publishButton"):
             status = "Published"
         else:
@@ -141,7 +165,8 @@ def publish_recipe():
             status        = status,
             ingredients   = ingredients_list,
             tags          = tag_list,
-            appliances    = appliance_list
+            appliances    = appliance_list,
+            steps         = step_list
         )
         
         try:

@@ -150,7 +150,7 @@ class Step(db.Model):
     step_number = db.Column(db.Integer, nullable=False)
     name = db.Column(db.String(100))
     desc = db.Column(db.String(500), nullable=False)
-    photo_url = db.Column(db.String(500))
+    photo = db.Column(db.Text, nullable=True)
 
     __table_args__ = (
         db.UniqueConstraint("recipe_id", "step_number", name="uq_step_recipe_number"),
