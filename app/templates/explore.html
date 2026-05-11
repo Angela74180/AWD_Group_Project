@@ -10,10 +10,7 @@
     <div class="filter-group">
         <label>Cuisine:</label>
         <select data-filter="cuisine">
-            <option value="All">All</option>
-            <option value="Asian">Asian</option> 
-            <option value="Mediterranean">Mediterranean</option>
-            <option value="Western">Western</option>               
+            <option value="All">All</option>             
         </select>
     </div>
 
@@ -21,9 +18,6 @@
         <label>Difficulty</label>
         <select data-filter="difficulty">
             <option value="All">All</option>
-            <option value="Easy">Easy</option>
-            <option value="Medium">Medium</option>
-            <option value="Hard">Hard</option>
         </select>
     </div>
 
@@ -41,10 +35,7 @@
     <div class="filter-group">
         <label>Diet</label>
         <select data-filter="diet">
-            <option value="Vegetarian">Vegetarian</option>
-            <option value="Vegan">Vegan</option>
-            <option value="Gluten-free">Gluten-free</option>
-            <option value="Dairy-free">Dairy-free</option>
+            <option value="All">All</option>
         </select>
     </div>
 
@@ -58,7 +49,6 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="{{ url_for('static', filename='Explore/data.js') }}"></script>
 <script src="{{ url_for('static', filename='Explore/getRandomRecipes.js') }}"></script>
 <script src="{{ url_for('static', filename='Explore/displayRecipes.js') }}"></script>
 <script src="{{ url_for('static', filename='Explore/displaySpotlight.js') }}"></script>
