@@ -3,6 +3,7 @@ from app import app, db
 from flask_login import login_user, logout_user
 from sqlalchemy.exc import SQLAlchemyError #############################################################
 from app.models import User, Recipe, Ingredient, RecipeIngredient, Tag, RecipeTag, Appliance, RecipeAppliance, Step
+from app.makeRecipeBannerDict import make_recipe_banner_dict
 
 @app.route('/')
 @app.route('/index')
@@ -572,7 +573,16 @@ def logout():
 
 @app.route("/profile")
 def profile():
-    return render_template("profilePage.html")
+    userId = session.get('authorId')
+    user = User.query.filter_by(id=userId).first()
+
+    my_recipes_list = []
+    for recipe in user.recipes:
+        my_recipes_list.append(make_recipe_banner_dict(recipe))
+
+
+
+    return render_template("profilePage.html", username=user.username, userRecipes=my_recipes_list)
 
 
 

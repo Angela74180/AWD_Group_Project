@@ -22,27 +22,27 @@ function makeRecipeBanner(recipe_details_dict){
     </fieldset>
     `;
 
-    let bookmark = document.createElement("i");
-    if (Object.values(bookmarked_dict).includes(recipe_details_dict)){
-        bookmark.setAttribute("class", "bi bi-bookmark-fill");
-        bookmark.setAttribute("onclick", "removeBookmark(event)");
-    }
-    else{
-        bookmark.setAttribute("class", "bi bi-bookmark");
-        bookmark.setAttribute("onclick", "addBookmark(event)");
-    }
+    // let bookmark = document.createElement("i");
+    // if (Object.values(bookmarked_dict).includes(recipe_details_dict)){
+    //     bookmark.setAttribute("class", "bi bi-bookmark-fill");
+    //     bookmark.setAttribute("onclick", "removeBookmark(event)");
+    // }
+    // else{
+    //     bookmark.setAttribute("class", "bi bi-bookmark");
+    //     bookmark.setAttribute("onclick", "addBookmark(event)");
+    // }
 
-    let cart = document.createElement("i");
-    if (Object.values(shopping_list_dict).includes(recipe_details_dict)){
-        cart.setAttribute("class", "bi bi-cart-fill");
-        cart.setAttribute("onclick", "removeFromCart(event)");
-    }
-    else{
-        cart.setAttribute("class", "bi bi-cart");
-        cart.setAttribute("onclick", "addToCart(event)");
-    }
-    newRecipeBanner.appendChild(bookmark);
-    newRecipeBanner.appendChild(cart);
+    // let cart = document.createElement("i");
+    // if (Object.values(shopping_list_dict).includes(recipe_details_dict)){
+    //     cart.setAttribute("class", "bi bi-cart-fill");
+    //     cart.setAttribute("onclick", "removeFromCart(event)");
+    // }
+    // else{
+    //     cart.setAttribute("class", "bi bi-cart");
+    //     cart.setAttribute("onclick", "addToCart(event)");
+    // }
+    // newRecipeBanner.appendChild(bookmark);
+    // newRecipeBanner.appendChild(cart);
     newRecipeBanner.appendChild(div);
 
     return newRecipeBanner;
