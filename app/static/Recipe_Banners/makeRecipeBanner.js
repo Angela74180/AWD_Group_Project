@@ -10,6 +10,12 @@ function makeRecipeBanner(recipe_details_dict){
 
     let div = document.createElement("div");
     let time = calcTime(recipe_details_dict["timeList"]["totalTime"][0], recipe_details_dict["timeList"]["totalTime"][1]);
+
+    let tags = `<p>`
+    for (let tag of recipe_details_dict["tagList"]){
+        tags += `<button type="button" class="btn btn-tag"># ${tag}</button>`
+    }
+    tags += `</p>`
     
     div.innerHTML = `
     <fieldset class="recipeBanner">
@@ -17,6 +23,7 @@ function makeRecipeBanner(recipe_details_dict){
         <div class="recipeBannerText">
             <h3>${recipe_details_dict["recipeName"]}</h3>
             <p>- ${recipe_details_dict["author"]} • Takes <b>${time}</b>, Serves <b>${recipe_details_dict["serves"]}</b></p>
+            ${tags}
             <p>${recipe_details_dict["recipeDescription"]}</p>
         <div>
     </fieldset>

@@ -173,7 +173,7 @@ def publish_recipe():
         try:
             db.session.add(recipe)
             db.session.commit()
-            return redirect(url_for("index"))
+            return redirect(url_for("profile"))
         
         except Exception as e:
             app.logger.error(e)
@@ -511,7 +511,6 @@ def create_recipe(recipe_num):
         return "Recipe not found", 404
 
     return render_template('create_recipe.html', recipe_details_dict=recipes_dict) 
-    # return render_template('create_recipe.html', recipe_num=recipe_num) 
 
 
 
@@ -578,11 +577,15 @@ def profile():
 
     my_recipes_list = []
     for recipe in user.recipes:
-        my_recipes_list.append(make_recipe_banner_dict(recipe))
+        author = User.query.filter_by(id=recipe.author_id).first().username
+        tag_list = []
+        
+        for recipeTag in recipe.tags:
+            tag_list.append(Tag.query.filter_by(id=recipeTag.tag_id).first().name)
 
+        my_recipes_list.append(make_recipe_banner_dict(recipe, author, tag_list))
 
-
-    return render_template("profilePage.html", username=user.username, userRecipes=my_recipes_list)
+    return render_template("profilePage.html", username=user.username, userRecipes=my_recipes_list[::-1])
 
 
 
