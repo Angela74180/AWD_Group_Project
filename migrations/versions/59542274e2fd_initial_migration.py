@@ -1,8 +1,8 @@
-"""initial schema
+"""Initial Migration
 
-Revision ID: d1a6e11625b1
+Revision ID: 59542274e2fd
 Revises: 
-Create Date: 2026-05-08 16:37:39.030528
+Create Date: 2026-05-10 20:42:05.502871
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'd1a6e11625b1'
+revision = '59542274e2fd'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -49,6 +49,7 @@ def upgrade():
     op.create_table('recipe',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('author_id', sa.Integer(), nullable=False),
+    sa.Column('prev_version_id', sa.Integer(), nullable=True),
     sa.Column('name', sa.String(length=200), nullable=False),
     sa.Column('recipe_type', sa.String(length=30), nullable=False),
     sa.Column('difficulty', sa.String(length=20), nullable=False),
@@ -59,6 +60,9 @@ def upgrade():
     sa.Column('prep_minutes', sa.Integer(), nullable=False),
     sa.Column('cook_minutes', sa.Integer(), nullable=False),
     sa.Column('total_minutes', sa.Integer(), nullable=False),
+    sa.Column('prep_hours', sa.Integer(), nullable=False),
+    sa.Column('cook_hours', sa.Integer(), nullable=False),
+    sa.Column('total_hours', sa.Integer(), nullable=False),
     sa.Column('visibility', sa.String(length=20), nullable=False),
     sa.Column('allow_ratings', sa.Boolean(), nullable=False),
     sa.Column('allow_reviews', sa.Boolean(), nullable=False),
@@ -66,6 +70,7 @@ def upgrade():
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.Column('updated_at', sa.DateTime(), nullable=False),
     sa.ForeignKeyConstraint(['author_id'], ['user.id'], ),
+    sa.ForeignKeyConstraint(['prev_version_id'], ['recipe.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('shopping_list',

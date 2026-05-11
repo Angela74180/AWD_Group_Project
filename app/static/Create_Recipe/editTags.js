@@ -12,7 +12,7 @@ function addTag(tagName) {
     newTag.setAttribute("class", "tag");
     newTag.innerHTML = `
         <button type="button" class="btn btn-remove" onclick="removeTag(event)">- Remove</button>
-        # <input type="text" placeholder = "(e.g Gluten Free, High Protein)" value = "${handleQuotes(tagName)}" required>
+        # <input name="tagName" type="text" placeholder = "(e.g Gluten Free, High Protein)" value = "${handleQuotes(tagName)}" required>
     `;
 
     container.appendChild(newTag);

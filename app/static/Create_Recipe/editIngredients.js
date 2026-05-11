@@ -12,9 +12,9 @@ function addIngredient(ingredientDict) {
     newIngredient.setAttribute("class", "ingredient");
     newIngredient.innerHTML = `
         <button type="button" class="btn btn-remove" onclick="removeIngredient(event)">- Remove</button>
-        <input type = "text" style="margin-bottom: 2%" placeholder = "Ingredient Name" value = "${handleQuotes(ingredientDict["name"])}" required> 
-        <input type = "number" style="width: 100px; margin-bottom: 2%" min = "0" placeholder = "Quantity (e.g 750, 0.25)" value = "${ingredientDict["quantity"]}" required>
-        <input list="units" style="width: 100px; margin-bottom: 2%" placeholder = "Units" value = "${handleQuotes(ingredientDict["units"])}" required>
+        <input name="ingredientName" type = "text" style="margin-bottom: 2%" placeholder = "Ingredient Name" value = "${handleQuotes(ingredientDict["name"])}" required> 
+        <input name="ingredientQuantity" type = "number" step="0.001" style="width: 100px; margin-bottom: 2%" min = "0" placeholder = "Quantity (e.g 750, 0.25)" value = "${ingredientDict["quantity"]}" required>
+        <input name="ingredientUnits" list="units" style="width: 100px; margin-bottom: 2%" placeholder = "Units" value = "${handleQuotes(ingredientDict["units"])}" required>
         <datalist id="units">
             <option value = '"Whole"'>(For ingredients that aren't to be divided, e.g eggs)</option>
             <option value = "mL">Millilitres</option>
@@ -43,7 +43,7 @@ function addIngredient(ingredientDict) {
             <option value = '"To Taste"'>(Quantity will not be included when published)</option>
         </datalist>
         <br>
-        <textarea placeholder="(Optional) Notes: 500 Character Limit" rows = "2" maxlength="500">${handleQuotes(ingredientDict["desc"])}</textarea>
+        <textarea name="ingredientDescription" placeholder="(Optional) Notes: 500 Character Limit" rows = "2" maxlength="500">${handleQuotes(ingredientDict["desc"])}</textarea>
     `;
 
     container.appendChild(newIngredient);
