@@ -3,6 +3,7 @@ from app import app, db
 from flask_login import login_user, logout_user
 from sqlalchemy.exc import SQLAlchemyError #############################################################
 from app.models import User, Recipe, Ingredient, RecipeIngredient, Tag, RecipeTag, Appliance, RecipeAppliance, Step
+from flask import jsonify
 
 @app.route('/')
 @app.route('/index')
@@ -10,8 +11,44 @@ def index():
     return render_template("homePage.html")
 
 @app.route("/explore")
-def home():
+def explore():
     return render_template("explore.html")
+
+@app.route("/api/recipes")
+def api_recipes():
+
+    db_recipes = Recipe.query.all()
+
+    data = []
+
+    for recipe in db_recipes:
+        data.append({
+            "title": recipe.name,
+            "difficulty": recipe.difficulty,
+            "time": recipe.total_minutes,
+            "cuisine": recipe.recipe_type,
+            "tags": [t.tag.name for t in recipe.tags]
+        })
+
+    return jsonify(data)
+
+@app.route("/api/tags")
+def api_tags():
+    tags = Tag.query.all()
+    return jsonify([t.name for t in tags])
+
+@app.route("/api/filters")
+def api_filters():
+
+    cuisines = sorted({r.recipe_type for r in Recipe.query.all()})
+    difficulties = sorted({r.difficulty for r in Recipe.query.all()})
+    tags = Tag.query.with_entities(Tag.name).all()
+
+    return jsonify({
+        "cuisines": cuisines,
+        "difficulties": difficulties,
+        "tags": [t[0] for t in tags]
+    })
 
 @app.route("/shopping_list")
 def shopping_list():
