@@ -15,6 +15,7 @@ function validatePhoto(photo) {
             image.setAttribute("src", e.target.result);
             image.setAttribute("class", "preview_image");
             // preview.src = e.target.result; // Set image source to base64 data
+            photo_div.nextElementSibling.value = e.target.result;
         };
 
         reader.onerror = function () {

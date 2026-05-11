@@ -12,6 +12,7 @@ function populate(recipe_details_dict) {
     document.getElementById("recipeName").value = handleQuotes(recipe_details_dict["recipeName"]);
     document.getElementById("recipeType").value = handleQuotes(recipe_details_dict["recipeType"]);
     document.getElementById("recipeDifficulty").value = handleQuotes(recipe_details_dict["recipeDifficulty"]);
+    document.getElementById("serves").value = recipe_details_dict["serves"];
 
     for (tag of recipe_details_dict["tagList"]){
         addTag(tag);
