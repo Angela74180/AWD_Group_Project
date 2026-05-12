@@ -103,7 +103,7 @@ class RecipeIngredient(db.Model):
     recipe = db.relationship("Recipe", back_populates="ingredients")
     ingredient = db.relationship("Ingredient", back_populates="recipe_uses")
 
-
+    
 class Appliance(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)

@@ -4,6 +4,7 @@ from flask_login import login_user, logout_user
 from sqlalchemy.exc import SQLAlchemyError #############################################################
 from app.models import User, Recipe, Ingredient, RecipeIngredient, Tag, RecipeTag, Appliance, RecipeAppliance, Step, Bookmark, ShoppingList
 from app.makeRecipeBannerDict import make_recipe_banner_dict
+from app.makeRecipeDict import make_recipe_dict
 
 @app.route('/')
 @app.route('/index')
@@ -278,7 +279,7 @@ def publish_recipe():
 
             step = Step(
                 name        = step_name,
-                desc        = appliance_description,
+                desc        = step_description,
                 photo       = step_photo,
                 step_number = i
             )
@@ -828,5 +829,82 @@ def profile():
 @app.route('/view_recipe/<recipe_num>')
 def view_recipe(recipe_num):
 
-    recipes_dict = make_recipe_dict(recipe, author, tag_list, bookmark_on, cart_on, signed_in=signed_in)
+    ############### You will nedd to actually check for a User
+    signed_in = True
+
+    userId = session.get('authorId')
+    user = User.query.filter_by(id=userId).first()
+
+
+    #########################Currently hardcoded so that anyone can view anything
+    allowed_to_view=True
+
+    recipe = Recipe.query.filter_by(id=recipe_num).first()
+
+    author = User.query.filter_by(id=recipe.author_id).first().username
+
+    bookmark = Bookmark.query.filter_by(user_id=userId, recipe_id=recipe.id).first()
+    cart = ShoppingList.query.filter_by(user_id=userId, recipe_id=recipe.id).first()
+    bookmark_on = True
+    if not bookmark:
+        bookmark_on = False
+    cart_on = True
+    if not cart:
+        cart_on = False
+    
+    print(bookmark_on)
+    print(cart_on)
+
+    tag_list = []
+    for recipeTag in recipe.tags:
+        tag_list.append(Tag.query.filter_by(id=recipeTag.tag_id).first().name)
+
+    appliances = []
+    for recipeAppliance in recipe.appliances:
+        appliance = Appliance.query.filter_by(id=recipeAppliance.appliance_id).first()
+        recipe_appliance = RecipeAppliance.query.filter_by(appliance_id=appliance.id, recipe_id=recipe.id).first()
+        appliance_dict = {
+            "name": appliance.name,
+            "extraData": recipe_appliance.extra_data,
+            "desc": recipe_appliance.desc
+        }
+        appliances.append(appliance_dict)
+
+
+    ingredients = []
+    for recipeIngredient in recipe.ingredients:
+        ingredient = Ingredient.query.filter_by(id=recipeIngredient.ingredient_id).first()
+        recipe_ingredient = RecipeIngredient.query.filter_by(ingredient_id=ingredient.id, recipe_id=recipe.id).first()
+        # print(recipe_ingredient.quantity)
+
+        quantity = float(recipe_ingredient.quantity)
+
+        # If it's a whole number, return int
+        if quantity.is_integer():
+            quantity = int(quantity)
+
+
+        ingredient_dict = {
+            "name": ingredient.name,
+            "quantity": quantity,
+            "units": recipe_ingredient.units,
+            "desc": recipe_ingredient.desc
+        }
+        ingredients.append(ingredient_dict)
+
+
+    steps = []
+    for recipeStep in recipe.steps:
+        # step = Step.query.filter_by(id=recipeStep.step_id).first()
+        step = Step.query.filter_by(id=recipeStep.id, recipe_id=recipe.id).first()
+        step_dict = {
+            "name": step.name,
+            "step_number": step.step_number,
+            "desc": step.desc,
+            "photo": step.photo
+        }
+        steps.append(step_dict)
+
+
+    recipes_dict = make_recipe_dict(recipe, author, tag_list, appliances, ingredients, steps, bookmark_on, cart_on, signed_in=signed_in, allowed_to_view=allowed_to_view)
     return render_template('view_recipe.html', recipe_details_dict=recipes_dict) 
