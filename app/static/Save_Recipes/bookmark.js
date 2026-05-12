@@ -1,8 +1,14 @@
-function makeBookmark() {
+function makeBookmark(bookmark_on) {
     let bookmark = document.createElement("i");
-    bookmark.setAttribute("class", "bi bi-bookmark");
-    bookmark.setAttribute("onclick", "addBookmark(event)");
 
+    if (bookmark_on){
+        bookmark.setAttribute("class", "bi bi-bookmark-fill");
+        bookmark.setAttribute("onclick", "removeBookmark(event)");
+    }
+    else{
+        bookmark.setAttribute("class", "bi bi-bookmark");
+        bookmark.setAttribute("onclick", "addBookmark(event)");
+    }
 
     return bookmark;
 }

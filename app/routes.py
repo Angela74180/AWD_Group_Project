@@ -579,7 +579,7 @@ def updateBookmark():
     user_id         = request.json.get("user_id")
     bookmark_status = request.json.get("bookmark_status")
 
-    bookmark        = Bookmark.query.filter_by(user_id=user_id, recipe_id=recipe_id).first()
+    bookmark = Bookmark.query.filter_by(user_id=user_id, recipe_id=recipe_id).first()
 
     if not bookmark and bookmark_status == "on":
         bookmark = Bookmark(
@@ -616,12 +616,18 @@ def profile():
     my_recipes_list = []
     for recipe in user.recipes:
         author = User.query.filter_by(id=recipe.author_id).first().username
+        bookmark = Bookmark.query.filter_by(user_id=userId, recipe_id=recipe.id).first()
+
+        bookmark_on = True
+        if not bookmark:
+            bookmark_on = False
+
         tag_list = []
         
         for recipeTag in recipe.tags:
             tag_list.append(Tag.query.filter_by(id=recipeTag.tag_id).first().name)
 
-        my_recipes_list.append(make_recipe_banner_dict(recipe, author, tag_list))
+        my_recipes_list.append(make_recipe_banner_dict(recipe, author, tag_list, bookmark_on))
 
     return render_template("profilePage.html", username=user.username, userRecipes=my_recipes_list[::-1])
 
