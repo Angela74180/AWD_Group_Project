@@ -11,9 +11,11 @@ function makeRecipeBanner(recipe_details_dict){
     newRecipeBanner.setAttribute("class", "outerRecipeBanner");
     newRecipeBanner.setAttribute("recipe_id", recipe_id);
 
-    newRecipeBanner.appendChild(makeBookmark(recipe_details_dict["bookmark_on"]));
-    newRecipeBanner.innerHTML += `&nbsp;&nbsp;`
-    newRecipeBanner.appendChild(makeCart(recipe_details_dict["cart_on"]));
+    if (recipe_details_dict["signed_in"]){
+        newRecipeBanner.appendChild(makeBookmark(recipe_details_dict["bookmark_on"]));
+        newRecipeBanner.innerHTML += `&nbsp;&nbsp;`
+        newRecipeBanner.appendChild(makeCart(recipe_details_dict["cart_on"]));
+    }
 
     let div = document.createElement("div");
     let time = calcTime(recipe_details_dict["timeList"]["totalTime"][0], recipe_details_dict["timeList"]["totalTime"][1]);
