@@ -3,12 +3,9 @@
 {% block title %}Shopping List - CookBook{% endblock %}
 
 {% block scripts %}
-<!-- THIS WILL NEED TO BE GOTTEN FROM SOMEWHERE NOT JUST HARDCODED -->
-<script src="{{ url_for('static', filename='prac_recipes.js') }}"></script>
-<script src="{{ url_for('static', filename='timeCalculation.js') }}"></script>
 <script src="{{ url_for('static', filename='Shopping_List/populateShoppingList.js') }}"></script>
 <script>
-    let recipes_list = {{ userRecipes | tojson }};
+    let recipes_list = {{ cartRecipes | tojson }};
 </script>
 {% endblock %}
 

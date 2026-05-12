@@ -26,6 +26,42 @@ def shopping_list():
     for shopping_list in shopping_lists:
         recipe_id = shopping_list.recipe_id
         recipe = Recipe.query.filter_by(id=recipe_id).first()
+
+        author = User.query.filter_by(id=recipe.author_id).first().username
+        bookmark = Bookmark.query.filter_by(user_id=userId, recipe_id=recipe.id).first()
+        cart = ShoppingList.query.filter_by(user_id=userId, recipe_id=recipe.id).first()
+
+        bookmark_on = True
+        if not bookmark:
+            bookmark_on = False
+
+        cart_on = True
+        if not cart:
+            cart_on = False
+
+        tag_list = []
+        
+        for recipeTag in recipe.tags:
+            tag_list.append(Tag.query.filter_by(id=recipeTag.tag_id).first().name)
+
+        recipes_list.append(make_recipe_banner_dict(recipe, author, tag_list, bookmark_on, cart_on))
+
+    return render_template("shopping_list.html", username=user.username, cartRecipes=recipes_list[::-1])
+
+
+@app.route("/saved")
+def saved():
+    userId = session.get('authorId')
+    user = User.query.filter_by(id=userId).first()
+
+    bookmarks = user.bookmarks
+
+
+    recipes_list = []
+    for bookmark in bookmarks:
+        print(bookmark)
+        recipe_id = bookmark.recipe_id
+        recipe = Recipe.query.filter_by(id=recipe_id).first()
         
         author = User.query.filter_by(id=recipe.author_id).first().username
         bookmark = Bookmark.query.filter_by(user_id=userId, recipe_id=recipe.id).first()
@@ -46,7 +82,7 @@ def shopping_list():
 
         recipes_list.append(make_recipe_banner_dict(recipe, author, tag_list, bookmark_on, cart_on))
 
-    return render_template("shopping_list.html", username=user.username, userRecipes=recipes_list[::-1])
+    return render_template("savedPage.html", username=user.username, savedRecipes=recipes_list[::-1])
 
 
 @app.route('/publish_recipe', methods=["POST"])

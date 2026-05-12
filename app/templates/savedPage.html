@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Saved Recipes - CookBook{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='Saved_Recipes/populateSaved.js') }}"></script>
+<script>
+    let recipes_list = {{ savedRecipes | tojson }};
+</script>
+{% endblock %}
+
+{% block content %}
+<h1>Saved Recipes</h1>
+<br>
+<div id="recipe_banner_div" user_id="{{ current_user.id }}"></div>
+{% endblock %}

@@ -4,7 +4,6 @@
 
 {% block scripts %}
 <script src="{{ url_for('static', filename='Profile/includeRecipes.js') }}"></script>
-<script src="{{ url_for('static', filename='timeCalculation.js') }}"></script>
 <script>
     let my_recipes_list = {{ userRecipes | tojson }};
 </script>
