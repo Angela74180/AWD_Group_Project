@@ -13,7 +13,7 @@ function makeRecipeBanner(recipe_details_dict){
 
     newRecipeBanner.appendChild(makeBookmark(recipe_details_dict["bookmark_on"]));
     newRecipeBanner.innerHTML += `&nbsp;&nbsp;`
-    newRecipeBanner.appendChild(makeCart());
+    newRecipeBanner.appendChild(makeCart(recipe_details_dict["cart_on"]));
 
     let div = document.createElement("div");
     let time = calcTime(recipe_details_dict["timeList"]["totalTime"][0], recipe_details_dict["timeList"]["totalTime"][1]);

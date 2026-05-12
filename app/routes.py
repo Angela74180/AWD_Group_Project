@@ -617,17 +617,22 @@ def profile():
     for recipe in user.recipes:
         author = User.query.filter_by(id=recipe.author_id).first().username
         bookmark = Bookmark.query.filter_by(user_id=userId, recipe_id=recipe.id).first()
+        # cart = ShoppingList.query.filter_by(user_id=userId, recipe_id=recipe.id).first()
 
         bookmark_on = True
         if not bookmark:
             bookmark_on = False
+
+        cart_on = True
+        # if not cart:
+        #     cart_on = False
 
         tag_list = []
         
         for recipeTag in recipe.tags:
             tag_list.append(Tag.query.filter_by(id=recipeTag.tag_id).first().name)
 
-        my_recipes_list.append(make_recipe_banner_dict(recipe, author, tag_list, bookmark_on))
+        my_recipes_list.append(make_recipe_banner_dict(recipe, author, tag_list, bookmark_on, cart_on))
 
     return render_template("profilePage.html", username=user.username, userRecipes=my_recipes_list[::-1])
 

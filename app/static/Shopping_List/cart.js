@@ -1,8 +1,14 @@
-function makeCart() {
+function makeCart(cart_on) {
     let cart = document.createElement("i");
-    cart.setAttribute("class", "bi bi-cart");
-    cart.setAttribute("onclick", "addToCart(event)");
 
+    if (cart_on){
+        cart.setAttribute("class", "bi bi-cart-fill");
+        cart.setAttribute("onclick", "removeFromCart(event)");
+    }
+    else{
+        cart.setAttribute("class", "bi bi-cart");
+        cart.setAttribute("onclick", "addToCart(event)");
+    }
 
     return cart;
 }
