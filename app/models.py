@@ -79,9 +79,7 @@ class Recipe(db.Model):
         cascade="all, delete-orphan",
     )
     bookmarks = db.relationship("Bookmark", back_populates="recipe", cascade="all, delete-orphan")
-    shopping_list_items = db.relationship(
-        "ShoppingListItem", back_populates="recipe", cascade="all, delete-orphan"
-    )
+    shopping_lists = db.relationship("ShoppingList", back_populates="recipe", cascade="all, delete-orphan")
 
 
 class Ingredient(db.Model):
@@ -179,27 +177,12 @@ class ShoppingList(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
-    name = db.Column(db.String(100), nullable=False)
-    created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-
-    user = db.relationship("User", back_populates="shopping_lists")
-    items = db.relationship(
-        "ShoppingListItem", back_populates="shopping_list", cascade="all, delete-orphan"
-    )
-
-
-class ShoppingListItem(db.Model):
-
-    id = db.Column(db.Integer, primary_key=True)
-    shopping_list_id = db.Column(db.Integer, db.ForeignKey("shopping_list.id"), nullable=False)
     recipe_id = db.Column(db.Integer, db.ForeignKey("recipe.id"), nullable=False)
-    added_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    saved_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
     __table_args__ = (
-        db.UniqueConstraint(
-            "shopping_list_id", "recipe_id", name="uq_shopping_item_list_recipe"
-        ),
+        db.UniqueConstraint("user_id", "recipe_id", name="uq_shopping_list_user_recipe"),
     )
 
-    shopping_list = db.relationship("ShoppingList", back_populates="items")
-    recipe = db.relationship("Recipe", back_populates="shopping_list_items")
+    user = db.relationship("User", back_populates="shopping_lists")
+    recipe = db.relationship("Recipe", back_populates="shopping_lists")

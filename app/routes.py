@@ -2,7 +2,7 @@ from flask import render_template, request, redirect, url_for, session, jsonify
 from app import app, db
 from flask_login import login_user, logout_user
 from sqlalchemy.exc import SQLAlchemyError #############################################################
-from app.models import User, Recipe, Ingredient, RecipeIngredient, Tag, RecipeTag, Appliance, RecipeAppliance, Step, Bookmark, ShoppingList, ShoppingListItem
+from app.models import User, Recipe, Ingredient, RecipeIngredient, Tag, RecipeTag, Appliance, RecipeAppliance, Step, Bookmark, ShoppingList
 from app.makeRecipeBannerDict import make_recipe_banner_dict
 
 @app.route('/')
