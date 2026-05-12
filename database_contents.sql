@@ -36,6 +36,7 @@ INSERT INTO ingredient VALUES(14,'Margarine');
 INSERT INTO ingredient VALUES(15,'Cayenne Pepper');
 INSERT INTO ingredient VALUES(16,'Crumbled Bread');
 INSERT INTO bookmark VALUES(1,1,1,'2026-05-12 06:34:40.814784');
+INSERT INTO shopping_list VALUES(1,1,2,'2026-05-12 07:05:09.110605');
 INSERT INTO recipe_appliance VALUES(1,1,1,'','',0);
 INSERT INTO recipe_appliance VALUES(2,2,2,'','',0);
 INSERT INTO recipe_appliance VALUES(3,2,1,'','',1);

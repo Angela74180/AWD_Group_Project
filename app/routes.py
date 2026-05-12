@@ -608,6 +608,43 @@ def updateBookmark():
     return jsonify({"success": True})
 
 
+
+@app.route("/updateShoppingList", methods=["POST"])
+def updateShoppingList():
+    recipe_id       = request.json.get("recipe_id")
+    user_id         = request.json.get("user_id")
+    cart_status = request.json.get("cart_status")
+
+    cart = ShoppingList.query.filter_by(user_id=user_id, recipe_id=recipe_id).first()
+
+    if not cart and cart_status == "on":
+        cart = ShoppingList(
+            user_id = user_id,
+            recipe_id = recipe_id
+        )
+
+        try:
+            db.session.add(cart)
+            db.session.commit()
+        
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({"success": False})
+
+
+    elif cart and cart_status == "off":
+        try:
+            db.session.delete(cart)
+            db.session.commit()
+        
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({"success": False})
+
+    return jsonify({"success": True})
+
+
+
 @app.route("/profile")
 def profile():
     userId = session.get('authorId')
@@ -617,15 +654,15 @@ def profile():
     for recipe in user.recipes:
         author = User.query.filter_by(id=recipe.author_id).first().username
         bookmark = Bookmark.query.filter_by(user_id=userId, recipe_id=recipe.id).first()
-        # cart = ShoppingList.query.filter_by(user_id=userId, recipe_id=recipe.id).first()
+        cart = ShoppingList.query.filter_by(user_id=userId, recipe_id=recipe.id).first()
 
         bookmark_on = True
         if not bookmark:
             bookmark_on = False
 
         cart_on = True
-        # if not cart:
-        #     cart_on = False
+        if not cart:
+            cart_on = False
 
         tag_list = []
         
