@@ -3,8 +3,41 @@
 {% block title %}Profile - CookBook{% endblock %}
 
 {% block scripts %}
+<script src="{{ url_for('static', filename='Profile/includeRecipes.js') }}"></script>
+<script src="{{ url_for('static', filename='Recipe_Banners/makeRecipeBanner.js') }}"></script>
+<script src="{{ url_for('static', filename='timeCalculation.js') }}"></script>
+<script>
+    let my_recipes_list = {{ userRecipes | tojson }};
+</script>
 {% endblock %}
 
 {% block content %}
-<h1>Profile</h1>
+<h1>Hello, {{ username }}</h1>
+<br>
+<div class="profilePic">
+    <img src="{{ current_user.profile_picture }}" style="height:200px;">
+</div>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<h3>Your Recipes:</h3>
+
+<div id="my_recipes"></div>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<h4><a href="/logout">Logout</a></h4>
+
+
+
+
+
 {% endblock %}

@@ -216,7 +216,23 @@ select {
   width:40px;
   height:40px;
   margin-left: 20px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(0, 0, 0);
 }
+.profilePic{
+  border-radius: 50%;
+  width:200px;
+  height:200px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(0, 0, 0);
+}
+
 
 #spotlight {
   display: flex;

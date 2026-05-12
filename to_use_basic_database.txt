@@ -1,6 +1,3 @@
-If you have already done any migrations:!!!
-You need to downgrade your database to nothing to ensure that your database is strating from scratch before running the upgrade command.
-
 To open the Database, type into a command window  sqlite3 app.db
 
 To clear the Database

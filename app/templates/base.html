@@ -27,8 +27,9 @@
             </ul>
             {% if current_user.is_authenticated %}
                 <a href="/profile">
-                    <img src="https://gleephoria.in/wp-content/uploads/2024/10/WhatsApp-Image-2023-07-14-at-6.04.12-PM.jpeg"
-                        class="profile-btn">
+                    <div class = "profile-btn">
+                        <img src="{{ current_user.profile_picture }}" style="height:40px;">
+                    </div>
                 </a>
                 <!-- Normally If you want to Logout that will be an option on the profile -->
                 <!-- <li><a href="/logout">Logout</a></li> -->
