@@ -25,7 +25,6 @@ def explore():
     ########## IT NEEDS TO BE A LIST 
     chosen_recipes = [Recipe.query.filter_by(id=1).first(), Recipe.query.filter_by(id=2).first()]
     
-    print(chosen_recipes)
     
     for recipe in chosen_recipes:
         author = User.query.filter_by(id=recipe.author_id).first().username
@@ -51,6 +50,8 @@ def explore():
         recipes_list.append(make_recipe_banner_dict(recipe, author, tag_list, bookmark_on, cart_on, signed_in=signed_in))
 
     return render_template("explore.html", foundRecipes=recipes_list[::-1])
+
+
 
 
 @app.route("/shopping_list")
@@ -130,6 +131,38 @@ def saved():
         recipes_list.append(make_recipe_banner_dict(recipe, author, tag_list, bookmark_on, cart_on, signed_in=signed_in))
 
     return render_template("savedPage.html", username=user.username, savedRecipes=recipes_list[::-1])
+
+
+@app.route("/my-recipes")
+def myRecipes():
+    ############### You will nedd to actually check for a User
+    signed_in = True
+
+    userId = session.get('authorId')
+    user = User.query.filter_by(id=userId).first()
+
+    my_recipes_list = []
+    for recipe in user.recipes:
+        author = User.query.filter_by(id=recipe.author_id).first().username
+        bookmark = Bookmark.query.filter_by(user_id=userId, recipe_id=recipe.id).first()
+        cart = ShoppingList.query.filter_by(user_id=userId, recipe_id=recipe.id).first()
+
+        bookmark_on = True
+        if not bookmark:
+            bookmark_on = False
+
+        cart_on = True
+        if not cart:
+            cart_on = False
+
+        tag_list = []
+        
+        for recipeTag in recipe.tags:
+            tag_list.append(Tag.query.filter_by(id=recipeTag.tag_id).first().name)
+
+        my_recipes_list.append(make_recipe_banner_dict(recipe, author, tag_list, bookmark_on, cart_on, signed_in=signed_in))
+
+    return render_template("myRecipesPage.html", username=user.username, userRecipes=my_recipes_list[::-1])
 
 
 @app.route('/publish_recipe', methods=["POST"])

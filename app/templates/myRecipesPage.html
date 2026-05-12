@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Profile - CookBook{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='Profile/includeRecipes.js') }}"></script>
+<script>
+    let my_recipes_list = {{ userRecipes | tojson }};
+</script>
+{% endblock %}
+
+{% block content %}
+<h1>Hello, {{ username }}, these are your recipes:</h1>
+<br>
+<div id="recipe_banner_div" user_id="{{ current_user.id }}"></div>
+<br>
+<br>
+<br>
+{% endblock %}
