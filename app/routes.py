@@ -43,12 +43,25 @@ def api_filters():
 
     cuisines = sorted({r.recipe_type for r in Recipe.query.all()})
     difficulties = sorted({r.difficulty for r in Recipe.query.all()})
-    tags = Tag.query.with_entities(Tag.name).all()
+    
+    DIET_TAGS = {
+        "Vegan",
+        "Vegetarian",
+        "Gluten-free",
+        "Dairy-free"
+    }
+
+    all_tags = [t.name for t in Tag.query.all()]
+
+    diet_tags = sorted([
+        tag for tag in all_tags
+        if tag in DIET_TAGS
+    ])
 
     return jsonify({
         "cuisines": cuisines,
         "difficulties": difficulties,
-        "tags": [t[0] for t in tags]
+        "tags": diet_tags
     })
 
 @app.route("/shopping_list")
