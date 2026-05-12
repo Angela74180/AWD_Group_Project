@@ -5,6 +5,8 @@ from sqlalchemy.exc import SQLAlchemyError #####################################
 from app.models import User, Recipe, Ingredient, RecipeIngredient, Tag, RecipeTag, Appliance, RecipeAppliance, Step, Bookmark, ShoppingList
 from app.makeRecipeBannerDict import make_recipe_banner_dict
 from app.makeRecipeDict import make_recipe_dict
+from sqlalchemy.exc import IntegrityError
+
 
 @app.route('/')
 @app.route('/index')
@@ -472,22 +474,21 @@ def signup():
         email = request.form['email']
         password = request.form['password']
 
-        existing_user = User.query.filter_by(username=username).first()
-
-        if existing_user:
-            return render_template('signupPage.html', error="User already exists")
-
-        user = User(
-            username=username,
-            email=email
-        )
-
+        user = User(username=username, email=email)
         user.set_password(password)
 
         db.session.add(user)
-        db.session.commit()
 
-        return redirect(url_for('login'))
+        try:
+            db.session.commit()
+            return redirect(url_for('login'))
+
+        except IntegrityError:
+            db.session.rollback()
+            return render_template(
+                'signupPage.html',
+                error="Username or email already exists"
+            )
 
     return render_template('signupPage.html')
 
