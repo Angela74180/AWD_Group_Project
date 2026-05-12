@@ -1,6 +1,6 @@
 from app.makeTimeDict import makeTimeDict
 
-def make_recipe__dict(recipe_object, author, tags_list, appliances, ingredients, steps):
+def make_recipe_dict(recipe_object, author, tags_list, appliances, ingredients, steps):
     timeDict = makeTimeDict({"prepTime": [recipe_object.prep_hours, recipe_object.prep_minutes], "cookingTime": [recipe_object.cook_hours, recipe_object.cook_minutes], "totalTime": [recipe_object.total_hours, recipe_object.total_minutes]})
 
     banner_dict = {

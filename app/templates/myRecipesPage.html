@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Profile - CookBook{% endblock %}
+{% block title %}My Recipes - CookBook{% endblock %}
 
 {% block scripts %}
 <script src="{{ url_for('static', filename='Profile/includeRecipes.js') }}"></script>
@@ -15,5 +15,5 @@
 <div id="recipe_banner_div" user_id="{{ current_user.id }}"></div>
 <br>
 <br>
-<br>
+<a href="/create_recipe/0"><button type="button" class="btn btn-add">Create a New Recipe</button></a>
 {% endblock %}
