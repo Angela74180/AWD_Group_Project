@@ -1,8 +1,8 @@
-from flask import render_template, request, redirect, url_for, session
+from flask import render_template, request, redirect, url_for, session, jsonify
 from app import app, db
 from flask_login import login_user, logout_user
 from sqlalchemy.exc import SQLAlchemyError #############################################################
-from app.models import User, Recipe, Ingredient, RecipeIngredient, Tag, RecipeTag, Appliance, RecipeAppliance, Step
+from app.models import User, Recipe, Ingredient, RecipeIngredient, Tag, RecipeTag, Appliance, RecipeAppliance, Step, Bookmark, ShoppingList
 from app.makeRecipeBannerDict import make_recipe_banner_dict
 
 @app.route('/')
@@ -11,12 +11,126 @@ def index():
     return render_template("homePage.html")
 
 @app.route("/explore")
-def home():
-    return render_template("explore.html")
+def explore():
+    recipes_list = []
+
+    ############### You will nedd to actually check for a User
+    signed_in = True
+
+    userId = session.get('authorId')
+    user = User.query.filter_by(id=userId).first()
+
+
+    ############################### CHOSEN RECIPES IS WHERE YOU STORE THE RECIPE OBJECTS THAT YOU WANT TO DISPLAY BASED ON YOUR QUERIES 
+    ########## IT NEEDS TO BE A LIST 
+    chosen_recipes = [Recipe.query.filter_by(id=1).first(), Recipe.query.filter_by(id=2).first()]
+    
+    print(chosen_recipes)
+    
+    for recipe in chosen_recipes:
+        author = User.query.filter_by(id=recipe.author_id).first().username
+
+        bookmark_on = True
+        cart_on = True
+
+        if signed_in:
+            bookmark = Bookmark.query.filter_by(user_id=userId, recipe_id=recipe.id).first()
+            cart = ShoppingList.query.filter_by(user_id=userId, recipe_id=recipe.id).first()
+
+            if not bookmark:
+                bookmark_on = False
+
+            if not cart:
+                cart_on = False
+
+        tag_list = []
+        
+        for recipeTag in recipe.tags:
+            tag_list.append(Tag.query.filter_by(id=recipeTag.tag_id).first().name)
+
+        recipes_list.append(make_recipe_banner_dict(recipe, author, tag_list, bookmark_on, cart_on, signed_in=signed_in))
+
+    return render_template("explore.html", foundRecipes=recipes_list[::-1])
+
 
 @app.route("/shopping_list")
 def shopping_list():
-    return render_template("shopping_list.html")
+
+    ############### You will nedd to actually check for a User
+    signed_in = True
+    
+    userId = session.get('authorId')
+    user = User.query.filter_by(id=userId).first()
+
+    shopping_lists = user.shopping_lists
+
+
+    recipes_list = []
+    for shopping_list in shopping_lists:
+        recipe_id = shopping_list.recipe_id
+        recipe = Recipe.query.filter_by(id=recipe_id).first()
+
+        author = User.query.filter_by(id=recipe.author_id).first().username
+        bookmark = Bookmark.query.filter_by(user_id=userId, recipe_id=recipe.id).first()
+        cart = ShoppingList.query.filter_by(user_id=userId, recipe_id=recipe.id).first()
+
+        bookmark_on = True
+        if not bookmark:
+            bookmark_on = False
+
+        cart_on = True
+        if not cart:
+            cart_on = False
+
+        tag_list = []
+        
+        for recipeTag in recipe.tags:
+            tag_list.append(Tag.query.filter_by(id=recipeTag.tag_id).first().name)
+
+        recipes_list.append(make_recipe_banner_dict(recipe, author, tag_list, bookmark_on, cart_on, signed_in=signed_in))
+
+    return render_template("shopping_list.html", username=user.username, cartRecipes=recipes_list[::-1])
+
+
+@app.route("/saved")
+def saved():
+
+    ############### You will nedd to actually check for a User
+    signed_in = True
+
+    userId = session.get('authorId')
+    user = User.query.filter_by(id=userId).first()
+
+    bookmarks = user.bookmarks
+
+
+    recipes_list = []
+    for bookmark in bookmarks:
+        print(bookmark)
+        recipe_id = bookmark.recipe_id
+        recipe = Recipe.query.filter_by(id=recipe_id).first()
+        
+        author = User.query.filter_by(id=recipe.author_id).first().username
+        bookmark = Bookmark.query.filter_by(user_id=userId, recipe_id=recipe.id).first()
+        cart = ShoppingList.query.filter_by(user_id=userId, recipe_id=recipe.id).first()
+
+        bookmark_on = True
+        if not bookmark:
+            bookmark_on = False
+
+        cart_on = True
+        if not cart:
+            cart_on = False
+
+        tag_list = []
+        
+        for recipeTag in recipe.tags:
+            tag_list.append(Tag.query.filter_by(id=recipeTag.tag_id).first().name)
+
+        recipes_list.append(make_recipe_banner_dict(recipe, author, tag_list, bookmark_on, cart_on, signed_in=signed_in))
+
+    return render_template("savedPage.html", username=user.username, savedRecipes=recipes_list[::-1])
+
 
 @app.route('/publish_recipe', methods=["POST"])
 def publish_recipe():
@@ -570,20 +684,109 @@ def logout():
     return redirect(url_for("index"))
 
 
+
+
+
+@app.route("/updateBookmark", methods=["POST"])
+def updateBookmark():
+    recipe_id       = request.json.get("recipe_id")
+    user_id         = request.json.get("user_id")
+    bookmark_status = request.json.get("bookmark_status")
+
+    bookmark = Bookmark.query.filter_by(user_id=user_id, recipe_id=recipe_id).first()
+
+    if not bookmark and bookmark_status == "on":
+        bookmark = Bookmark(
+            user_id = user_id,
+            recipe_id = recipe_id
+        )
+
+        try:
+            db.session.add(bookmark)
+            db.session.commit()
+        
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({"success": False})
+
+
+    elif bookmark and bookmark_status == "off":
+        try:
+            db.session.delete(bookmark)
+            db.session.commit()
+        
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({"success": False})
+
+    return jsonify({"success": True})
+
+
+
+@app.route("/updateShoppingList", methods=["POST"])
+def updateShoppingList():
+    recipe_id       = request.json.get("recipe_id")
+    user_id         = request.json.get("user_id")
+    cart_status = request.json.get("cart_status")
+
+    cart = ShoppingList.query.filter_by(user_id=user_id, recipe_id=recipe_id).first()
+
+    if not cart and cart_status == "on":
+        cart = ShoppingList(
+            user_id = user_id,
+            recipe_id = recipe_id
+        )
+
+        try:
+            db.session.add(cart)
+            db.session.commit()
+        
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({"success": False})
+
+
+    elif cart and cart_status == "off":
+        try:
+            db.session.delete(cart)
+            db.session.commit()
+        
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({"success": False})
+
+    return jsonify({"success": True})
+
+
+
 @app.route("/profile")
 def profile():
+    ############### You will nedd to actually check for a User
+    signed_in = True
+
     userId = session.get('authorId')
     user = User.query.filter_by(id=userId).first()
 
     my_recipes_list = []
     for recipe in user.recipes:
         author = User.query.filter_by(id=recipe.author_id).first().username
+        bookmark = Bookmark.query.filter_by(user_id=userId, recipe_id=recipe.id).first()
+        cart = ShoppingList.query.filter_by(user_id=userId, recipe_id=recipe.id).first()
+
+        bookmark_on = True
+        if not bookmark:
+            bookmark_on = False
+
+        cart_on = True
+        if not cart:
+            cart_on = False
+
         tag_list = []
         
         for recipeTag in recipe.tags:
             tag_list.append(Tag.query.filter_by(id=recipeTag.tag_id).first().name)
 
-        my_recipes_list.append(make_recipe_banner_dict(recipe, author, tag_list))
+        my_recipes_list.append(make_recipe_banner_dict(recipe, author, tag_list, bookmark_on, cart_on, signed_in=signed_in))
 
     return render_template("profilePage.html", username=user.username, userRecipes=my_recipes_list[::-1])
 

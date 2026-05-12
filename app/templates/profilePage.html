@@ -4,8 +4,6 @@
 
 {% block scripts %}
 <script src="{{ url_for('static', filename='Profile/includeRecipes.js') }}"></script>
-<script src="{{ url_for('static', filename='Recipe_Banners/makeRecipeBanner.js') }}"></script>
-<script src="{{ url_for('static', filename='timeCalculation.js') }}"></script>
 <script>
     let my_recipes_list = {{ userRecipes | tojson }};
 </script>
@@ -26,10 +24,11 @@
 <br>
 <h3>Your Recipes:</h3>
 
-<div id="my_recipes"></div>
+<div id="recipe_banner_div" user_id="{{ current_user.id }}"></div>
 <br>
 <br>
 <br>
+<!-- <p>{{  current_user.recipes  }}</p> -->
 <br>
 <br>
 <br>
