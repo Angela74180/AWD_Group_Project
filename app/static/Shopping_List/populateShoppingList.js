@@ -1,23 +1,15 @@
 document.addEventListener("DOMContentLoaded", function () {
-    populate();
+    populate(recipes_list);
 });
 
-function populate() {
-    document.getElementById("recipes_for_shopping_list").innerText = "Recipes that you have selected to have a shopping list made from will appear here..."
-    let recipes = Object.keys(shopping_list_dict);
-    for (let recipe of recipes) {
-        let recipeBanner = makeRecipeBanner(shopping_list_dict[recipe]);
-        // recipeBanner.getElementsByTagName("i")[1].setAttribute("class", "bi bi-cart-fill");
-        // recipeBanner.getElementsByTagName("i")[1].setAttribute("onclick", "removeFromCart(event)");
-        
-        // let bookmarked = Object.keys(bookmarked_dict);
-        // console.log(bookmarked)
-        // console.log(recipe)
-        // if (recipe in Object.keys(bookmarked_dict)){
-        //     recipeBanner.getElementsByTagName("i")[0].setAttribute("class", "bi bi-bookmark-fill");
-        //     recipeBanner.getElementsByTagName("i")[0].setAttribute("onclick", "removeBookmark(event)");
-        // }
+function populate(recipes_list) {
 
-        document.getElementById("recipes_for_shopping_list").appendChild(recipeBanner);
+    let container = document.getElementById("recipe_banner_div");
+    container.innerHTML = `Looks like you don't have any recipes in your cart yet...`;
+    if (recipes_list != ""){
+        container.innerHTML = ``;
+        for (let recipe_dict of recipes_list){
+            container.appendChild(makeRecipeBanner(recipe_dict));
+        }
     }
 }
