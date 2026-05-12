@@ -8,29 +8,13 @@ function handleQuotes(str) {
 
 function view_recipe(recipe_details_dict) {
     let div_main = document.getElementsByClassName("div_main")[0]
-    div_main.innerHTML += ``;
-    
+
+    document.getElementById("recipe_banner_div").appendChild(makeBookmark(recipe_details_dict["bookmark_on"]));
+    document.getElementById("recipe_banner_div").innerHTML += `&nbsp;&nbsp;`
+    document.getElementById("recipe_banner_div").appendChild(makeCart(recipe_details_dict["cart_on"]));
+
     div_main.innerHTML += `<img src=${recipe_details_dict["recipeCoverImage"]} class = "recipeImage recipeBannerImage">`;
-    div_main.innerHTML += `<h1>~ ${recipe_details_dict["recipeName"]} ~</h1>`;
-
-
-    // console.log(Object.values(bookmarked_dict));
-    // console.log(recipe_details_dict);
-    // console.log(Object.values(bookmarked_dict).includes(recipe_details_dict));
-
-    // if (Object.values(bookmarked_dict).includes(recipe_details_dict)){
-    //     div_main.innerHTML += `<i class="bi bi-bookmark-fill" onclick="removeBookmark(event)"></i>`;
-    // }
-    // else{
-    //     div_main.innerHTML += `<i class="bi bi-bookmark" onclick="addBookmark(event)"></i>`;
-    // }
-
-    // if (Object.values(shopping_list_dict).includes(recipe_details_dict)){
-    //     div_main.innerHTML += `<i class="bi bi-cart-fill" onclick="removeFromCart(event)"></i>`;
-    // }
-    // else{
-    //     div_main.innerHTML += `<i class="bi bi-cart" onclick="addToCart(event)"></i>`;
-    // }
+    div_main.innerHTML += `<br><h1>~ ${recipe_details_dict["recipeName"]} ~</h1>`;
 
     div_main.innerHTML += `<p>- ${recipe_details_dict["author"]}</p>`;
 

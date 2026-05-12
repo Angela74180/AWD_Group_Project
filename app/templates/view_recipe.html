@@ -7,9 +7,10 @@
 <script src="{{ url_for('static', filename='Review/review.js') }}"></script>
 <script>
     let recipe_details_dict = {{ recipe_details_dict | tojson }};
-    console.log(recipe_details_dict)
+    console.log(recipe_details_dict["recipeId"])
 </script>
 {% endblock %}
 
 {% block content %}
+<div id="recipe_banner_div" user_id="{{ current_user.id }}" recipe_id="{{ recipe_details_dict['recipeId'] }}"></div>
 {% endblock %}

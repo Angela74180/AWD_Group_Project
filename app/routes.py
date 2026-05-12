@@ -72,6 +72,7 @@ def shopping_list():
         recipe_id = shopping_list.recipe_id
         recipe = Recipe.query.filter_by(id=recipe_id).first()
 
+        print(recipe.author_id)
         author = User.query.filter_by(id=recipe.author_id).first().username
         bookmark = Bookmark.query.filter_by(user_id=userId, recipe_id=recipe.id).first()
         cart = ShoppingList.query.filter_by(user_id=userId, recipe_id=recipe.id).first()
@@ -108,7 +109,6 @@ def saved():
 
     recipes_list = []
     for bookmark in bookmarks:
-        print(bookmark)
         recipe_id = bookmark.recipe_id
         recipe = Recipe.query.filter_by(id=recipe_id).first()
         
@@ -852,8 +852,6 @@ def view_recipe(recipe_num):
     if not cart:
         cart_on = False
     
-    print(bookmark_on)
-    print(cart_on)
 
     tag_list = []
     for recipeTag in recipe.tags:
@@ -875,7 +873,6 @@ def view_recipe(recipe_num):
     for recipeIngredient in recipe.ingredients:
         ingredient = Ingredient.query.filter_by(id=recipeIngredient.ingredient_id).first()
         recipe_ingredient = RecipeIngredient.query.filter_by(ingredient_id=ingredient.id, recipe_id=recipe.id).first()
-        # print(recipe_ingredient.quantity)
 
         quantity = float(recipe_ingredient.quantity)
 
