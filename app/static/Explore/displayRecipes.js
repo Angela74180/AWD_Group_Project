@@ -47,6 +47,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
 
     function displayRecipes(filteredRecipes) {
+
         recipeList.innerHTML = "";
 
         if (filteredRecipes.length === 0) {
@@ -68,6 +69,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         const filtered = recipes.filter(recipe => {
 
             const matchesSearch =
+                searchTerm === "" ||
                 recipe.title.toLowerCase().includes(searchTerm);
 
             const matchesCuisine =
@@ -80,20 +82,10 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             const matchesTime =
                 selectedFilters.time === "All" ||
-
-                (selectedFilters.time === "Under 15 min" &&
-                    recipe.time < 15) ||
-
-                (selectedFilters.time === "15-30 min" &&
-                    recipe.time >= 15 &&
-                    recipe.time <= 30) ||
-
-                (selectedFilters.time === "30-60 min" &&
-                    recipe.time > 30 &&
-                    recipe.time <= 60) ||
-
-                (selectedFilters.time === "60+" &&
-                    recipe.time > 60);
+                (selectedFilters.time === "Under 15 min" && recipe.time < 15) ||
+                (selectedFilters.time === "15-30 min" && recipe.time >= 15 && recipe.time <= 30) ||
+                (selectedFilters.time === "30-60 min" && recipe.time > 30 && recipe.time <= 60) ||
+                (selectedFilters.time === "60+" && recipe.time > 60);
 
             const matchesDiet =
                 selectedFilters.diet === "All" ||
