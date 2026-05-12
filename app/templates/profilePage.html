@@ -5,34 +5,42 @@
 {% block scripts %}
 <script src="{{ url_for('static', filename='Profile/includeRecipes.js') }}"></script>
 <script>
-    let my_recipes_list = {{ userRecipes | tojson }};
+    <!-- let my_recipes_list = {{ userRecipes | tojson }}; --> 
 </script>
 {% endblock %}
 
 {% block content %}
 <h1>Hello, {{ username }}</h1>
 <br>
-<div class="profilePic">
-    <img src="{{ current_user.profile_picture }}" style="height:200px;">
-</div>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<h3>Your Recipes:</h3>
 
-<div id="recipe_banner_div" user_id="{{ current_user.id }}"></div>
-<br>
-<br>
-<br>
-<!-- <p>{{  current_user.recipes  }}</p> -->
-<br>
-<br>
-<br>
-<br>
+<div class="profile-header">
+
+<label class="avatar-wrap" title="Change profile photo">
+    <input type="file" id="avatarInput" accept="image/*" hidden>
+    {% if user.avatar_url %}
+    <img id="avatarDisplay" src="{{ current_user.profile_picture }}" alt="Profile picture">
+    {% else %}
+    <div class="avatar-initials" id="avatarDisplay">
+        <img src="https://gleephoria.in/wp-content/uploads/2024/10/WhatsApp-Image-2023-07-14-at-6.04.12-PM.jpeg" alt="Profile Picture">
+    </div>
+    {% endif %}
+
+    <span class="avatar-overlay">CHANGE<br>PHOTO</span>
+</label>
+
+<div>
+    <p class="header-name" id="headerName">{{ user.name }}</p>
+    <p class="header-meta"> recipes · reviews</p>
+</div>
+
+</div>
+
+<div class="tabs">
+<button class="tab-btn active" data-tab="profile">Profile</button>
+<button class="tab-btn" data-tab="recipes">Recipes (4)</button>
+<button class="tab-btn" data-tab="reviews">Reviews (3)</button>
+</div>
+
 <h4><a href="/logout">Logout</a></h4>
 
 
