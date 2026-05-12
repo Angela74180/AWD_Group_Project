@@ -398,6 +398,12 @@ select {
   object-fit: cover;
 }
 
+.avatar-initials img {
+  width: 100%; height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
 .avatar-wrap:hover .avatar {
   box-shadow: 0 0 0 4px rgba(244,169,59,.2);
 }

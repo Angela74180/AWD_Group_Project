@@ -5,7 +5,7 @@
 {% block scripts %}
 <script src="{{ url_for('static', filename='Profile/includeRecipes.js') }}"></script>
 <script>
-    <!-- let my_recipes_list = {{ userRecipes | tojson }}; --> 
+    //let my_recipes_list = {{ userRecipes | tojson }};
 </script>
 {% endblock %}
 
@@ -14,23 +14,24 @@
 <br>
 
 <div class="profile-header">
+<div class="avatar">
+    <label class="avatar-wrap" title="Change profile photo">
+        <input type="file" id="avatarInput" accept="image/*" hidden>
+        {% if user.avatar_url %}
+        <img id="avatarDisplay" src="{{ current_user.profile_picture }}" alt="Profile picture">
+        {% else %}
+        <div class="avatar-initials" id="avatarDisplay">
+            <img src="https://gleephoria.in/wp-content/uploads/2024/10/WhatsApp-Image-2023-07-14-at-6.04.12-PM.jpeg" alt="Profile Picture">
+        </div>
+        {% endif %}
 
-<label class="avatar-wrap" title="Change profile photo">
-    <input type="file" id="avatarInput" accept="image/*" hidden>
-    {% if user.avatar_url %}
-    <img id="avatarDisplay" src="{{ current_user.profile_picture }}" alt="Profile picture">
-    {% else %}
-    <div class="avatar-initials" id="avatarDisplay">
-        <img src="https://gleephoria.in/wp-content/uploads/2024/10/WhatsApp-Image-2023-07-14-at-6.04.12-PM.jpeg" alt="Profile Picture">
-    </div>
-    {% endif %}
-
-    <span class="avatar-overlay">CHANGE<br>PHOTO</span>
-</label>
+        <span class="avatar-overlay">CHANGE<br>PHOTO</span>
+    </label>
+</div>
 
 <div>
     <p class="header-name" id="headerName">{{ user.name }}</p>
-    <p class="header-meta"> recipes · reviews</p>
+    <p class="header-meta"> {{recipecount}} recipes · (review count) reviews</p>
 </div>
 
 </div>

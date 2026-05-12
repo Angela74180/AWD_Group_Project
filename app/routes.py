@@ -767,8 +767,11 @@ def profile():
     userId = session.get('authorId')
     user = User.query.filter_by(id=userId).first()
 
+    count = 0
+
     my_recipes_list = []
     for recipe in user.recipes:
+        count += 1
         author = User.query.filter_by(id=recipe.author_id).first().username
         bookmark = Bookmark.query.filter_by(user_id=userId, recipe_id=recipe.id).first()
         cart = ShoppingList.query.filter_by(user_id=userId, recipe_id=recipe.id).first()
@@ -788,7 +791,7 @@ def profile():
 
         my_recipes_list.append(make_recipe_banner_dict(recipe, author, tag_list, bookmark_on, cart_on, signed_in=signed_in))
 
-    return render_template("profilePage.html", username=user.username, userRecipes=my_recipes_list[::-1])
+    return render_template("profilePage.html", user = user, username=user.username, userRecipes=my_recipes_list[::-1], recipecount = count)
 
 
 
