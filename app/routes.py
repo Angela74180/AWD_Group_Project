@@ -1,8 +1,8 @@
-from flask import render_template, request, redirect, url_for, session
+from flask import render_template, request, redirect, url_for, session, jsonify
 from app import app, db
 from flask_login import login_user, logout_user
 from sqlalchemy.exc import SQLAlchemyError #############################################################
-from app.models import User, Recipe, Ingredient, RecipeIngredient, Tag, RecipeTag, Appliance, RecipeAppliance, Step
+from app.models import User, Recipe, Ingredient, RecipeIngredient, Tag, RecipeTag, Appliance, RecipeAppliance, Step, Bookmark, ShoppingList, ShoppingListItem
 from app.makeRecipeBannerDict import make_recipe_banner_dict
 
 @app.route('/')
@@ -568,6 +568,44 @@ def signup():
 def logout():
     logout_user()
     return redirect(url_for("index"))
+
+
+
+
+
+@app.route("/updateBookmark", methods=["POST"])
+def updateBookmark():
+    recipe_id       = request.json.get("recipe_id")
+    user_id         = request.json.get("user_id")
+    bookmark_status = request.json.get("bookmark_status")
+
+    bookmark        = Bookmark.query.filter_by(user_id=user_id, recipe_id=recipe_id).first()
+
+    if not bookmark and bookmark_status == "on":
+        bookmark = Bookmark(
+            user_id = user_id,
+            recipe_id = recipe_id
+        )
+
+        try:
+            db.session.add(bookmark)
+            db.session.commit()
+        
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({"success": False})
+
+
+    elif bookmark and bookmark_status == "off":
+        try:
+            db.session.delete(bookmark)
+            db.session.commit()
+        
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({"success": False})
+
+    return jsonify({"success": True})
 
 
 @app.route("/profile")

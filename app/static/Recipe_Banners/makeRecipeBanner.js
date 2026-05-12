@@ -5,8 +5,15 @@ function addRecipeBanner(recipe_details_dict){
 }
 
 function makeRecipeBanner(recipe_details_dict){
+    let recipe_id = recipe_details_dict["recipeId"];
+
     let newRecipeBanner = document.createElement("fieldset");
     newRecipeBanner.setAttribute("class", "outerRecipeBanner");
+    newRecipeBanner.setAttribute("recipe_id", recipe_id);
+
+    newRecipeBanner.appendChild(makeBookmark());
+    newRecipeBanner.innerHTML += `&nbsp;&nbsp;`
+    newRecipeBanner.appendChild(makeCart());
 
     let div = document.createElement("div");
     let time = calcTime(recipe_details_dict["timeList"]["totalTime"][0], recipe_details_dict["timeList"]["totalTime"][1]);
