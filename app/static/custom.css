@@ -216,7 +216,9 @@ select {
   width:40px;
   height:40px;
   margin-left: 20px;
+  overflow: hidden;
 }
+
 
 #spotlight {
   display: flex;

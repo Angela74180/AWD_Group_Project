@@ -13,7 +13,10 @@
 
 {% block content %}
 <h1>Hello, {{ username }}</h1>
-<h4><a href="/logout">Logout</a></h4>
+<br>
+<div style="overflow: hidden; border-radius: 50%; width:200px; height:200px;">
+    <img src="{{ current_user.profile_picture }}" style="height:200px;">
+</div>
 <br>
 <br>
 <br>
@@ -22,7 +25,17 @@
 <br>
 <br>
 <h3>Your Recipes:</h3>
+
 <div id="my_recipes"></div>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<h4><a href="/logout">Logout</a></h4>
+
 
 
 
