@@ -354,3 +354,9 @@ select {
   border-radius:22px;
   display:flex;
 }
+
+.error-message {
+    color: red;
+    margin-bottom: 10px;
+    font-weight: 500;
+}
