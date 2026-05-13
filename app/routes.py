@@ -74,7 +74,7 @@ def shopping_list():
         recipe_id = shopping_list.recipe_id
         recipe = Recipe.query.filter_by(id=recipe_id).first()
 
-        print(recipe.author_id)
+        # print(recipe.author_id)
         author = User.query.filter_by(id=recipe.author_id).first().username
         bookmark = Bookmark.query.filter_by(user_id=userId, recipe_id=recipe.id).first()
         cart = ShoppingList.query.filter_by(user_id=userId, recipe_id=recipe.id).first()
@@ -93,8 +93,10 @@ def shopping_list():
             tag_list.append(Tag.query.filter_by(id=recipeTag.tag_id).first().name)
 
         recipes_list.append(make_recipe_banner_dict(recipe, author, tag_list, bookmark_on, cart_on, signed_in=signed_in))
+        
+        ingredients_list = []
 
-    return render_template("shopping_list.html", username=user.username, cartRecipes=recipes_list[::-1])
+    return render_template("shopping_list.html", username=user.username, cartRecipes=recipes_list[::-1], cartIngredients=ingredients_list)
 
 
 @app.route("/saved")

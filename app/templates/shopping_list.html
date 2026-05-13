@@ -7,6 +7,7 @@
 <script src="{{ url_for('static', filename='Shopping_List/makeShoppingList.js') }}"></script>
 <script>
     let recipes_list = {{ cartRecipes | tojson }};
+    let ingredients_list = {{ cartIngredients | tojson }};
 </script>
 {% endblock %}
 

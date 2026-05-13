@@ -17,12 +17,12 @@
 </script>
 {% endblock %}
 
-{% block content %}
+{% block outer_content %}
+<div class="container-fluid">
+     <div class="row">
 
-<div class="container mt-4">
-    <div class="row">
-        <div class="col p-3">
-            <h1>Explore Page</h1>
+         <div class="col div_main">
+             <h1>Explore Page</h1>
             <input type="search" id="searchBar" style = "width: 100%" placeholder="Search recipes...">
             <br><br>
             <div id="recipeList"></div>
@@ -30,10 +30,12 @@
             <!-- <h2>Spotlight Recipes</h2> -->
             <!-- <div id="spotlight"></div> -->
             <div id="recipe_banner_div" user_id="{{ current_user.id }}"></div>
-        </div>
+         </div>
 
-        <!-- Right Column (fixed width in grid terms) -->
-        <div class="col-3 p-3" style="border-left: 2px solid rgb(255, 204, 75);">
+
+
+         <div class="col-auto filter-bar">
+            <br>
             <button type="button" style =" width: 100%;" class="btn btn-primary" onclick="get_search_reqs()">Apply Filters</button>
             <br><br>
             <div class="filter-group">
@@ -74,7 +76,10 @@
                 <br>
                 <button type="button" class="btn btn-tag" onclick="makeFilterAppliance()">Exclude Appliance</button>
             </div>
-        </div>
-    </div>
+         </div>
+     </div>
 </div>
+{% endblock %}
+
+{% block content %}
 {% endblock %}
