@@ -70,6 +70,7 @@ def shopping_list():
 
 
     recipes_list = []
+    ingredients_list = []
     for shopping_list in shopping_lists:
         recipe_id = shopping_list.recipe_id
         recipe = Recipe.query.filter_by(id=recipe_id).first()
@@ -93,10 +94,36 @@ def shopping_list():
             tag_list.append(Tag.query.filter_by(id=recipeTag.tag_id).first().name)
 
         recipes_list.append(make_recipe_banner_dict(recipe, author, tag_list, bookmark_on, cart_on, signed_in=signed_in))
-        
-        ingredients_list = []
+
+        print(recipe_id)
+
+        recipe = Recipe.query.filter_by(id=recipe_id).first()
+
+        ingredients = []
+        for recipeIngredient in recipe.ingredients:
+            ingredient = Ingredient.query.filter_by(id=recipeIngredient.ingredient_id).first()
+            recipe_ingredient = RecipeIngredient.query.filter_by(ingredient_id=ingredient.id, recipe_id=recipe.id).first()
+
+            quantity = float(recipe_ingredient.quantity)
+
+            # If it's a whole number, return int
+            if quantity.is_integer():
+                quantity = int(quantity)
+
+
+            ingredient_dict = {
+                "name": ingredient.name,
+                "quantity": quantity,
+                "units": recipe_ingredient.units,
+                "desc": recipe_ingredient.desc
+            }
+            ingredients.append(ingredient_dict)
+
+        ingredients_list.append(ingredients)
 
     return render_template("shopping_list.html", username=user.username, cartRecipes=recipes_list[::-1], cartIngredients=ingredients_list)
+
+
 
 
 @app.route("/saved")
