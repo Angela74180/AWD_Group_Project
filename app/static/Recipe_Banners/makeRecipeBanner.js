@@ -34,17 +34,31 @@ function makeRecipeBanner(recipe_details_dict, editable){
     }
     tags += `</p>`
     
-    div.innerHTML = `
-    <fieldset class="recipeBanner" onclick = "location.href='/view_recipe/${recipe_details_dict["recipeId"]}'">
-        <img src=${recipe_details_dict["recipeCoverImage"]} class = "recipeImage recipeBannerImage">
-        <div class="recipeBannerText">
-            <h3>${recipe_details_dict["recipeName"]}</h3>
-            <p>- <a href="/outer_profile/${recipe_details_dict["authorId"]}">${recipe_details_dict["author"]}<a> • Takes <b>${time}</b>, Serves <b>${recipe_details_dict["serves"]}</b></p>
-            ${tags}
-            <p>${recipe_details_dict["recipeDescription"]}</p>
-        <div>
-    </fieldset>
-    `;
+    if (recipe_details_dict["recipeCoverImage"]){
+        div.innerHTML = `
+        <fieldset class="recipeBanner" onclick = "location.href='/view_recipe/${recipe_details_dict["recipeId"]}'">
+            <img src=${recipe_details_dict["recipeCoverImage"]} class = "recipeImage recipeBannerImage">
+            <div class="recipeBannerText">
+                <h3>${recipe_details_dict["recipeName"]}</h3>
+                <p>- <a href="/outer_profile/${recipe_details_dict["authorId"]}">${recipe_details_dict["author"]}<a> • Takes <b>${time}</b>, Serves <b>${recipe_details_dict["serves"]}</b></p>
+                ${tags}
+                <p>${recipe_details_dict["recipeDescription"]}</p>
+            <div>
+        </fieldset>
+        `;
+    }
+    else{
+        div.innerHTML = `
+        <fieldset class="recipeBanner" onclick = "location.href='/view_recipe/${recipe_details_dict["recipeId"]}'">
+            <div class="recipeBannerText">
+                <h3>${recipe_details_dict["recipeName"]}</h3>
+                <p>- <a href="/outer_profile/${recipe_details_dict["authorId"]}">${recipe_details_dict["author"]}<a> • Takes <b>${time}</b>, Serves <b>${recipe_details_dict["serves"]}</b></p>
+                ${tags}
+                <p>${recipe_details_dict["recipeDescription"]}</p>
+            <div>
+        </fieldset>
+        `;
+    }
 
     newRecipeBanner.appendChild(div);
 

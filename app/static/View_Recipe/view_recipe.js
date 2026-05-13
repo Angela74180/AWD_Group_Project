@@ -13,7 +13,9 @@ function view_recipe(recipe_details_dict) {
     document.getElementById("recipe_banner_div").innerHTML += `&nbsp;&nbsp;`
     document.getElementById("recipe_banner_div").appendChild(makeCart(recipe_details_dict["cart_on"]));
 
-    div_main.innerHTML += `<img src=${recipe_details_dict["recipeCoverImage"]} class = "recipeImage recipeBannerImage">`;
+    if (recipe_details_dict["recipeCoverImage"] != ""){
+        div_main.innerHTML += `<img src=${recipe_details_dict["recipeCoverImage"]} class = "recipeImage recipeBannerImage">`;
+    }
     div_main.innerHTML += `<br><h1>~ ${recipe_details_dict["recipeName"]} ~</h1>`;
 
     div_main.innerHTML += `<p>- ${recipe_details_dict["author"]}</p>`;
@@ -137,7 +139,7 @@ function view_recipe(recipe_details_dict) {
         }
         newStep += "</h5></legend>";
 
-        if (step["photo"] !== ""){
+        if (step["photo"]){
             newStep += `<img src=${step["photo"]} class = "recipeImage recipeStepImage"></img>`;
         }
 

@@ -310,6 +310,9 @@ def publish_recipe():
             step_description = step_descriptions[i]
             step_photo = step_photos[i]
 
+            if not step_photo:
+                step_photo = ""
+
             step = Step(
                 name        = step_name,
                 desc        = step_description,
