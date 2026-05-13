@@ -698,3 +698,9 @@ select {
 .pw-save-btn:not(:disabled):hover { 
   opacity: 0.9;
 }
+
+.error-message {
+    color: red;
+    margin-bottom: 10px;
+    font-weight: 500;
+}
