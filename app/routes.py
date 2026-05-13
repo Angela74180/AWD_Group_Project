@@ -51,7 +51,7 @@ def explore():
         for recipeTag in recipe.tags:
             tag_list.append(Tag.query.filter_by(id=recipeTag.tag_id).first().name)
 
-        recipes_list.append(make_recipe_banner_dict(recipe, author, tag_list, bookmark_on, cart_on, signed_in=signed_in))
+        recipes_list.append(make_recipe_dict(recipe,author,tag_list,appliances=[],ingredients=[],steps=[],bookmark_on=bookmark_on,cart_on=cart_on,signed_in=signed_in,allowed_to_view=True))
 
     return render_template("explore.html", foundRecipes=recipes_list[::-1])
 
