@@ -222,12 +222,12 @@ select {
   align-items: center;
   background-color: rgb(0, 0, 0);
 }
+
 .profilePic{
   border-radius: 50%;
   width:200px;
   height:200px;
   overflow: hidden;
-  object-fit: cover;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -441,7 +441,7 @@ select {
   flex-shrink: 0;
 }
 
-.avatar-small img,
+.profile-btn img, .profile-pic img, .avatar-small img,
 .avatar-small-img {
   width: 100%;
   height: 100%;
