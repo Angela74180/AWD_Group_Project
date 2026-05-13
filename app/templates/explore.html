@@ -6,14 +6,13 @@
 <script src="{{ url_for('static', filename='Explore/data.js') }}"></script>
 <script src="{{ url_for('static', filename='Explore/getRandomRecipes.js') }}"></script>
 <script src="{{ url_for('static', filename='Explore/displayRecipes.js') }}"></script>
-<!-- <script src="{{ url_for('static', filename='Explore/displaySpotlight.js') }}"></script> -->
 <script src="{{ url_for('static', filename='Explore/populateExplore.js') }}"></script>
 <script src="{{ url_for('static', filename='Create_Recipe/editTags.js') }}"></script>
 <script src="{{ url_for('static', filename='Create_Recipe/editIngredients.js') }}"></script>
 <script src="{{ url_for('static', filename='Create_Recipe/editAppliances.js') }}"></script>
 <script src="{{ url_for('static', filename='Explore/getSearchRequirements.js') }}"></script>
 <script>
-    let recipes_list = {{ foundRecipes | tojson }};
+    window.recipes_list = {{ foundRecipes | tojson | safe }};
 </script>
 {% endblock %}
 
@@ -25,10 +24,6 @@
              <h1>Explore Page</h1>
             <input type="search" id="searchBar" style = "width: 100%" placeholder="Search recipes...">
             <br><br>
-            <div id="recipeList"></div>
-
-            <!-- <h2>Spotlight Recipes</h2> -->
-            <!-- <div id="spotlight"></div> -->
             <div id="recipe_banner_div" user_id="{{ current_user.id }}"></div>
          </div>
 
@@ -36,15 +31,15 @@
 
          <div class="col-auto filter-bar">
             <br>
-            <button type="button" style =" width: 100%;" class="btn btn-primary" onclick="get_search_reqs()">Apply Filters</button>
+            <button type="button" style =" width: 100%;" class="btn btn-primary" onclick="filterRecipes()">Apply Filters</button>
             <br><br>
             <div class="filter-group">
                 <label>Difficulty</label>
                 <select id="difficulty" data-filter="difficulty">
                     <option value="All">All</option>
-                    <option value="Easy">Easy</option>
-                    <option value="Medium">Medium</option>
-                    <option value="Hard">Hard</option>
+                    <option value="Simple">Simple</option>
+                    <option value="Intermediate">Intermediate</option>
+                    <option value="Challenging">Challenging</option>
                 </select>
             </div>
 
