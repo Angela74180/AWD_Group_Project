@@ -7,8 +7,6 @@ from app.makeRecipeBannerDict import make_recipe_banner_dict
 from app.makeRecipeDict import make_recipe_dict
 from sqlalchemy.exc import IntegrityError
 
-from flask import jsonify
-
 @app.route('/')
 @app.route('/index')
 def index():
