@@ -360,3 +360,30 @@ select {
     margin-bottom: 10px;
     font-weight: 500;
 }
+
+.filter-bar {
+  border-left: 3px solid rgb(255, 204, 75);
+  padding: 1%;
+  width: 20%;
+  float: right;
+
+  position: fixed;
+  top: 60px; /* Push down below top navbar */
+  right: 0;
+  width: 200px;
+  height: calc(100vh - 60px); /* Fill remaining height */
+  background-color: #ffffff;
+  overflow: hidden;
+  padding-top: 20px;
+
+}
+
+.filter-group{
+  padding: 2px;
+}
+
+.content_next_to_filter {
+  margin-right: 200px; /* Push right of sidebar */
+}
+
+
