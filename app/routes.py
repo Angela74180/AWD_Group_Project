@@ -1,6 +1,6 @@
 from flask import render_template, request, redirect, url_for, session, jsonify
 from app import app, db
-from flask_login import login_user, logout_user
+from flask_login import login_user, logout_user, login_required, current_user
 from sqlalchemy.exc import SQLAlchemyError #############################################################
 from app.models import User, Recipe, Ingredient, RecipeIngredient, Tag, RecipeTag, Appliance, RecipeAppliance, Step, Bookmark, ShoppingList
 from app.makeRecipeBannerDict import make_recipe_banner_dict
@@ -761,38 +761,72 @@ def updateShoppingList():
 
 @app.route("/profile")
 def profile():
-    ############### You will nedd to actually check for a User
     signed_in = True
-
     userId = session.get('authorId')
     user = User.query.filter_by(id=userId).first()
 
-    count = 0
-
     my_recipes_list = []
     for recipe in user.recipes:
-        count += 1
-        author = User.query.filter_by(id=recipe.author_id).first().username
-        bookmark = Bookmark.query.filter_by(user_id=userId, recipe_id=recipe.id).first()
-        cart = ShoppingList.query.filter_by(user_id=userId, recipe_id=recipe.id).first()
-
-        bookmark_on = True
-        if not bookmark:
-            bookmark_on = False
-
-        cart_on = True
-        if not cart:
-            cart_on = False
-
-        tag_list = []
-        
-        for recipeTag in recipe.tags:
-            tag_list.append(Tag.query.filter_by(id=recipeTag.tag_id).first().name)
-
+        author      = User.query.filter_by(id=recipe.author_id).first().username
+        bookmark_on = Bookmark.query.filter_by(user_id=userId, recipe_id=recipe.id).first() is not None
+        cart_on     = ShoppingList.query.filter_by(user_id=userId, recipe_id=recipe.id).first() is not None
+        tag_list    = [Tag.query.filter_by(id=rt.tag_id).first().name for rt in recipe.tags]
         my_recipes_list.append(make_recipe_banner_dict(recipe, author, tag_list, bookmark_on, cart_on, signed_in=signed_in))
 
-    return render_template("profilePage.html", user = user, username=user.username, userRecipes=my_recipes_list[::-1], recipecount = count)
+    return render_template("profilePage.html",
+        user=user,
+        username=user.username,
+        userRecipes=my_recipes_list[::-1],
+        recipecount=len(my_recipes_list)
+    )
 
+
+@app.route("/update_username", methods=["POST"])
+@login_required
+def update_username():
+    new_name = request.get_json().get("username", "").strip()
+
+    if not new_name:
+        return jsonify(success=False, message="Name cannot be empty.")
+
+    existing = User.query.filter_by(username=new_name).first()
+    if existing and existing.id != current_user.id:
+        return jsonify(success=False, message="Username already taken.")
+
+    current_user.username = new_name
+    db.session.commit()
+    return jsonify(success=True)
+
+
+@app.route("/upload_avatar", methods=["POST"])
+@login_required
+def upload_avatar():
+    image_data = request.get_json().get("image")
+
+    if not image_data:
+        return jsonify(success=False, message="No image provided.")
+
+    current_user.profile_picture = image_data
+    db.session.commit()
+    return jsonify(success=True)
+
+
+@app.route("/update_password", methods=["POST"])
+@login_required
+def update_password():
+    data   = request.get_json()
+    current = data.get("current")
+    new_pw  = data.get("new")
+
+    if not current_user.check_password(current):
+        return jsonify(success=False, message="Current password is incorrect.")
+
+    if not new_pw or len(new_pw) < 3:
+        return jsonify(success=False, message="New password must be at least 3 characters.")
+
+    current_user.set_password(new_pw)
+    db.session.commit()
+    return jsonify(success=True)
 
 
 @app.route('/view_recipe/<recipe_num>')
