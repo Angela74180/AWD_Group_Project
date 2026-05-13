@@ -8,7 +8,7 @@ function includeRecipes(my_recipes_list){
     if (my_recipes_list != ""){
         container.innerHTML = ``;
         for (let recipe_dict of my_recipes_list){
-            container.appendChild(makeRecipeBanner(recipe_dict));
+            container.appendChild(makeRecipeBanner(recipe_dict, true));
         }
     }
 }

@@ -4,7 +4,7 @@ function addRecipeBanner(recipe_details_dict){
     document.getElementById("recipes_for_shopping_list").appendChild(newRecipeBanner);
 }
 
-function makeRecipeBanner(recipe_details_dict){
+function makeRecipeBanner(recipe_details_dict, editable){
     let recipe_id = recipe_details_dict["recipeId"];
 
     let newRecipeBanner = document.createElement("fieldset");
@@ -15,6 +15,14 @@ function makeRecipeBanner(recipe_details_dict){
         newRecipeBanner.appendChild(makeBookmark(recipe_details_dict["bookmark_on"]));
         newRecipeBanner.innerHTML += `&nbsp;&nbsp;`
         newRecipeBanner.appendChild(makeCart(recipe_details_dict["cart_on"]));
+
+        if (editable){
+            newRecipeBanner.innerHTML += `&nbsp;&nbsp;`
+            let editButton = document.createElement("a");
+            editButton.setAttribute("href", `/create_recipe/${recipe_details_dict["recipeId"]}`);
+            editButton.innerHTML = `<button class = "btn btn-add" >Edit Recipe</button>`;
+            newRecipeBanner.appendChild(editButton);
+        }
     }
 
     let div = document.createElement("div");
