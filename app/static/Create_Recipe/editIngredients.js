@@ -52,3 +52,21 @@ function addIngredient(ingredientDict) {
 function removeIngredient(removeButton) {
     removeButton.target.parentElement.remove();
 }
+
+
+function makeFilterIngredient(){
+    let line = document.createElement("div");
+    let remove = document.createElement("button");
+    remove.innerText = "-"
+    remove.setAttribute("style", "border-color: #00000000; background-color: #00000000;");
+    remove.setAttribute("onclick", "removeIngredient(event)");
+
+    line.appendChild(remove);
+
+    let input = document.createElement("input");
+    input.setAttribute("style", "width: 130px");
+
+    line.appendChild(input);
+
+    document.getElementById("filter_ingredients").appendChild(line);
+}

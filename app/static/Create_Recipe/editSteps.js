@@ -19,9 +19,13 @@ function addStep(stepDict){
         <br>
         <textarea name="stepDescription" placeholder="500 Character Limit" rows = "2" maxlength="500" required>${handleQuotes(stepDict["desc"])}</textarea>
         (Optional) Step Picture: <input type = "file" accept=".jpg, .png, .jpeg, .webp" onchange="validatePhoto(event.target)">
-        <div></div>
-        <input name="stepPhoto" type = "hidden">
+        <div>
+        <img src="${stepDict["photo"]}" class="preview_image">
+        </div>
+        <input name="stepPhoto" type = "hidden" value = "${stepDict["photo"]}">
     `;
+
+    console.log(stepDict)
 
     container.appendChild(newStep);
 }
