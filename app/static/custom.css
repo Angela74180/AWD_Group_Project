@@ -227,6 +227,7 @@ select {
   width:200px;
   height:200px;
   overflow: hidden;
+  object-fit: cover;
   display: flex;
   justify-content: center;
   align-items: center;
