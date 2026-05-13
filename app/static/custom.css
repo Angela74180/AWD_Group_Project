@@ -724,3 +724,33 @@ select {
 }
 
 
+.section-heading {
+    margin: 30px 0 16px;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+}
+
+.card-info {
+    padding: 10px 14px 14px;
+}
+
+.card-author {
+    font-size: 12px;
+    color: #888;
+    margin: 2px 0 6px;
+}
+
+.card-tags {
+    font-size: 11px;
+    color: #aaa;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.no-results {
+    color: #999;
+    font-size: 14px;
+    margin-top: 20px;
+}

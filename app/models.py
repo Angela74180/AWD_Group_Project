@@ -6,6 +6,48 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import sqlalchemy as sa
 import sqlalchemy.orm as so
 
+class Review(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    author_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    recipe_id = db.Column(db.Integer, db.ForeignKey("recipe.id"), nullable=False)
+ 
+    title = db.Column(db.String(100), nullable=False)
+    body = db.Column(db.Text, nullable=True)
+    taste_rating = db.Column(db.Integer, nullable=True)   # 1-5
+    accuracy_rating = db.Column(db.Integer, nullable=True)  # 1-5
+    timing_rating = db.Column(db.Integer, nullable=True)   # 1-7
+    like_count = db.Column(db.Integer, nullable=False, default=0)
+ 
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
+ 
+    # One review per user per recipe
+    __table_args__ = (
+        db.UniqueConstraint("author_id", "recipe_id", name="uq_review_author_recipe"),
+    )
+ 
+    author = db.relationship("User", back_populates="reviews")
+    recipe = db.relationship("Recipe", back_populates="reviews")
+    liked_by = db.relationship("ReviewLike", back_populates="review", cascade="all, delete-orphan")
+ 
+ 
+class ReviewLike(db.Model): 
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    review_id = db.Column(db.Integer, db.ForeignKey("review.id"), nullable=False)
+    liked_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+ 
+    __table_args__ = (
+        db.UniqueConstraint("user_id", "review_id", name="uq_review_like_user_review"),
+    )
+ 
+    user = db.relationship("User", back_populates="review_likes")
+    review = db.relationship("Review", back_populates="liked_by")
+
+
+
+
+
 
 class User(UserMixin, db.Model):
 
@@ -19,6 +61,8 @@ class User(UserMixin, db.Model):
     recipes = db.relationship("Recipe", back_populates="author", cascade="all, delete-orphan")
     bookmarks = db.relationship("Bookmark", back_populates="user", cascade="all, delete-orphan")
     shopping_lists = db.relationship("ShoppingList", back_populates="user", cascade="all, delete-orphan")
+    reviews      = db.relationship("Review", back_populates="author", cascade="all, delete-orphan")
+    review_likes = db.relationship("ReviewLike", back_populates="user", cascade="all, delete-orphan")
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -57,6 +101,7 @@ class Recipe(db.Model):
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
 
+    reviews = db.relationship("Review", back_populates="recipe", cascade="all, delete-orphan")
 
     author = db.relationship("User", back_populates="recipes")
     ingredients = db.relationship(

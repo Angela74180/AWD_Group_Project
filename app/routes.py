@@ -7,10 +7,24 @@ from app.makeRecipeBannerDict import make_recipe_banner_dict
 from app.makeRecipeDict import make_recipe_dict
 from sqlalchemy.exc import IntegrityError
 
+
 @app.route('/')
 @app.route('/index')
 def index():
-    return render_template("homePage.html")
+    userId    = session.get('authorId')
+    signed_in = userId is not None
+
+    recipes = Recipe.query.order_by(Recipe.id.desc()).limit(6).all()
+
+    latest_recipes = []
+    for recipe in recipes:
+        author   = User.query.filter_by(id=recipe.author_id).first().username
+        tag_list = [Tag.query.filter_by(id=rt.tag_id).first().name for rt in recipe.tags]
+        latest_recipes.append(make_recipe_banner_dict(recipe, author, tag_list, signed_in=signed_in, bookmark_on=False, cart_on=False))
+
+    return render_template("homePage.html", latest_recipes=latest_recipes)
+
+
 
 @app.route("/explore")
 def explore():
