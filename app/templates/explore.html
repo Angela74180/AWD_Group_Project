@@ -2,71 +2,80 @@
 
 {% block title %}Explore - CookBook{% endblock %}
 
-{% block content %}
-<h1>Explore Page</h1>
-
-<div class="filter-bar">
-
-    <div class="filter-group">
-        <label>Cuisine:</label>
-        <select data-filter="cuisine">
-            <option value="All">All</option>
-            <option value="Asian">Asian</option> 
-            <option value="Mediterranean">Mediterranean</option>
-            <option value="Western">Western</option>               
-        </select>
-    </div>
-
-    <div class="filter-group">
-        <label>Difficulty</label>
-        <select data-filter="difficulty">
-            <option value="All">All</option>
-            <option value="Easy">Easy</option>
-            <option value="Medium">Medium</option>
-            <option value="Hard">Hard</option>
-        </select>
-    </div>
-
-    <div class="filter-group">
-        <label>Time</label>
-        <select data-filter="time">
-            <option value="All">All</option>
-            <option value="Under 15 min">Under 15 min</option>
-            <option value="15-30 min">15-30 min</option>
-            <option value="30-60 min">30-60 min</option>
-            <option value="60+">60+</option>
-        </select>
-    </div>
-
-    <div class="filter-group">
-        <label>Diet</label>
-        <select data-filter="diet">
-            <option value="Vegetarian">Vegetarian</option>
-            <option value="Vegan">Vegan</option>
-            <option value="Gluten-free">Gluten-free</option>
-            <option value="Dairy-free">Dairy-free</option>
-        </select>
-    </div>
-
-</div>
-
-<input type="search" id="searchBar" placeholder="Search recipes...">
-<div id="recipeList"></div>
-
-<h2>Spotlight Recipes</h2>
-<div id="spotlight"></div>
-<fieldset>
-<div id="recipe_banner_div" user_id="{{ current_user.id }}"></div>
-</fieldset>
-{% endblock %}
-
 {% block scripts %}
 <script src="{{ url_for('static', filename='Explore/data.js') }}"></script>
 <script src="{{ url_for('static', filename='Explore/getRandomRecipes.js') }}"></script>
 <script src="{{ url_for('static', filename='Explore/displayRecipes.js') }}"></script>
-<script src="{{ url_for('static', filename='Explore/displaySpotlight.js') }}"></script>
 <script src="{{ url_for('static', filename='Explore/populateExplore.js') }}"></script>
+<script src="{{ url_for('static', filename='Create_Recipe/editTags.js') }}"></script>
+<script src="{{ url_for('static', filename='Create_Recipe/editIngredients.js') }}"></script>
+<script src="{{ url_for('static', filename='Create_Recipe/editAppliances.js') }}"></script>
+<script src="{{ url_for('static', filename='Explore/getSearchRequirements.js') }}"></script>
 <script>
-    let recipes_list = {{ foundRecipes | tojson }};
+    window.recipes_list = {{ foundRecipes | tojson | safe }};
 </script>
+{% endblock %}
+
+{% block outer_content %}
+<div class="container-fluid">
+     <div class="row">
+
+         <div class="col div_main">
+             <h1>Explore Page</h1>
+            <input type="search" id="searchBar" style = "width: 100%" placeholder="Search recipes...">
+            <br><br>
+            <div id="recipe_banner_div" user_id="{{ current_user.id }}"></div>
+         </div>
+
+
+
+         <div class="col-auto filter-bar">
+            <br>
+            <button type="button" style =" width: 100%;" class="btn btn-primary" onclick="filterRecipes()">Apply Filters</button>
+            <br><br>
+            <div class="filter-group">
+                <label>Difficulty</label>
+                <select id="difficulty" data-filter="difficulty">
+                    <option value="All">All</option>
+                    <option value="Simple">Simple</option>
+                    <option value="Intermediate">Intermediate</option>
+                    <option value="Challenging">Challenging</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label>Time</label>
+                <select id = "time" data-filter="time">
+                    <option value="All">All</option>
+                    <option value="Under 15 min">Under 15 min</option>
+                    <option value="15-30 min">15-30 min</option>
+                    <option value="30-60 min">30-60 min</option>
+                    <option value="60+">60+</option>
+                </select>
+            </div>
+
+            
+            <div id="filter_tags" class="filter-group">
+                <label>Includes Tags:</label>
+                <br>
+                <button type="button" class="btn btn-tag" onclick="makeFilterTag()">New Tag</button>
+            </div>
+
+            <div id="filter_ingredients" class="filter-group">
+                <label>Includes Ingredients:</label>
+                <br>
+                <button type="button" class="btn btn-tag" onclick="makeFilterIngredient()">New Ingredient</button>
+            </div>
+
+            <div id="filter_appliances" class="filter-group">
+                <label>Exclude Appliances:</label>
+                <br>
+                <button type="button" class="btn btn-tag" onclick="makeFilterAppliance()">New Appliance</button>
+            </div>
+         </div>
+     </div>
+</div>
+{% endblock %}
+
+{% block content %}
 {% endblock %}
