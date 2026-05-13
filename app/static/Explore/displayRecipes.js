@@ -58,10 +58,28 @@ function filterRecipes() {
                     .includes(tag.toLowerCase())
             );
 
+        const matchesIngredients =
+            searchReqs.ingredients_list.length === 0 ||
+            searchReqs.ingredients_list.every(ing =>
+                recipe.ingredients
+                    .map(i => i.toLowerCase())
+                    .includes(ing.toLowerCase())
+            );
+        
+        const matchesAppliances =
+            searchReqs.appliances_list.length === 0 ||
+            !searchReqs.appliances_list.some(app =>
+                recipe.appliances
+                    .map(a => a.toLowerCase())
+                    .includes(app.toLowerCase())
+            );
+
         return matchesSearch &&
             matchesTime &&
             matchesDifficulty &&
-            matchesTags;
+            matchesTags &&
+            matchesIngredients &&
+            matchesAppliances;
     });
 
     populate(filteredRecipes);
