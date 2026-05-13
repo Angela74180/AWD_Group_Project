@@ -1,75 +1,68 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-    let selectedFilters = {
-    cuisine: "All",
-    difficulty: "All",
-    time: "All",
-    diet: "All"
-    };
+    populate(recipes_list);
 
-    const recipeList = document.getElementById("recipeList");
-    const searchBar = document.getElementById("searchBar");
+    document.getElementById("searchBar")
+        .addEventListener("input", filterRecipes);
 
-    function displayRecipes(filteredRecipes) {
-        recipeList.innerHTML = "";
-
-        filteredRecipes.forEach(recipe => {
-            const div = document.createElement("div");
-            div.textContent = recipe.title;
-            recipeList.appendChild(div);
+    document.querySelectorAll(".filter-bar select")
+        .forEach(select => {
+            select.addEventListener("change", filterRecipes);
         });
-    }
+});
 
-    function filterRecipes() {
-        const searchTerm = searchBar.value.toLowerCase();
-        if (searchTerm === "") {
-            recipeList.innerHTML = "";
-            return;
-        }
+function filterRecipes() {
 
-        const filtered = recipes.filter(recipe => {
+    const searchReqs = get_search_reqs();
 
-            const matchesSearch = recipe.title.toLowerCase().includes(searchTerm);
+    const filteredRecipes = recipes_list.filter(recipe => {
 
-            const matchesCuisine =
-                selectedFilters.cuisine === "All" ||
-                recipe.cuisine === selectedFilters.cuisine;
+        const searchText =
+            searchReqs.search_bar.toLowerCase();
 
-            const matchesDifficulty =
-                selectedFilters.difficulty === "All" ||
-                recipe.difficulty === selectedFilters.difficulty;
+        const matchesSearch =
+            searchText === "" ||
+            recipe.recipeName.toLowerCase().includes(searchText);
 
-            const matchesTime =
-                selectedFilters.time === "All" ||
-                recipe.time === selectedFilters.time;
+        const recipeMinutes =
+            recipe.timeList.totalTime[0] * 60 +
+            recipe.timeList.totalTime[1];
 
-            const matchesDiet =
-                selectedFilters.diet === "All" ||
-                recipe.diet === selectedFilters.diet;
+        const matchesTime =
+            searchReqs.time === "All" ||
 
-            return matchesSearch &&
-                matchesCuisine &&
-                matchesDifficulty &&
-                matchesTime &&
-                matchesDiet;
-        });
+            (searchReqs.time === "Under 15 min" &&
+                recipeMinutes < 15) ||
 
-        displayRecipes(filtered);
-    }
+            (searchReqs.time === "15-30 min" &&
+                recipeMinutes >= 15 &&
+                recipeMinutes <= 30) ||
 
-    searchBar.addEventListener("input", filterRecipes);
+            (searchReqs.time === "30-60 min" &&
+                recipeMinutes > 30 &&
+                recipeMinutes <= 60) ||
 
-    document.querySelectorAll(".filter-bar select").forEach(select => {
-        select.addEventListener("change", () => {
-            const type = select.dataset.filter;
-            const value = select.value;
+            (searchReqs.time === "60+" &&
+                recipeMinutes > 60);
 
-            selectedFilters[type] = value;
+        const matchesDifficulty =
+            searchReqs.difficulty === "All" ||
+            recipe.recipeDifficulty === searchReqs.difficulty;
 
-            filterRecipes();
-        });
+        const matchesTags =
+            searchReqs.tags_list.length === 0 ||
+
+            searchReqs.tags_list.every(tag =>
+                recipe.tagList
+                    .map(t => t.toLowerCase())
+                    .includes(tag.toLowerCase())
+            );
+
+        return matchesSearch &&
+            matchesTime &&
+            matchesDifficulty &&
+            matchesTags;
     });
 
-    filterRecipes();
-
-});
+    populate(filteredRecipes);
+}

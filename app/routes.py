@@ -7,7 +7,6 @@ from app.makeRecipeBannerDict import make_recipe_banner_dict
 from app.makeRecipeDict import make_recipe_dict
 from sqlalchemy.exc import IntegrityError
 
-
 @app.route('/')
 @app.route('/index')
 def index():
@@ -26,13 +25,11 @@ def explore():
 
     ############################### CHOSEN RECIPES IS WHERE YOU STORE THE RECIPE OBJECTS THAT YOU WANT TO DISPLAY BASED ON YOUR QUERIES 
     ########## IT NEEDS TO BE A LIST 
-
-
-    chosen_recipes = [Recipe.query.filter_by(id=1).first(), Recipe.query.filter_by(id=2).first()]
+    chosen_recipes = Recipe.query.filter_by(visibility="Public").all()
     
     
     for recipe in chosen_recipes:
-        author = User.query.filter_by(id=recipe.author_id).first().username
+        author = recipe.author.username
 
         bookmark_on = True
         cart_on = True
@@ -52,11 +49,13 @@ def explore():
         for recipeTag in recipe.tags:
             tag_list.append(Tag.query.filter_by(id=recipeTag.tag_id).first().name)
 
-        recipes_list.append(make_recipe_banner_dict(recipe, author, tag_list, bookmark_on, cart_on, signed_in=signed_in))
+        recipes_list.append(make_recipe_dict(recipe,author,tag_list,appliances=[],ingredients=[],steps=[],bookmark_on=bookmark_on,cart_on=cart_on,signed_in=signed_in,allowed_to_view=True))
 
     return render_template("explore.html", foundRecipes=recipes_list[::-1])
 
 
+def explore():
+    return render_template("explore.html")
 
 
 @app.route("/shopping_list")
