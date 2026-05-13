@@ -27,11 +27,11 @@ def explore():
 
     ############################### CHOSEN RECIPES IS WHERE YOU STORE THE RECIPE OBJECTS THAT YOU WANT TO DISPLAY BASED ON YOUR QUERIES 
     ########## IT NEEDS TO BE A LIST 
-    chosen_recipes = [Recipe.query.filter_by(id=1).first(), Recipe.query.filter_by(id=2).first()]
+    chosen_recipes = Recipe.query.all()
     
     
     for recipe in chosen_recipes:
-        author = User.query.filter_by(id=recipe.author_id).first().username
+        author = recipe.author.username
 
         bookmark_on = True
         cart_on = True

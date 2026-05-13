@@ -44,8 +44,6 @@
 <input type="search" id="searchBar" placeholder="Search recipes...">
 <div id="recipeList"></div>
 
-<h2>Spotlight Recipes</h2>
-<div id="spotlight"></div>
 <fieldset>
 <div id="recipe_banner_div" user_id="{{ current_user.id }}"></div>
 </fieldset>
@@ -54,7 +52,6 @@
 {% block scripts %}
 <script src="{{ url_for('static', filename='Explore/getRandomRecipes.js') }}"></script>
 <script src="{{ url_for('static', filename='Explore/displayRecipes.js') }}"></script>
-<script src="{{ url_for('static', filename='Explore/displaySpotlight.js') }}"></script>
 <script src="{{ url_for('static', filename='Explore/populateExplore.js') }}"></script>
 <script>
     let recipes_list = {{ foundRecipes | tojson }};
