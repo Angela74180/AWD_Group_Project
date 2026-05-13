@@ -1,6 +1,6 @@
 from flask import render_template, request, redirect, url_for, session, jsonify
 from app import app, db
-from flask_login import login_user, logout_user
+from flask_login import login_user, logout_user, login_required, current_user
 from sqlalchemy.exc import SQLAlchemyError #############################################################
 from app.models import User, Recipe, Ingredient, RecipeIngredient, Tag, RecipeTag, Appliance, RecipeAppliance, Step, Bookmark, ShoppingList
 from app.makeRecipeBannerDict import make_recipe_banner_dict
@@ -122,6 +122,7 @@ def shopping_list():
 
 
     recipes_list = []
+    ingredients_list = []
     for shopping_list in shopping_lists:
         recipe_id = shopping_list.recipe_id
         recipe = Recipe.query.filter_by(id=recipe_id).first()
@@ -145,10 +146,36 @@ def shopping_list():
             tag_list.append(Tag.query.filter_by(id=recipeTag.tag_id).first().name)
 
         recipes_list.append(make_recipe_banner_dict(recipe, author, tag_list, bookmark_on, cart_on, signed_in=signed_in))
-        
-        ingredients_list = []
+
+        print(recipe_id)
+
+        recipe = Recipe.query.filter_by(id=recipe_id).first()
+
+        ingredients = []
+        for recipeIngredient in recipe.ingredients:
+            ingredient = Ingredient.query.filter_by(id=recipeIngredient.ingredient_id).first()
+            recipe_ingredient = RecipeIngredient.query.filter_by(ingredient_id=ingredient.id, recipe_id=recipe.id).first()
+
+            quantity = float(recipe_ingredient.quantity)
+
+            # If it's a whole number, return int
+            if quantity.is_integer():
+                quantity = int(quantity)
+
+
+            ingredient_dict = {
+                "name": ingredient.name,
+                "quantity": quantity,
+                "units": recipe_ingredient.units,
+                "desc": recipe_ingredient.desc
+            }
+            ingredients.append(ingredient_dict)
+
+        ingredients_list.append(ingredients)
 
     return render_template("shopping_list.html", username=user.username, cartRecipes=recipes_list[::-1], cartIngredients=ingredients_list)
+
+
 
 
 @app.route("/saved")
@@ -631,35 +658,72 @@ def updateShoppingList():
 
 @app.route("/profile")
 def profile():
-    ############### You will nedd to actually check for a User
     signed_in = True
-
     userId = session.get('authorId')
     user = User.query.filter_by(id=userId).first()
 
     my_recipes_list = []
     for recipe in user.recipes:
-        author = User.query.filter_by(id=recipe.author_id).first().username
-        bookmark = Bookmark.query.filter_by(user_id=userId, recipe_id=recipe.id).first()
-        cart = ShoppingList.query.filter_by(user_id=userId, recipe_id=recipe.id).first()
-
-        bookmark_on = True
-        if not bookmark:
-            bookmark_on = False
-
-        cart_on = True
-        if not cart:
-            cart_on = False
-
-        tag_list = []
-        
-        for recipeTag in recipe.tags:
-            tag_list.append(Tag.query.filter_by(id=recipeTag.tag_id).first().name)
-
+        author      = User.query.filter_by(id=recipe.author_id).first().username
+        bookmark_on = Bookmark.query.filter_by(user_id=userId, recipe_id=recipe.id).first() is not None
+        cart_on     = ShoppingList.query.filter_by(user_id=userId, recipe_id=recipe.id).first() is not None
+        tag_list    = [Tag.query.filter_by(id=rt.tag_id).first().name for rt in recipe.tags]
         my_recipes_list.append(make_recipe_banner_dict(recipe, author, tag_list, bookmark_on, cart_on, signed_in=signed_in))
 
-    return render_template("profilePage.html", username=user.username, userRecipes=my_recipes_list[::-1])
+    return render_template("profilePage.html",
+        user=user,
+        username=user.username,
+        userRecipes=my_recipes_list[::-1],
+        recipecount=len(my_recipes_list)
+    )
 
+
+@app.route("/update_username", methods=["POST"])
+@login_required
+def update_username():
+    new_name = request.get_json().get("username", "").strip()
+
+    if not new_name:
+        return jsonify(success=False, message="Name cannot be empty.")
+
+    existing = User.query.filter_by(username=new_name).first()
+    if existing and existing.id != current_user.id:
+        return jsonify(success=False, message="Username already taken.")
+
+    current_user.username = new_name
+    db.session.commit()
+    return jsonify(success=True)
+
+
+@app.route("/upload_avatar", methods=["POST"])
+@login_required
+def upload_avatar():
+    image_data = request.get_json().get("image")
+
+    if not image_data:
+        return jsonify(success=False, message="No image provided.")
+
+    current_user.profile_picture = image_data
+    db.session.commit()
+    return jsonify(success=True)
+
+
+@app.route("/update_password", methods=["POST"])
+@login_required
+def update_password():
+    data   = request.get_json()
+    current = data.get("current")
+    new_pw  = data.get("new")
+
+    if not current_user.check_password(current):
+        return jsonify(success=False, message="Current password is incorrect.")
+
+    if not new_pw or len(new_pw) < 3:
+        return jsonify(success=False, message="New password must be at least 3 characters.")
+
+    current_user.set_password(new_pw)
+    db.session.commit()
+    return jsonify(success=True)
 
 
 @app.route('/view_recipe/<recipe_num>')
@@ -741,3 +805,41 @@ def view_recipe(recipe_num):
 
     recipes_dict = make_recipe_dict(recipe, author, tag_list, appliances, ingredients, steps, bookmark_on, cart_on, signed_in=signed_in, allowed_to_view=allowed_to_view)
     return render_template('view_recipe.html', recipe_details_dict=recipes_dict) 
+
+
+
+
+@app.route("/outer_profile/<author_id>")
+def outer_profile(author_id):
+    ############### You will nedd to actually check for a User
+    signed_in = True
+
+    current_user_id = session.get('authorId')
+    current_user = User.query.filter_by(id=current_user_id).first()
+
+    author = User.query.filter_by(id=author_id).first()
+
+    their_recipes_list = []
+    for recipe in author.recipes:
+        author_username = User.query.filter_by(id=recipe.author_id).first().username
+        bookmark = Bookmark.query.filter_by(user_id=current_user_id, recipe_id=recipe.id).first()
+        cart = ShoppingList.query.filter_by(user_id=current_user_id, recipe_id=recipe.id).first()
+
+        bookmark_on = True
+        if not bookmark:
+            bookmark_on = False
+
+        cart_on = True
+        if not cart:
+            cart_on = False
+
+        tag_list = []
+        
+        for recipeTag in recipe.tags:
+            tag_list.append(Tag.query.filter_by(id=recipeTag.tag_id).first().name)
+
+        their_recipes_list.append(make_recipe_banner_dict(recipe, author_username, tag_list, bookmark_on, cart_on, signed_in=signed_in))
+
+        print(author.profile_picture)
+
+    return render_template("outerProfilePage.html", authorUsername=author_username, authorRecipes=their_recipes_list[::-1], authorProfilePic=author.profile_picture)

@@ -3,40 +3,136 @@
 {% block title %}Profile - CookBook{% endblock %}
 
 {% block scripts %}
-<script src="{{ url_for('static', filename='Profile/includeRecipes.js') }}"></script>
 <script>
+    let currentName = {{ user.username | tojson }};
     let my_recipes_list = {{ userRecipes | tojson }};
 </script>
+<script src="{{ url_for('static', filename='Profile/includeRecipes.js') }}"></script>
+<script src="{{ url_for('static', filename='Profile/changeUsername.js') }}"></script>
+<script src="{{ url_for('static', filename='Profile/password.js') }}"></script>
+<script src="{{ url_for('static', filename='Profile/passwordHide.js') }}"></script>
+<script src="{{ url_for('static', filename='Profile/tabs.js') }}"></script>
+<script src="{{ url_for('static', filename='Profile/uploadAvatar.js') }}"></script>
 {% endblock %}
 
 {% block content %}
-<h1>Hello, {{ username }}</h1>
-<br>
-<div class="profilePic">
-    <img src="{{ current_user.profile_picture }}" style="height:200px;">
+
+<!-- Header -->
+<div class="profile-header">
+    <label class="avatar-wrap" id="avatarWrap" title="Change profile photo">
+        <input type="file" id="avatar-input" accept="image/*" hidden>
+        {% if current_user.profile_picture %}
+            <img id="avatarDisplay" src="{{ current_user.profile_picture }}" class="avatar-display-img" alt="Profile Picture">
+        {% else %}
+            <img id="avatarDisplay" src="https://gleephoria.in/wp-content/uploads/2024/10/WhatsApp-Image-2023-07-14-at-6.04.12-PM.jpeg" class="avatar-display-img" alt="Profile Picture">
+        {% endif %}
+        <span class="avatar-overlay">CHANGE<br>PHOTO</span>
+    </label>
+
+    <div>
+        <p class="header-name" id="headerName">{{ username }}</p>
+        <p class="header-meta">{{ recipecount }} recipes · (review count) reviews</p>
+    </div>
 </div>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<h3>Your Recipes:</h3>
 
-<div id="recipe_banner_div" user_id="{{ current_user.id }}"></div>
-<br>
-<br>
-<br>
-<!-- <p>{{  current_user.recipes  }}</p> -->
-<br>
-<br>
-<br>
-<br>
+<!-- Tabs -->
+<div class="tabs">
+    <button class="tab-btn active" data-tab="profile">Profile</button>
+    <button class="tab-btn" data-tab="recipes">Recipes ({{ recipecount }})</button>
+    <button class="tab-btn" data-tab="reviews">Reviews (3)</button>
+</div>
+
+<!-- Profile Tab -->
+<div class="profile-tab tab-pane" id="profile-tab">
+    <div class="section">
+
+        <div class="section-title">Personal Information</div>
+
+        <!-- Username view/edit -->
+        <div class="field-row" id="nameViewRow">
+            <span class="field-label">Name</span>
+            <span class="field-value" id="nameDisplay">{{ username }}</span>
+            <span class="success-pill" id="nameSavedAlert" hidden>✓ Saved</span>
+            <button class="edit-btn" id="nameEditBtn">Edit</button>
+        </div>
+
+        <div class="field-row" id="nameEditRow" hidden>
+            <span class="field-label">Name</span>
+            <input class="field-input" type="text" id="nameInput" />
+            <button class="save-btn" id="nameSaveBtn">Save</button>
+            <button class="cancel-btn" id="nameCancelBtn">✕</button>
+        </div>
+
+        <div class="field-row">
+            <span class="field-label">Email</span>
+            <span class="field-value muted">{{ user.email }}</span>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Profile photo -->
+        <div class="section-title photo-section">Profile Photo</div>
+        <div class="photo-row">
+            <div class="avatar-small" id="avatarSmall">
+                {% if current_user.profile_picture %}
+                    <img src="{{ current_user.profile_picture }}" class="avatar-small-img" alt="Profile Picture">
+                {% else %}
+                    <img src="https://gleephoria.in/wp-content/uploads/2024/10/WhatsApp-Image-2023-07-14-at-6.04.12-PM.jpeg" alt="Profile Picture">
+                {% endif %}
+            </div>
+            <div>
+                <button class="edit-btn" id="uploadPhotoBtn">Upload Photo</button>
+  
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Change password -->
+        <div class="section-title pw-section">Change Password</div>
+
+        <div class="pw-success" id="pwSuccess" hidden>✓ Password updated successfully</div>
+
+        <div class="pw-field">
+            <label class="pw-label">Current Password</label>
+            <div class="pw-input-wrap">
+                <input class="pw-input" type="password" id="pwCurrent" placeholder="Enter current password" />
+                <button class="eye-btn" data-target="pwCurrent">👁️</button>
+            </div>
+        </div>
+
+        <div class="pw-field">
+            <label class="pw-label">New Password</label>
+            <div class="pw-input-wrap">
+                <input class="pw-input" type="password" id="pwNext" placeholder="Enter new password" />
+                <button class="eye-btn" data-target="pwNext">👁️</button>
+            </div>
+        </div>
+
+        <div class="pw-field">
+            <label class="pw-label">Confirm New Password</label>
+            <div class="pw-input-wrap">
+                <input class="pw-input" type="password" id="pwConfirm" placeholder="Confirm new password" />
+                <button class="eye-btn" data-target="pwConfirm">👁️</button>
+            </div>
+            <p class="pw-mismatch" id="pwMismatch" hidden>Passwords don't match</p>
+        </div>
+
+        <button class="pw-save-btn" id="pwSaveBtn" disabled>Update Password</button>
+
+    </div>
+</div>
+
+<!-- Recipes Tab -->
+<div class="recipe-tab tab-pane" id="recipes-tab" hidden>
+    <div class="section">
+        <div id="recipe_banner_div"></div>
+    </div>
+</div>
+
+<!-- Reviews Tab -->
+<div class="review-tab tab-pane" id="reviews-tab" hidden></div>
+
 <h4><a href="/logout">Logout</a></h4>
-
-
-
-
 
 {% endblock %}
