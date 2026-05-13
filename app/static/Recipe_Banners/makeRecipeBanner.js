@@ -39,7 +39,7 @@ function makeRecipeBanner(recipe_details_dict, editable){
         <img src=${recipe_details_dict["recipeCoverImage"]} class = "recipeImage recipeBannerImage">
         <div class="recipeBannerText">
             <h3>${recipe_details_dict["recipeName"]}</h3>
-            <p>- ${recipe_details_dict["author"]} • Takes <b>${time}</b>, Serves <b>${recipe_details_dict["serves"]}</b></p>
+            <p>- <a href="/outer_profile/${recipe_details_dict["authorId"]}">${recipe_details_dict["author"]}<a> • Takes <b>${time}</b>, Serves <b>${recipe_details_dict["serves"]}</b></p>
             ${tags}
             <p>${recipe_details_dict["recipeDescription"]}</p>
         <div>

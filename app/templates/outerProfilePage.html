@@ -1,30 +1,23 @@
 {% extends "base.html" %}
 
-{% block title %}Profile - CookBook{% endblock %}
+{% block title %}View Profile - CookBook{% endblock %}
 
 {% block scripts %}
 <script src="{{ url_for('static', filename='Profile/includeRecipes.js') }}"></script>
 <script>
-    let their_recipes_list = {{ userRecipes | tojson }};
-    let their_username = {{ userName | tojson }};
-    let their_profile_pic = {{ userProfilePic | tojson }};
+    let my_recipes_list = {{ authorRecipes | tojson }};
 </script>
 {% endblock %}
 
 {% block content %}
-<h1>Hello, {{ username }}</h1>
+<h1>{{ authorUsername }}</h1>
 <br>
 <div class="profilePic">
-    <img src="{{ current_user.profile_picture }}" style="height:200px;">
+    <img src="{{ authorProfilePic }}" style="height:200px;">
 </div>
 <br>
 <br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<h3>Your Recipes:</h3>
+<h3>Their Recipes:</h3>
 
 <div id="recipe_banner_div" user_id="{{ current_user.id }}"></div>
 
