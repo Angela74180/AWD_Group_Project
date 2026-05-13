@@ -12,10 +12,16 @@ function validatePhoto(photo) {
         let source = "";
 
         reader.onload = function (e) {
-            image.setAttribute("src", e.target.result);
-            image.setAttribute("class", "preview_image");
-            // preview.src = e.target.result; // Set image source to base64 data
-            photo_div.nextElementSibling.value = e.target.result;
+            // Restrict image size to 100k (AKA 136K in base 64 format)
+            if (e.target.result.length > 136000){
+                alert("The image selected is too large. Images must be less than 100K");
+                photo.value = "";
+            }
+            else{
+                image.setAttribute("src", e.target.result);
+                image.setAttribute("class", "preview_image");
+                photo_div.nextElementSibling.value = e.target.result;
+            }
         };
 
         reader.onerror = function () {
