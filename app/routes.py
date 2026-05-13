@@ -43,7 +43,29 @@ def explore():
         for recipeTag in recipe.tags:
             tag_list.append(Tag.query.filter_by(id=recipeTag.tag_id).first().name)
 
-        recipes_list.append(make_recipe_dict(recipe,author,tag_list,appliances=[],ingredients=[],steps=[],bookmark_on=bookmark_on,cart_on=cart_on,signed_in=signed_in,allowed_to_view=True))
+        recipes_list.append(
+            make_recipe_dict(
+                recipe,
+                author,
+                tag_list,
+
+                appliances=[
+                    Appliance.query.filter_by(id=ra.appliance_id).first().name
+                    for ra in recipe.appliances
+                ],
+
+                ingredients=[
+                    Ingredient.query.filter_by(id=ri.ingredient_id).first().name
+                    for ri in recipe.ingredients
+                ],
+
+                steps=[],
+                bookmark_on=bookmark_on,
+                cart_on=cart_on,
+                signed_in=signed_in,
+                allowed_to_view=True
+            )
+        )
 
     return render_template("explore.html", foundRecipes=recipes_list[::-1])
 
