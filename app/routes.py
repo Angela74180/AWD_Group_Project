@@ -27,7 +27,7 @@ def explore():
 
     ############################### CHOSEN RECIPES IS WHERE YOU STORE THE RECIPE OBJECTS THAT YOU WANT TO DISPLAY BASED ON YOUR QUERIES 
     ########## IT NEEDS TO BE A LIST 
-    chosen_recipes = Recipe.query.all()
+    chosen_recipes = Recipe.query.filter_by(visibility="Public").all()
     
     
     for recipe in chosen_recipes:
