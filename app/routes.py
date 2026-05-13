@@ -6,6 +6,7 @@ from app.models import User, Recipe, Ingredient, RecipeIngredient, Tag, RecipeTa
 from app.makeRecipeBannerDict import make_recipe_banner_dict
 from app.makeRecipeDict import make_recipe_dict
 from sqlalchemy.exc import IntegrityError
+from app.blueprint import main
 
 @app.route('/')
 @app.route('/index')
@@ -841,3 +842,7 @@ def outer_profile(author_id):
         print(author.profile_picture)
 
     return render_template("outerProfilePage.html", authorUsername=author_username, authorRecipes=their_recipes_list[::-1], authorProfilePic=author.profile_picture)
+
+@main.route("/groups")
+def groups():
+    return

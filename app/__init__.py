@@ -13,3 +13,14 @@ login = LoginManager(app)
 login.login_view = "login"
 
 from app import routes, models
+
+def create_app(config):
+    flaskApp = Flask(__name__)
+    flaskApp.config.from_object(config)
+
+    db.init_app(flaskApp)
+
+    from app.blueprint import main
+    flaskApp.register_blueprint(main)
+
+    return flaskApp
