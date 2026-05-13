@@ -1,119 +1,68 @@
-document.addEventListener("DOMContentLoaded", async function () {
+document.addEventListener("DOMContentLoaded", function () {
 
-    let selectedFilters = {
-        cuisine: "All",
-        difficulty: "All",
-        time: "All",
-        diet: "All"
-    };
+    populate(recipes_list);
 
-    const recipeList = document.getElementById("recipeList");
-    const searchBar = document.getElementById("searchBar");
+    document.getElementById("searchBar")
+        .addEventListener("input", filterRecipes);
 
-    let recipes = [];
-    let filters = {};
-
-    const [recipesRes, filtersRes] = await Promise.all([
-        fetch("/api/recipes"),
-        fetch("/api/filters")
-    ]);
-
-    recipes = await recipesRes.json();
-    filters = await filtersRes.json();
-
-    const cuisineSelect = document.querySelector('[data-filter="cuisine"]');
-    const difficultySelect = document.querySelector('[data-filter="difficulty"]');
-    const dietSelect = document.querySelector('[data-filter="diet"]');
-
-    filters.cuisines.forEach(c => {
-        const opt = document.createElement("option");
-        opt.value = c;
-        opt.textContent = c;
-        cuisineSelect.appendChild(opt);
-    });
-
-    filters.difficulties.forEach(d => {
-        const opt = document.createElement("option");
-        opt.value = d;
-        opt.textContent = d;
-        difficultySelect.appendChild(opt);
-    });
-
-    filters.tags.forEach(t => {
-        const opt = document.createElement("option");
-        opt.value = t;
-        opt.textContent = t;
-        dietSelect.appendChild(opt);
-    });
-
-    function displayRecipes(filteredRecipes) {
-
-        recipeList.innerHTML = "";
-
-        if (filteredRecipes.length === 0) {
-            recipeList.textContent = "No recipes found.";
-            return;
-        }
-
-        filteredRecipes.forEach(recipe => {
-            const div = document.createElement("div");
-            div.textContent = recipe.title;
-            recipeList.appendChild(div);
+    document.querySelectorAll(".filter-bar select")
+        .forEach(select => {
+            select.addEventListener("change", filterRecipes);
         });
-    }
-
-    function filterRecipes() {
-
-        const searchTerm = searchBar.value.toLowerCase();
-
-        const filtered = recipes.filter(recipe => {
-
-            const matchesSearch =
-                searchTerm === "" ||
-                recipe.title.toLowerCase().includes(searchTerm);
-
-            const matchesCuisine =
-                selectedFilters.cuisine === "All" ||
-                recipe.cuisine === selectedFilters.cuisine;
-
-            const matchesDifficulty =
-                selectedFilters.difficulty === "All" ||
-                recipe.difficulty === selectedFilters.difficulty;
-
-            const matchesTime =
-                selectedFilters.time === "All" ||
-                (selectedFilters.time === "Under 15 min" && recipe.time < 15) ||
-                (selectedFilters.time === "15-30 min" && recipe.time >= 15 && recipe.time <= 30) ||
-                (selectedFilters.time === "30-60 min" && recipe.time > 30 && recipe.time <= 60) ||
-                (selectedFilters.time === "60+" && recipe.time > 60);
-
-            const matchesDiet =
-                selectedFilters.diet === "All" ||
-                recipe.tags.includes(selectedFilters.diet);
-
-            return matchesSearch &&
-                matchesCuisine &&
-                matchesDifficulty &&
-                matchesTime &&
-                matchesDiet;
-        });
-
-        displayRecipes(filtered);
-    }
-
-    searchBar.addEventListener("input", filterRecipes);
-
-    document.querySelectorAll(".filter-bar select").forEach(select => {
-        select.addEventListener("change", () => {
-
-            const type = select.dataset.filter;
-            const value = select.value;
-
-            selectedFilters[type] = value;
-
-            filterRecipes();
-        });
-    });
-
-    filterRecipes();
 });
+
+function filterRecipes() {
+
+    const searchReqs = get_search_reqs();
+
+    const filteredRecipes = recipes_list.filter(recipe => {
+
+        const searchText =
+            searchReqs.search_bar.toLowerCase();
+
+        const matchesSearch =
+            searchText === "" ||
+            recipe.recipeName.toLowerCase().includes(searchText);
+
+        const recipeMinutes =
+            recipe.timeList.totalTime[0] * 60 +
+            recipe.timeList.totalTime[1];
+
+        const matchesTime =
+            searchReqs.time === "All" ||
+
+            (searchReqs.time === "Under 15 min" &&
+                recipeMinutes < 15) ||
+
+            (searchReqs.time === "15-30 min" &&
+                recipeMinutes >= 15 &&
+                recipeMinutes <= 30) ||
+
+            (searchReqs.time === "30-60 min" &&
+                recipeMinutes > 30 &&
+                recipeMinutes <= 60) ||
+
+            (searchReqs.time === "60+" &&
+                recipeMinutes > 60);
+
+        const matchesDifficulty =
+            searchReqs.difficulty === "All" ||
+            recipe.recipeDifficulty === searchReqs.difficulty;
+
+        const matchesTags =
+            searchReqs.tags_list.length === 0 ||
+
+            searchReqs.tags_list.every(tag =>
+                recipe.tagList
+                    .map(t => t.toLowerCase())
+                    .includes(tag.toLowerCase())
+            );
+
+        return matchesSearch &&
+            matchesTime &&
+            matchesDifficulty &&
+            matchesTags;
+    });
+
+    populate(filteredRecipes);
+}

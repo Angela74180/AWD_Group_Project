@@ -355,18 +355,21 @@ select {
   display:flex;
 }
 
-.filter-bar {
-    display: flex;
-    gap: 20px;
-    margin-bottom: 15px;
-}
-
-.filter-group {
-    display: flex;
-    flex-direction: column;
-}
 .error-message {
     color: red;
     margin-bottom: 10px;
     font-weight: 500;
 }
+
+.filter-bar {
+  border-left: 2px solid rgb(255, 204, 75);
+  padding: 1%;
+  background-color: #ffffff;
+
+}
+
+.filter-group{
+  padding: 10px;
+}
+
+

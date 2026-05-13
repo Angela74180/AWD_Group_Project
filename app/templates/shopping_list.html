@@ -4,16 +4,20 @@
 
 {% block scripts %}
 <script src="{{ url_for('static', filename='Shopping_List/populateShoppingList.js') }}"></script>
+<script src="{{ url_for('static', filename='Shopping_List/makeShoppingList.js') }}"></script>
 <script>
     let recipes_list = {{ cartRecipes | tojson }};
+    let ingredients_list = {{ cartIngredients | tojson }};
 </script>
 {% endblock %}
 
 {% block content %}
 <h1>Shopping List</h1>
 <br>
-<fieldset>
+<fieldset id="shopping_list">
     <legend>Selected Recipes</legend>
     <div id="recipe_banner_div" user_id="{{ current_user.id }}"></div>
 </fieldset>
+<br>
+<button type="button" class="btn btn-add" onclick="makeShoppingList()">Make Shopping List</button>
 {% endblock %}
