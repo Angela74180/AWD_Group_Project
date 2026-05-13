@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function includeRecipes(my_recipes_list){
-    let container = document.getElementById("my_recipes");
+    let container = document.getElementById("recipe_banner_div");
     container.innerHTML = `Looks like you don't have any recipes yet...`;
     if (my_recipes_list != ""){
         container.innerHTML = ``;

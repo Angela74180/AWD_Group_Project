@@ -3,16 +3,9 @@
 {% block title %}Shopping List - CookBook{% endblock %}
 
 {% block scripts %}
-<!-- THIS WILL NEED TO BE GOTTEN FROM SOMEWHERE NOT JUST HARDCODED -->
-<script src="{{ url_for('static', filename='prac_recipes.js') }}"></script>
-<script src="{{ url_for('static', filename='Recipe_Banners/makeRecipeBanner.js') }}"></script>
-<script src="{{ url_for('static', filename='timeCalculation.js') }}"></script>
 <script src="{{ url_for('static', filename='Shopping_List/populateShoppingList.js') }}"></script>
-<script src="{{ url_for('static', filename='Shopping_List/cart.js') }}"></script>
-<script src="{{ url_for('static', filename='Save_Recipes/bookmark.js') }}"></script>
 <script>
-    // console.log(tuna_mornay_dict);
-    // console.log(pancake_dict);
+    let recipes_list = {{ cartRecipes | tojson }};
 </script>
 {% endblock %}
 
@@ -21,7 +14,6 @@
 <br>
 <fieldset>
     <legend>Selected Recipes</legend>
-    <div id="recipes_for_shopping_list">
-    </div>
+    <div id="recipe_banner_div" user_id="{{ current_user.id }}"></div>
 </fieldset>
 {% endblock %}

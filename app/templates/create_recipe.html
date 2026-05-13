@@ -9,7 +9,6 @@
 <script src="{{ url_for('static', filename='Create_Recipe/editSteps.js') }}"></script>
 <script src="{{ url_for('static', filename='Create_Recipe/editTime.js') }}"></script>
 <script src="{{ url_for('static', filename='Create_Recipe/editPhotos.js') }}"></script>
-<script src="{{ url_for('static', filename='timeCalculation.js') }}"></script>
 <script src="{{ url_for('static', filename='Create_Recipe/getRecipeInfo.js') }}"></script>
 <script src="{{ url_for('static', filename='Create_Recipe/previewRecipe.js') }}"></script>
 <script src="{{ url_for('static', filename='Create_Recipe/submitRecipeForm.js') }}"></script>
@@ -128,12 +127,12 @@
         <br>
         <br>
         <br>
-        <button type="button" class="btn btn-primary" onclick="previewRecipe(getRecipeInfo())">Preview Recipe</button>
+        <!-- <button type="button" class="btn btn-primary" onclick="previewRecipe(getRecipeInfo())">Preview Recipe</button>
         <br>
+        <br> -->
+        <!-- <button name="saveDraftButton" type="button" class="btn btn-primary" onclick="getRecipeInfo()">Save as Draft</button>
         <br>
-        <button name="saveDraftButton" type="button" class="btn btn-primary" onclick="getRecipeInfo()">Save as Draft</button>
-        <br>
-        <br>
+        <br> -->
         <button name="publishButton" type="submit" id="publishRecipe" class="btn btn-primary">Publish Recipe</button>
     </form>
 {% endblock %}

@@ -9,6 +9,10 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='custom.css') }}">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 
+        <script src="{{ url_for('static', filename='Recipe_Banners/makeRecipeBanner.js') }}"></script>
+        <script src="{{ url_for('static', filename='Shopping_List/cart.js') }}"></script>
+        <script src="{{ url_for('static', filename='Saved_Recipes/bookmark.js') }}"></script>
+        <script src="{{ url_for('static', filename='timeCalculation.js') }}"></script>
         {% block scripts %}{% endblock %}
     </head>
 
@@ -19,8 +23,8 @@
                 <li><a href="/">Home</a></li>
                 <li><a href="/explore">Explore</a></li>
                 <li><a href="/my-recipes">My Recipes</a></li>
-                <li><a href="/create_recipe/0">Create_Recipe (TEMPORARY)</a></li>
-                <li><a href="/mykitchen">MyKitchen</a></li>
+                <li><a href="/create_recipe/0">Create a Recipe</a></li>
+                <!-- <li><a href="/mykitchen">MyKitchen</a></li> -->
                 <li><a href="/saved">Saved <i class="bi bi-bookmark"></i></a></li>
                 <li><a href="/shopping_list"><i class="bi bi-cart3"></i></a></li>
                 <li><a href="/notifications"><i class="bi bi-bell-fill"></i></a></li>
