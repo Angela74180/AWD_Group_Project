@@ -2,7 +2,7 @@ from flask import render_template, request, redirect, url_for, session, jsonify
 from app import app, db
 from flask_login import login_user, logout_user, login_required, current_user
 from sqlalchemy.exc import SQLAlchemyError #############################################################
-from app.models import User, Recipe, Ingredient, RecipeIngredient, Tag, RecipeTag, Appliance, RecipeAppliance, Step, Bookmark, ShoppingList
+from app.models import User, Recipe, Ingredient, RecipeIngredient, Tag, RecipeTag, Appliance, RecipeAppliance, Step, Bookmark, ShoppingList, Review, ReviewLike
 from app.makeRecipeBannerDict import make_recipe_banner_dict
 from app.makeRecipeDict import make_recipe_dict
 from sqlalchemy.exc import IntegrityError
@@ -201,6 +201,18 @@ def saved():
 
     return render_template("savedPage.html", username=user.username, savedRecipes=recipes_list[::-1])
 
+@app.route("/get_reviews/<int:recipe_id>", methods=["GET"])
+def get_reviews(recipe_id):
+    reviews = Review.query.filter_by(recipe_id=recipe_id).all()
+    
+    reviews_data = [{
+        "author": review.author.username,
+        "rating": review.taste_rating,
+        "body": review.body,
+        "created_at": review.created_at.strftime("%Y-%m-%d %H:%M") if hasattr(review, 'created_at') else "Unknown"
+    } for review in reviews]
+    
+    return jsonify({"reviews": reviews_data})
 
 @app.route("/my-recipes")
 def myRecipes():
@@ -209,6 +221,10 @@ def myRecipes():
 
     userId = session.get('authorId')
     user = User.query.filter_by(id=userId).first()
+
+    if user is None:
+        logout_user()
+        return redirect(url_for("login"))
 
     my_recipes_list = []
     for recipe in user.recipes:
@@ -232,6 +248,43 @@ def myRecipes():
         my_recipes_list.append(make_recipe_banner_dict(recipe, author, tag_list, bookmark_on, cart_on, signed_in=signed_in))
 
     return render_template("myRecipesPage.html", username=user.username, userRecipes=my_recipes_list[::-1])
+
+
+@app.route("/submit_review", methods=["POST"])
+@login_required
+def submit_review():
+    data = request.get_json()
+
+    recipe_id = data.get("recipe_id")
+    rating = data.get("rating")
+    body = data.get("body")
+
+    if not recipe_id:
+        return jsonify({"success": False, "message": "Missing recipe_id"}), 400
+
+    review = Review.query.filter_by(
+        author_id=current_user.id,
+        recipe_id=recipe_id
+    ).first()
+
+    if review:
+        review.taste_rating = rating
+        review.body = body
+    else:
+        review = Review(
+            author_id=current_user.id,
+            recipe_id=recipe_id,
+            taste_rating=rating,
+            body=body,
+            title="Review"
+        )
+        db.session.add(review)
+
+    db.session.commit()
+
+    return jsonify({"success": True})
+
+
 
 
 @app.route('/publish_recipe', methods=["POST"])

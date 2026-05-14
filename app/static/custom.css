@@ -747,3 +747,10 @@ select {
     font-size: 14px;
     margin-top: 20px;
 }
+
+
+.reviews-section {
+  width: 100%;
+  order: 999;
+  flex-shrink: 0;
+}
