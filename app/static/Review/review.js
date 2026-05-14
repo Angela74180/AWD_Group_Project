@@ -1,167 +1,167 @@
-// ─────────────────────────────────────────────────────────────
-// Inject modal AFTER DOM is ready
-// ─────────────────────────────────────────────────────────────
 document.addEventListener("DOMContentLoaded", () => {
-    const modalHTML = `
-    <div id="reviewModal" style="display:none; position:fixed; inset:0; z-index:9999;
-         background:rgba(0,0,0,0.5); justify-content:center; align-items:center;">
-
-        <div style="background:#fff; border-radius:10px; padding:30px;
-                    width:min(480px,90vw); box-shadow:0 8px 30px rgba(0,0,0,0.2);
-                    position:relative; font-family:'Bahnschrift Light', sans-serif;">
-
-            <button onclick="closeReviewModal()" style="position:absolute; top:12px; right:16px;
-                background:none; border:none; font-size:1.4rem; cursor:pointer; color:#888;">
-                &times;
-            </button>
-
-            <h5 id="reviewModalTitle" style="margin-bottom:16px; font-size:1.2rem;">
-                Leave a Review
-            </h5>
-
-            <!-- Rating -->
-            <div id="ratingSection" style="margin-bottom:16px;">
-                <label style="display:block; margin-bottom:6px; font-weight:600;">Rating</label>
-
-                <div id="starRow" style="display:flex; gap:6px; font-size:1.6rem; cursor:pointer;">
-                    <span class="star" data-val="1">&#9733;</span>
-                    <span class="star" data-val="2">&#9733;</span>
-                    <span class="star" data-val="3">&#9733;</span>
-                    <span class="star" data-val="4">&#9733;</span>
-                    <span class="star" data-val="5">&#9733;</span>
-                </div>
-
-                <input type="hidden" id="ratingValue" value="0">
-            </div>
-
-            <!-- Review -->
-            <div id="reviewSection" style="margin-bottom:20px;">
-                <label for="reviewText" style="display:block; margin-bottom:6px; font-weight:600;">
-                    Your Review
-                </label>
-
-                <textarea id="reviewText" rows="4"
-                    placeholder="Share your thoughts about this recipe..."
-                    style="width:100%; padding:10px; border:1px solid #ccc;
-                        border-radius:6px; box-sizing:border-box; resize:none;
-                        font-family:inherit;"></textarea>
-            </div>
-
-            <div style="display:flex; gap:10px; justify-content:flex-end;">
-                <button onclick="closeReviewModal()" class="btn btn-secondary btn-sm">
-                    Cancel
-                </button>
-
-                <button onclick="submitReview()" class="btn btn-primary btn-sm">
-                    Submit
-                </button>
-            </div>
-        </div>
-    </div>`;
-
-    document.body.insertAdjacentHTML("beforeend", modalHTML);
+    injectModal();
+    injectReviewsSection();
     setupStars();
-});
-
-
-// ─────────────────────────────────────────────────────────────
-// Load reviews after page fully loads
-// ─────────────────────────────────────────────────────────────
-window.addEventListener("load", () => {
-    const divMain = document.querySelector(".div_main");
-    
-    if (divMain) {
-        const reviewsSection = document.createElement("div");
-        reviewsSection.className = "reviews-section";
-        reviewsSection.id = "reviewsSection";
-
-        reviewsSection.innerHTML = `
-            <h3>Reviews</h3>
-            <div id="reviewsList"></div>
-        `;
-        
-        // Append INSIDE div_main at the bottom
-        divMain.appendChild(reviewsSection);
-    }
-    
     loadReviews();
 });
 
 
-// ─────────────────────────────────────────────────────────────
-// Recipe ID helper
-// ─────────────────────────────────────────────────────────────
-function getRecipeId() {
-    return document.getElementById("recipe_banner_div")
-        ?.getAttribute("data-recipe-id");
+function injectModal() {
+    let modal = document.createElement("div");
+    modal.id = "reviewModal";
+    modal.className = "review-modal";
+
+    let box = document.createElement("div");
+    box.className = "review-modal-box";
+
+    box.innerHTML = `
+        <button class="review-modal-close" onclick="closeReviewModal()">&times;</button>
+
+        <h5 id="reviewModalTitle" class="review-modal-title">Leave a Review</h5>
+
+        <div id="ratingSection" class="review-modal-section">
+            <label class="review-modal-label">Rating</label>
+            <div id="starRow" class="review-star-row">
+                <span class="star" data-val="1">&#9733;</span>
+                <span class="star" data-val="2">&#9733;</span>
+                <span class="star" data-val="3">&#9733;</span>
+                <span class="star" data-val="4">&#9733;</span>
+                <span class="star" data-val="5">&#9733;</span>
+            </div>
+            <input type="hidden" id="ratingValue" value="0">
+        </div>
+
+        <div id="reviewSection" class="review-modal-section">
+            <label for="reviewText" class="review-modal-label">Your Review</label>
+            <textarea id="reviewText" class="review-modal-textarea" rows="4" placeholder="Share your thoughts about this recipe..."></textarea>
+        </div>
+
+        <div class="review-modal-actions">
+            <button onclick="closeReviewModal()" class="btn btn-secondary btn-sm">Cancel</button>
+            <button onclick="submitReview()" class="btn btn-primary btn-sm">Submit</button>
+        </div>
+    `;
+
+    modal.appendChild(box);
+    document.body.appendChild(modal);
+
+    modal.addEventListener("click", e => { if (e.target === modal) closeReviewModal(); });
 }
 
 
-// ─────────────────────────────────────────────────────────────
-// Load and display reviews
-// ─────────────────────────────────────────────────────────────
+function injectReviewsSection() {
+    let divMain = document.querySelector(".div_main");
+    if (!divMain || document.getElementById("reviewsSection")) return;
+
+    let section = document.createElement("div");
+    section.id = "reviewsSection";
+    section.className = "reviews-section";
+    section.innerHTML = `<h3>Reviews</h3><div id="reviewsList"></div>`;
+
+    divMain.appendChild(section);
+}
+
+
+function getRecipeId() {
+    return document.getElementById("recipe_banner_div")?.getAttribute("data-recipe-id");
+}
+
+
 function loadReviews() {
-    const recipeId = getRecipeId();
-    if (!recipeId) {
-        console.warn("Recipe ID not found");
-        return;
-    }
+    let recipeId = getRecipeId();
+    if (!recipeId) return;
 
     fetch(`/get_reviews/${recipeId}`)
         .then(res => res.json())
         .then(data => {
-            const reviewsList = document.getElementById("reviewsList");
-            if (!reviewsList) {
-                console.error("reviewsList element not found");
-                return;
-            }
+            let list = document.getElementById("reviewsList");
+            if (!list) return;
 
-            reviewsList.innerHTML = "";
+            list.innerHTML = "";
+
+            if (data.avg_rating) {
+                let avgStars = "★".repeat(Math.round(data.avg_rating)) + "☆".repeat(5 - Math.round(data.avg_rating));
+                list.innerHTML += `<p class="review-avg-rating"><b>Average rating: ${avgStars} (${data.avg_rating} / 5)</b></p>`;
+            }
 
             if (data.reviews.length === 0) {
-                reviewsList.innerHTML = "<p>No reviews yet. Be the first to review!</p>";
+                list.innerHTML += `<p>No reviews yet. Be the first to review!</p>`;
                 return;
             }
 
-            data.reviews.forEach(review => {
-                const stars = "★".repeat(review.rating || 0) + "☆".repeat(5 - (review.rating || 0));
-                const reviewHTML = `
-                    <div style="padding: 15px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <strong>${review.author}</strong>
-                            <span style="color: #f5a623; font-size: 1.2rem;">${stars}</span>
-                        </div>
-                        <p style="margin: 10px 0; color: #555;">${review.body || "No text review"}</p>
-                        <small style="color: #999;">${review.created_at}</small>
-                    </div>
-                `;
-                reviewsList.innerHTML += reviewHTML;
-            });
+            for (let review of data.reviews) {
+                list.appendChild(makeReviewCard(review));
+            }
         })
         .catch(err => console.error("Error loading reviews:", err));
 }
 
 
-// ─────────────────────────────────────────────────────────────
-// Star logic
-// ─────────────────────────────────────────────────────────────
+function makeReviewCard(review) {
+    let filled = review.rating || 0;
+    let stars = "★".repeat(filled) + "☆".repeat(5 - filled);
+
+    let card = document.createElement("div");
+    card.className = "review-card";
+    card.innerHTML = `
+        <div class="review-card-header">
+            <strong>${review.author}</strong>
+            <span class="review-card-stars">${stars}</span>
+        </div>
+        <p class="review-card-body">${review.body || "No text review"}</p>
+        <div class="review-card-footer">
+            <small class="review-card-date">${review.created_at}</small>
+            <button class="btn btn-sm btn-outline-secondary like-btn" data-liked="${review.liked_by_me}" onclick="likeReview(${review.id}, this)">
+                👍 <span class="like-count">${review.like_count}</span>
+            </button>
+        </div>
+    `;
+
+    let likeBtn = card.querySelector(".like-btn");
+    likeBtn.classList.toggle("liked", review.liked_by_me);
+    likeBtn.title = review.liked_by_me ? "Unlike" : "Like";
+
+    return card;
+}
+
+
+function likeReview(reviewId, btn) {
+    fetch("/like_review", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ review_id: reviewId })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            btn.dataset.liked = data.liked;
+            btn.querySelector(".like-count").textContent = data.like_count;
+            btn.classList.toggle("liked", data.liked);
+            btn.title = data.liked ? "Unlike" : "Like";
+        } else {
+            alert(data.message || "Could not like review");
+        }
+    })
+    .catch(err => console.error("Like error:", err));
+}
+
+
 function setupStars() {
-    document.querySelectorAll(".star").forEach(star => {
+    for (let star of document.querySelectorAll(".star")) {
         star.addEventListener("mouseover", () => highlightStars(star.dataset.val));
         star.addEventListener("mouseout", resetStarHighlight);
         star.addEventListener("click", () => selectRating(star.dataset.val));
-    });
+    }
 }
 
 function highlightStars(val) {
-    document.querySelectorAll(".star").forEach(s => {
-        s.style.color = s.dataset.val <= val ? "#f5a623" : "#ccc";
-    });
+    for (let star of document.querySelectorAll(".star")) {
+        star.style.color = star.dataset.val <= val ? "#f5a623" : "#ccc";
+    }
 }
 
 function resetStarHighlight() {
-    const selected = document.getElementById("ratingValue").value;
-    highlightStars(selected);
+    highlightStars(document.getElementById("ratingValue").value);
 }
 
 function selectRating(val) {
@@ -170,106 +170,55 @@ function selectRating(val) {
 }
 
 
-// ─────────────────────────────────────────────────────────────
-// Modal control
-// ─────────────────────────────────────────────────────────────
-function openReviewModal(recipeId, mode) {
-    const modal = document.getElementById("reviewModal");
+function openReviewModal(mode) {
+    let modal = document.getElementById("reviewModal");
     if (!modal) return;
 
-    const showRating = (mode === "rate" || mode === "review_rate");
-    const showReview = (mode === "review" || mode === "review_rate");
+    let titles = { review: "Leave a Review", rate: "Rate this Recipe", review_rate: "Rate & Review" };
+    document.getElementById("reviewModalTitle").textContent = titles[mode] ?? "Leave a Review";
 
-    const titles = {
-        review: "Leave a Review",
-        rate: "Rate this Recipe",
-        review_rate: "Rate & Review"
-    };
-
-    document.getElementById("reviewModalTitle").textContent =
-        titles[mode] || "Leave a Review";
-
-    document.getElementById("ratingSection").style.display =
-        showRating ? "block" : "none";
-
-    document.getElementById("reviewSection").style.display =
-        showReview ? "block" : "none";
+    document.getElementById("ratingSection").style.display = (mode === "rate" || mode === "review_rate") ? "block" : "none";
+    document.getElementById("reviewSection").style.display = (mode === "review" || mode === "review_rate") ? "block" : "none";
 
     document.getElementById("ratingValue").value = "0";
     document.getElementById("reviewText").value = "";
-    document.querySelectorAll(".star").forEach(s => s.style.color = "#ccc");
+    for (let star of document.querySelectorAll(".star")) star.style.color = "#ccc";
 
     modal.style.display = "flex";
 }
 
 function closeReviewModal() {
-    const modal = document.getElementById("reviewModal");
+    let modal = document.getElementById("reviewModal");
     if (modal) modal.style.display = "none";
 }
 
 
-// close when clicking outside
-document.addEventListener("click", (e) => {
-    const modal = document.getElementById("reviewModal");
-    if (e.target === modal) closeReviewModal();
-});
+function submitReview() {
+    let rating = parseInt(document.getElementById("ratingValue").value) || null;
+    let body = document.getElementById("reviewText").value.trim();
+    let recipeId = getRecipeId();
 
-
-// ─────────────────────────────────────────────────────────────
-// Submit review (GLOBAL so onclick works)
-// ───────────────────────────────────────────────���─────────────
-window.submitReview = function () {
-    const rating = parseInt(document.getElementById("ratingValue").value) || null;
-    const reviewText = document.getElementById("reviewText").value.trim();
-    const recipeId = getRecipeId();
-
-    if (!recipeId) {
-        alert("Missing recipe ID");
-        return;
-    }
-
-    if (!rating && !reviewText) {
-        alert("Please add a rating or write a review.");
-        return;
-    }
+    if (!recipeId) { alert("Missing recipe ID"); return; }
+    if (!rating && !body) { alert("Please add a rating or write a review."); return; }
 
     fetch("/submit_review", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            recipe_id: recipeId,
-            rating: rating,
-            body: reviewText
-        })
+        body: JSON.stringify({ recipe_id: recipeId, rating, body })
     })
     .then(res => res.json())
     .then(data => {
         if (data.success) {
             closeReviewModal();
-            alert("Review submitted!");
             loadReviews();
         } else {
             alert(data.message || "Error submitting review");
         }
     })
-    .catch(err => {
-        console.error("Fetch error:", err);
-        alert("Something went wrong");
-    });
-};
+    .catch(err => { console.error("Fetch error:", err); alert("You must be logged in to submit a review."); });
+}
 
 
-// ─────────────────────────────────────────────────────────────
-// Global triggers (buttons in HTML)
-// ─────────────────────────────────────────────────────────────
-window.review = function (event) {
-    openReviewModal(getRecipeId(), "review");
-};
-
-window.rate = function (event) {
-    openReviewModal(getRecipeId(), "rate");
-};
-
-window.review_rate = function (event) {
-    openReviewModal(getRecipeId(), "review_rate");
-};
+window.review      = () => openReviewModal("review");
+window.rate        = () => openReviewModal("rate");
+window.review_rate = () => openReviewModal("review_rate");

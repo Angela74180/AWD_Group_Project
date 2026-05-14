@@ -201,18 +201,72 @@ def saved():
 
     return render_template("savedPage.html", username=user.username, savedRecipes=recipes_list[::-1])
 
+
+@app.route("/like_review", methods=["POST"])
+@login_required
+def like_review():
+    data = request.get_json()
+    review_id = data.get("review_id")
+
+    if not review_id:
+        return jsonify({"success": False, "message": "Missing review_id"}), 400
+
+    review = Review.query.get(review_id)
+    if not review:
+        return jsonify({"success": False, "message": "Review not found"}), 404
+
+    existing = ReviewLike.query.filter_by(
+        user_id=current_user.id,
+        review_id=review_id
+    ).first()
+
+    if existing:
+        db.session.delete(existing)
+        review.like_count = max(0, review.like_count - 1)
+        liked = False
+    else:
+        like = ReviewLike(user_id=current_user.id, review_id=review_id)
+        db.session.add(like)
+        review.like_count += 1
+        liked = True
+
+    db.session.commit()
+    return jsonify({"success": True, "like_count": review.like_count, "liked": liked})
+
+
+
 @app.route("/get_reviews/<int:recipe_id>", methods=["GET"])
 def get_reviews(recipe_id):
-    reviews = Review.query.filter_by(recipe_id=recipe_id).all()
-    
+    reviews = Review.query.filter_by(recipe_id=recipe_id)\
+        .order_by(Review.created_at.asc())\
+        .all()
+
     reviews_data = [{
+        "id": review.id,
         "author": review.author.username,
         "rating": review.taste_rating,
         "body": review.body,
-        "created_at": review.created_at.strftime("%Y-%m-%d %H:%M") if hasattr(review, 'created_at') else "Unknown"
+        "created_at": review.created_at.strftime("%Y-%m-%d %H:%M"),
+        "like_count": review.like_count,
     } for review in reviews]
-    
-    return jsonify({"reviews": reviews_data})
+
+    reviews_data = [{
+    "id": review.id,
+    "author": review.author.username,
+    "rating": review.taste_rating,
+    "body": review.body,
+    "created_at": review.created_at.strftime("%Y-%m-%d %H:%M"),
+    "like_count": review.like_count,
+    "liked_by_me": any(l.user_id == current_user.id for l in review.liked_by) if current_user.is_authenticated else False,
+    } for review in reviews]
+
+
+    # Average rating across all reviews (exclude nulls)
+    ratings = [r.taste_rating for r in reviews if r.taste_rating is not None]
+    avg_rating = round(sum(ratings) / len(ratings), 1) if ratings else None
+
+    return jsonify({"reviews": reviews_data, "avg_rating": avg_rating})
+
 
 @app.route("/my-recipes")
 def myRecipes():
@@ -249,7 +303,6 @@ def myRecipes():
 
     return render_template("myRecipesPage.html", username=user.username, userRecipes=my_recipes_list[::-1])
 
-
 @app.route("/submit_review", methods=["POST"])
 @login_required
 def submit_review():
@@ -262,29 +315,17 @@ def submit_review():
     if not recipe_id:
         return jsonify({"success": False, "message": "Missing recipe_id"}), 400
 
-    review = Review.query.filter_by(
+    review = Review(
         author_id=current_user.id,
-        recipe_id=recipe_id
-    ).first()
-
-    if review:
-        review.taste_rating = rating
-        review.body = body
-    else:
-        review = Review(
-            author_id=current_user.id,
-            recipe_id=recipe_id,
-            taste_rating=rating,
-            body=body,
-            title="Review"
-        )
-        db.session.add(review)
-
+        recipe_id=recipe_id,
+        taste_rating=rating,
+        body=body,
+        title="Review"
+    )
+    db.session.add(review)
     db.session.commit()
 
     return jsonify({"success": True})
-
-
 
 
 @app.route('/publish_recipe', methods=["POST"])
