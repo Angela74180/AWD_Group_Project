@@ -20,8 +20,14 @@ function populate(recipe_details_dict) {
 
     document.getElementById("timeCheckbox").checked = recipe_details_dict["timeSplit"];
     splitTime(recipe_details_dict["timeList"]);
-
-    // DO PHOTO!!
+    
+    let coverPhoto = document.getElementById("coverPhoto");
+    let photo_div = coverPhoto.nextElementSibling;
+    let image = document.createElement("img");
+    image.setAttribute("src", recipe_details_dict["recipeCoverImage"]);
+    image.setAttribute("class", "preview_image");
+    photo_div.appendChild(image);
+    photo_div.nextElementSibling.value = recipe_details_dict["recipeCoverImage"];
 
     document.getElementById("Description").value = recipe_details_dict["recipeDescription"];
 

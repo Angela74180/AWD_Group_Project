@@ -4,6 +4,11 @@
 
 {% block content %}
 <h1>Sign up</h1>
+
+{% if error %}
+    <p class="error-message">{{ error }}</p>
+{% endif %}
+
 <form name="Sign Up" action="/signup" method="POST">
     <br>
 

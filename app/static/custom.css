@@ -697,3 +697,22 @@ select {
 .pw-save-btn:not(:disabled):hover { 
   opacity: 0.9;
 }
+
+.error-message {
+    color: red;
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+.filter-bar {
+  border-left: 2px solid rgb(255, 204, 75);
+  padding: 1%;
+  background-color: #ffffff;
+
+}
+
+.filter-group{
+  padding: 10px;
+}
+
+
