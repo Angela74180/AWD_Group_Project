@@ -1,5 +1,5 @@
-from flask import render_template, request, redirect, url_for, session, jsonify
-from app import app, db
+from flask import render_template, request, redirect, url_for, session, jsonify, current_app
+from app import db
 from flask_login import login_user, logout_user, login_required, current_user
 from sqlalchemy.exc import SQLAlchemyError #############################################################
 from app.models import User, Recipe, Ingredient, RecipeIngredient, Tag, RecipeTag, Appliance, RecipeAppliance, Step, Bookmark, ShoppingList
@@ -8,12 +8,12 @@ from app.makeRecipeDict import make_recipe_dict
 from sqlalchemy.exc import IntegrityError
 from app.blueprint import main
 
-@app.route('/')
-@app.route('/index')
+@main.route('/')
+@main.route('/index')
 def index():
     return render_template("homePage.html")
 
-@app.route("/explore")
+@main.route("/explore")
 def explore():
     recipes_list = []
 
@@ -55,11 +55,7 @@ def explore():
     return render_template("explore.html", foundRecipes=recipes_list[::-1])
 
 
-
-def explore():
-    return render_template("explore.html")
-
-@app.route("/api/recipes")
+@main.route("/api/recipes")
 def api_recipes():
 
     db_recipes = Recipe.query.all()
@@ -77,12 +73,12 @@ def api_recipes():
 
     return jsonify(data)
 
-@app.route("/api/tags")
+@main.route("/api/tags")
 def api_tags():
     tags = Tag.query.all()
     return jsonify([t.name for t in tags])
 
-@app.route("/api/filters")
+@main.route("/api/filters")
 def api_filters():
 
     cuisines = sorted({r.recipe_type for r in Recipe.query.all()})
@@ -108,7 +104,7 @@ def api_filters():
         "tags": diet_tags
     })
 
-@app.route("/shopping_list")
+@main.route("/shopping_list")
 def shopping_list():
 
     ############### You will nedd to actually check for a User
@@ -177,7 +173,7 @@ def shopping_list():
 
 
 
-@app.route("/saved")
+@main.route("/saved")
 def saved():
 
     ############### You will nedd to actually check for a User
@@ -216,7 +212,7 @@ def saved():
     return render_template("savedPage.html", username=user.username, savedRecipes=recipes_list[::-1])
 
 
-@app.route("/my-recipes")
+@main.route("/my-recipes")
 def myRecipes():
     ############### You will nedd to actually check for a User
     signed_in = True
@@ -248,7 +244,7 @@ def myRecipes():
     return render_template("myRecipesPage.html", username=user.username, userRecipes=my_recipes_list[::-1])
 
 
-@app.route('/publish_recipe', methods=["POST"])
+@main.route('/publish_recipe', methods=["POST"])
 def publish_recipe():
     if request.method == "POST":
 
@@ -403,16 +399,16 @@ def publish_recipe():
         try:
             db.session.add(recipe)
             db.session.commit()
-            return redirect(url_for("profile"))
+            return redirect(url_for("main.profile"))
         
         except Exception as e:
-            app.logger.error(e)
+            current_app.logger.error(e)
             db.session.rollback()
             error = "Recipe could not be saved."
             return render_template("/create_recipe", error=error)
 
 
-@app.route('/create_recipe/<recipe_num>')
+@main.route('/create_recipe/<recipe_num>')
 def create_recipe(recipe_num):
     ############### You will nedd to actually check for a User
     signed_in = True
@@ -525,7 +521,7 @@ def create_recipe(recipe_num):
 
 
 
-@app.route('/login', methods=['GET', 'POST'])
+@main.route('/login', methods=['GET', 'POST'])
 def login():
 
     if request.method == 'POST':
@@ -538,14 +534,14 @@ def login():
         if user and user.check_password(password):
             login_user(user)
             session['authorId'] = user.id
-            return redirect(url_for('index'))
+            return redirect(url_for('main.index'))
 
         return render_template('loginPage.html', error="Invalid credentials")
 
     return render_template('loginPage.html')
 
 
-@app.route('/signup', methods=['GET', 'POST'])
+@main.route('/signup', methods=['GET', 'POST'])
 def signup():
 
     if request.method == 'POST':
@@ -561,7 +557,7 @@ def signup():
 
         try:
             db.session.commit()
-            return redirect(url_for('login'))
+            return redirect(url_for('main.login'))
 
         except IntegrityError:
             db.session.rollback()
@@ -574,16 +570,16 @@ def signup():
 
 
 
-@app.route("/logout")
+@main.route("/logout")
 def logout():
     logout_user()
-    return redirect(url_for("index"))
+    return redirect(url_for("main.index"))
 
 
 
 
 
-@app.route("/updateBookmark", methods=["POST"])
+@main.route("/updateBookmark", methods=["POST"])
 def updateBookmark():
     recipe_id       = request.json.get("recipe_id")
     user_id         = request.json.get("user_id")
@@ -619,7 +615,7 @@ def updateBookmark():
 
 
 
-@app.route("/updateShoppingList", methods=["POST"])
+@main.route("/updateShoppingList", methods=["POST"])
 def updateShoppingList():
     recipe_id       = request.json.get("recipe_id")
     user_id         = request.json.get("user_id")
@@ -655,7 +651,7 @@ def updateShoppingList():
 
 
 
-@app.route("/profile")
+@main.route("/profile")
 def profile():
     signed_in = True
     userId = session.get('authorId')
@@ -677,7 +673,7 @@ def profile():
     )
 
 
-@app.route("/update_username", methods=["POST"])
+@main.route("/update_username", methods=["POST"])
 @login_required
 def update_username():
     new_name = request.get_json().get("username", "").strip()
@@ -694,7 +690,7 @@ def update_username():
     return jsonify(success=True)
 
 
-@app.route("/upload_avatar", methods=["POST"])
+@main.route("/upload_avatar", methods=["POST"])
 @login_required
 def upload_avatar():
     image_data = request.get_json().get("image")
@@ -707,7 +703,7 @@ def upload_avatar():
     return jsonify(success=True)
 
 
-@app.route("/update_password", methods=["POST"])
+@main.route("/update_password", methods=["POST"])
 @login_required
 def update_password():
     data   = request.get_json()
@@ -725,7 +721,7 @@ def update_password():
     return jsonify(success=True)
 
 
-@app.route('/view_recipe/<recipe_num>')
+@main.route('/view_recipe/<recipe_num>')
 def view_recipe(recipe_num):
 
     ############### You will nedd to actually check for a User
@@ -808,7 +804,7 @@ def view_recipe(recipe_num):
 
 
 
-@app.route("/outer_profile/<author_id>")
+@main.route("/outer_profile/<author_id>")
 def outer_profile(author_id):
     ############### You will nedd to actually check for a User
     signed_in = True
@@ -842,7 +838,3 @@ def outer_profile(author_id):
         print(author.profile_picture)
 
     return render_template("outerProfilePage.html", authorUsername=author_username, authorRecipes=their_recipes_list[::-1], authorProfilePic=author.profile_picture)
-
-@main.route("/groups")
-def groups():
-    return
