@@ -15,8 +15,7 @@ def index():
     userId    = session.get('authorId')
     signed_in = userId is not None
 
-    # Grab the 6 most recent recipes
-    recipes = Recipe.query.order_by(Recipe.id.desc()).limit(6).all()
+    recipes = Recipe.query.filter_by(visibility="Public").order_by(db.func.random()).limit(6).all()
 
     latest_recipes = []
     for recipe in recipes:
