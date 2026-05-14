@@ -2,7 +2,7 @@ from flask import render_template, request, redirect, url_for, session, jsonify,
 from app import db
 from flask_login import login_user, logout_user, login_required, current_user
 from sqlalchemy.exc import SQLAlchemyError #############################################################
-from app.models import User, Recipe, Ingredient, RecipeIngredient, Tag, RecipeTag, Appliance, RecipeAppliance, Step, Bookmark, ShoppingList
+from app.models import User, Recipe, Ingredient, RecipeIngredient, Tag, RecipeTag, Appliance, RecipeAppliance, Step, Bookmark, ShoppingList, Review, ReviewLike
 from app.makeRecipeBannerDict import make_recipe_banner_dict
 from app.makeRecipeDict import make_recipe_dict
 from sqlalchemy.exc import IntegrityError
@@ -22,7 +22,6 @@ def index():
     userId    = session.get('authorId')
     signed_in = userId is not None
 
-    # Grab the 6 most recent recipes
     recipes = Recipe.query.order_by(Recipe.id.desc()).limit(6).all()
 
     latest_recipes = []
@@ -32,6 +31,7 @@ def index():
         latest_recipes.append(make_recipe_banner_dict(recipe, author, tag_list, signed_in=signed_in, bookmark_on=False, cart_on=False))
 
     return render_template("homePage.html", latest_recipes=latest_recipes)
+
 
 
 @main.route("/explore")
@@ -201,6 +201,65 @@ def saved():
     return render_template("savedPage.html", username=user.username, savedRecipes=recipes_list[::-1])
 
 
+@main.route("/like_review", methods=["POST"])
+@login_required
+def like_review():
+    data = request.get_json()
+    review_id = data.get("review_id")
+
+    if not review_id:
+        return jsonify({"success": False, "message": "Missing review_id"}), 400
+
+    review = Review.query.get(review_id)
+    if not review:
+        return jsonify({"success": False, "message": "Review not found"}), 404
+
+    existing = ReviewLike.query.filter_by(
+        user_id=current_user.id,
+        review_id=review_id
+    ).first()
+
+    if existing:
+        db.session.delete(existing)
+        review.like_count = max(0, review.like_count - 1)
+        liked = False
+    else:
+        like = ReviewLike(user_id=current_user.id, review_id=review_id)
+        db.session.add(like)
+        review.like_count += 1
+        liked = True
+
+    db.session.commit()
+    return jsonify({"success": True, "like_count": review.like_count, "liked": liked})
+
+
+
+@main.route("/get_reviews/<int:recipe_id>", methods=["GET"])
+def get_reviews(recipe_id):
+    reviews = Review.query.filter_by(recipe_id=recipe_id)\
+        .order_by(Review.created_at.asc()).all()
+
+    reviews_data = [{
+        "id":               review.id,
+        "author":           review.author.username,
+        "taste_rating":     review.taste_rating,
+        "accuracy_rating":  review.accuracy_rating,
+        "timing_rating":    review.timing_rating,
+        "body":             review.body,
+        "created_at":       review.created_at.strftime("%Y-%m-%d %H:%M"),
+        "like_count":       review.like_count,
+        "liked_by_me":      any(l.user_id == current_user.id for l in review.liked_by) if current_user.is_authenticated else False,
+    } for review in reviews]
+
+    taste_ratings    = [r.taste_rating    for r in reviews if r.taste_rating    is not None]
+    accuracy_ratings = [r.accuracy_rating for r in reviews if r.accuracy_rating is not None]
+
+    avg_taste    = round(sum(taste_ratings)    / len(taste_ratings),    1) if taste_ratings    else None
+    avg_accuracy = round(sum(accuracy_ratings) / len(accuracy_ratings), 1) if accuracy_ratings else None
+
+    return jsonify({"reviews": reviews_data, "avg_taste": avg_taste, "avg_accuracy": avg_accuracy})
+
+
 @main.route("/myRecipes")
 def myRecipes():
 
@@ -211,6 +270,10 @@ def myRecipes():
 
     userId = current_user.id
     user = User.query.filter_by(id=userId).first()
+
+    if user is None:
+        logout_user()
+        return redirect(url_for("login"))
 
     my_recipes_list = []
     for recipe in user.recipes:
@@ -234,6 +297,29 @@ def myRecipes():
         my_recipes_list.append(make_recipe_banner_dict(recipe, author, tag_list, bookmark_on, cart_on, signed_in=signed_in))
 
     return render_template("myRecipesPage.html", username=user.username, userRecipes=my_recipes_list[::-1])
+
+@main.route("/submit_review", methods=["POST"])
+@login_required
+def submit_review():
+    data = request.get_json()
+
+    recipe_id = data.get("recipe_id")
+    if not recipe_id:
+        return jsonify({"success": False, "message": "Missing recipe_id"}), 400
+
+    review = Review(
+        author_id      = current_user.id,
+        recipe_id      = recipe_id,
+        taste_rating   = data.get("taste"),
+        accuracy_rating= data.get("accuracy"),
+        timing_rating  = data.get("timing"),
+        body           = data.get("body"),
+        title          = "Review"
+    )
+    db.session.add(review)
+    db.session.commit()
+
+    return jsonify({"success": True})
 
 
 @main.route('/publish_recipe', methods=["POST"])

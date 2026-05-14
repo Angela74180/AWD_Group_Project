@@ -736,6 +736,43 @@ button:active {
 }
 
 
+.section-heading {
+    margin: 30px 0 16px;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+}
+
+.card-info {
+    padding: 10px 14px 14px;
+}
+
+.card-author {
+    font-size: 12px;
+    color: #888;
+    margin: 2px 0 6px;
+}
+
+.card-tags {
+    font-size: 11px;
+    color: #aaa;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.no-results {
+    color: #999;
+    font-size: 14px;
+    margin-top: 20px;
+}
+
+
+.reviews-section {
+  width: 100%;
+  order: 999;
+  flex-shrink: 0;
+}
 .avatar-hint {
     font-size: 0.7rem;
     color: #999;
@@ -749,4 +786,22 @@ button:active {
 
 .avatar-hint-success {
     color: #27ae60;
+}
+
+
+.review-modal-select {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 0.95rem;
+}
+
+.review-card-ratings {
+    display: flex;
+    gap: 16px;
+    margin: 8px 0;
+    font-size: 0.9rem;
+    flex-wrap: wrap;
 }
