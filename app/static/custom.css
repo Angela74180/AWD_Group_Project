@@ -787,3 +787,21 @@ button:active {
 .avatar-hint-success {
     color: #27ae60;
 }
+
+
+.review-modal-select {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 0.95rem;
+}
+
+.review-card-ratings {
+    display: flex;
+    gap: 16px;
+    margin: 8px 0;
+    font-size: 0.9rem;
+    flex-wrap: wrap;
+}

@@ -16,8 +16,8 @@ def is_number(given_string):
         return False
 
 
-@app.route('/')
-@app.route('/index')
+@main.route('/')
+@main.route('/index')
 def index():
     userId    = session.get('authorId')
     signed_in = userId is not None
@@ -201,7 +201,7 @@ def saved():
     return render_template("savedPage.html", username=user.username, savedRecipes=recipes_list[::-1])
 
 
-@app.route("/like_review", methods=["POST"])
+@main.route("/like_review", methods=["POST"])
 @login_required
 def like_review():
     data = request.get_json()
@@ -234,40 +234,33 @@ def like_review():
 
 
 
-@app.route("/get_reviews/<int:recipe_id>", methods=["GET"])
+@main.route("/get_reviews/<int:recipe_id>", methods=["GET"])
 def get_reviews(recipe_id):
     reviews = Review.query.filter_by(recipe_id=recipe_id)\
-        .order_by(Review.created_at.asc())\
-        .all()
+        .order_by(Review.created_at.asc()).all()
 
     reviews_data = [{
-        "id": review.id,
-        "author": review.author.username,
-        "rating": review.taste_rating,
-        "body": review.body,
-        "created_at": review.created_at.strftime("%Y-%m-%d %H:%M"),
-        "like_count": review.like_count,
+        "id":               review.id,
+        "author":           review.author.username,
+        "taste_rating":     review.taste_rating,
+        "accuracy_rating":  review.accuracy_rating,
+        "timing_rating":    review.timing_rating,
+        "body":             review.body,
+        "created_at":       review.created_at.strftime("%Y-%m-%d %H:%M"),
+        "like_count":       review.like_count,
+        "liked_by_me":      any(l.user_id == current_user.id for l in review.liked_by) if current_user.is_authenticated else False,
     } for review in reviews]
 
-    reviews_data = [{
-    "id": review.id,
-    "author": review.author.username,
-    "rating": review.taste_rating,
-    "body": review.body,
-    "created_at": review.created_at.strftime("%Y-%m-%d %H:%M"),
-    "like_count": review.like_count,
-    "liked_by_me": any(l.user_id == current_user.id for l in review.liked_by) if current_user.is_authenticated else False,
-    } for review in reviews]
+    taste_ratings    = [r.taste_rating    for r in reviews if r.taste_rating    is not None]
+    accuracy_ratings = [r.accuracy_rating for r in reviews if r.accuracy_rating is not None]
+
+    avg_taste    = round(sum(taste_ratings)    / len(taste_ratings),    1) if taste_ratings    else None
+    avg_accuracy = round(sum(accuracy_ratings) / len(accuracy_ratings), 1) if accuracy_ratings else None
+
+    return jsonify({"reviews": reviews_data, "avg_taste": avg_taste, "avg_accuracy": avg_accuracy})
 
 
-    # Average rating across all reviews (exclude nulls)
-    ratings = [r.taste_rating for r in reviews if r.taste_rating is not None]
-    avg_rating = round(sum(ratings) / len(ratings), 1) if ratings else None
-
-    return jsonify({"reviews": reviews_data, "avg_rating": avg_rating})
-
-
-@app.route("/my-recipes")
+@main.route("/my-recipes")
 def myRecipes():
 
     signed_in = current_user.is_authenticated
@@ -305,24 +298,23 @@ def myRecipes():
 
     return render_template("myRecipesPage.html", username=user.username, userRecipes=my_recipes_list[::-1])
 
-@app.route("/submit_review", methods=["POST"])
+@main.route("/submit_review", methods=["POST"])
 @login_required
 def submit_review():
     data = request.get_json()
 
     recipe_id = data.get("recipe_id")
-    rating = data.get("rating")
-    body = data.get("body")
-
     if not recipe_id:
         return jsonify({"success": False, "message": "Missing recipe_id"}), 400
 
     review = Review(
-        author_id=current_user.id,
-        recipe_id=recipe_id,
-        taste_rating=rating,
-        body=body,
-        title="Review"
+        author_id      = current_user.id,
+        recipe_id      = recipe_id,
+        taste_rating   = data.get("taste"),
+        accuracy_rating= data.get("accuracy"),
+        timing_rating  = data.get("timing"),
+        body           = data.get("body"),
+        title          = "Review"
     )
     db.session.add(review)
     db.session.commit()

@@ -20,15 +20,37 @@ function injectModal() {
         <h5 id="reviewModalTitle" class="review-modal-title">Leave a Review</h5>
 
         <div id="ratingSection" class="review-modal-section">
-            <label class="review-modal-label">Rating</label>
-            <div id="starRow" class="review-star-row">
-                <span class="star" data-val="1">&#9733;</span>
-                <span class="star" data-val="2">&#9733;</span>
-                <span class="star" data-val="3">&#9733;</span>
-                <span class="star" data-val="4">&#9733;</span>
-                <span class="star" data-val="5">&#9733;</span>
+            <label class="review-modal-label">Taste</label>
+            <div id="tasteStarRow" class="review-star-row">
+                <span class="star taste-star" data-val="1">&#9733;</span>
+                <span class="star taste-star" data-val="2">&#9733;</span>
+                <span class="star taste-star" data-val="3">&#9733;</span>
+                <span class="star taste-star" data-val="4">&#9733;</span>
+                <span class="star taste-star" data-val="5">&#9733;</span>
             </div>
-            <input type="hidden" id="ratingValue" value="0">
+            <input type="hidden" id="tasteValue" value="0">
+
+            <label class="review-modal-label" style="margin-top:12px;">Accuracy</label>
+            <div id="accuracyStarRow" class="review-star-row">
+                <span class="star accuracy-star" data-val="1">&#9733;</span>
+                <span class="star accuracy-star" data-val="2">&#9733;</span>
+                <span class="star accuracy-star" data-val="3">&#9733;</span>
+                <span class="star accuracy-star" data-val="4">&#9733;</span>
+                <span class="star accuracy-star" data-val="5">&#9733;</span>
+            </div>
+            <input type="hidden" id="accuracyValue" value="0">
+
+            <label class="review-modal-label" style="margin-top:12px;">Timings</label>
+            <select id="timingValue" class="review-modal-select">
+                <option value="">-- Select --</option>
+                <option value="1">Took Much More Time</option>
+                <option value="2">Took More Time</option>
+                <option value="3">Took a Little More Time</option>
+                <option value="4">Perfect</option>
+                <option value="5">Took a Little Less Time</option>
+                <option value="6">Took Less Time</option>
+                <option value="7">Took Much Less Time</option>
+            </select>
         </div>
 
         <div id="reviewSection" class="review-modal-section">
@@ -79,9 +101,15 @@ function loadReviews() {
 
             list.innerHTML = "";
 
-            if (data.avg_rating) {
-                let avgStars = "★".repeat(Math.round(data.avg_rating)) + "☆".repeat(5 - Math.round(data.avg_rating));
-                list.innerHTML += `<p class="review-avg-rating"><b>Average rating: ${avgStars} (${data.avg_rating} / 5)</b></p>`;
+            if (data.avg_taste || data.avg_accuracy) {
+                let tasteStars    = data.avg_taste    ? "★".repeat(Math.round(data.avg_taste))    + "☆".repeat(5 - Math.round(data.avg_taste))    : "N/A";
+                let accuracyStars = data.avg_accuracy ? "★".repeat(Math.round(data.avg_accuracy)) + "☆".repeat(5 - Math.round(data.avg_accuracy)) : "N/A";
+                list.innerHTML += `
+                    <p class="review-avg-rating">
+                        <b>Avg Taste: ${tasteStars} (${data.avg_taste ?? "N/A"} / 5)</b> &nbsp;|&nbsp;
+                        <b>Avg Accuracy: ${accuracyStars} (${data.avg_accuracy ?? "N/A"} / 5)</b>
+                    </p>
+                `;
             }
 
             if (data.reviews.length === 0) {
@@ -97,20 +125,35 @@ function loadReviews() {
 }
 
 
+const TIMING_LABELS = {
+    1: "Took Much More Time",
+    2: "Took More Time",
+    3: "Took a Little More Time",
+    4: "Perfect",
+    5: "Took a Little Less Time",
+    6: "Took Less Time",
+    7: "Took Much Less Time"
+};
+
 function makeReviewCard(review) {
-    let filled = review.rating || 0;
-    let stars = "★".repeat(filled) + "☆".repeat(5 - filled);
+    let tasteStars    = review.taste_rating    ? "★".repeat(review.taste_rating)    + "☆".repeat(5 - review.taste_rating)    : "N/A";
+    let accuracyStars = review.accuracy_rating ? "★".repeat(review.accuracy_rating) + "☆".repeat(5 - review.accuracy_rating) : "N/A";
+    let timingLabel   = review.timing_rating   ? TIMING_LABELS[review.timing_rating] : "N/A";
 
     let card = document.createElement("div");
     card.className = "review-card";
     card.innerHTML = `
         <div class="review-card-header">
             <strong>${review.author}</strong>
-            <span class="review-card-stars">${stars}</span>
-        </div>
-        <p class="review-card-body">${review.body || "No text review"}</p>
-        <div class="review-card-footer">
             <small class="review-card-date">${review.created_at}</small>
+        </div>
+        <div class="review-card-ratings">
+            <span>Taste: <span class="review-card-stars">${tasteStars}</span></span>
+            <span>Accuracy: <span class="review-card-stars">${accuracyStars}</span></span>
+            <span>Timing: <b>${timingLabel}</b></span>
+        </div>
+        <p class="review-card-body">${review.body || ""}</p>
+        <div class="review-card-footer">
             <button class="btn btn-sm btn-outline-secondary like-btn" data-liked="${review.liked_by_me}" onclick="likeReview(${review.id}, this)">
                 👍 <span class="like-count">${review.like_count}</span>
             </button>
@@ -147,26 +190,25 @@ function likeReview(reviewId, btn) {
 
 
 function setupStars() {
-    for (let star of document.querySelectorAll(".star")) {
-        star.addEventListener("mouseover", () => highlightStars(star.dataset.val));
-        star.addEventListener("mouseout", resetStarHighlight);
-        star.addEventListener("click", () => selectRating(star.dataset.val));
+    setupStarRow("taste-star", "tasteValue");
+    setupStarRow("accuracy-star", "accuracyValue");
+}
+
+function setupStarRow(className, inputId) {
+    for (let star of document.querySelectorAll(`.${className}`)) {
+        star.addEventListener("mouseover", () => highlightStarRow(className, star.dataset.val));
+        star.addEventListener("mouseout",  () => highlightStarRow(className, document.getElementById(inputId).value));
+        star.addEventListener("click",     () => {
+            document.getElementById(inputId).value = star.dataset.val;
+            highlightStarRow(className, star.dataset.val);
+        });
     }
 }
 
-function highlightStars(val) {
-    for (let star of document.querySelectorAll(".star")) {
+function highlightStarRow(className, val) {
+    for (let star of document.querySelectorAll(`.${className}`)) {
         star.style.color = star.dataset.val <= val ? "#f5a623" : "#ccc";
     }
-}
-
-function resetStarHighlight() {
-    highlightStars(document.getElementById("ratingValue").value);
-}
-
-function selectRating(val) {
-    document.getElementById("ratingValue").value = val;
-    highlightStars(val);
 }
 
 
@@ -180,8 +222,11 @@ function openReviewModal(mode) {
     document.getElementById("ratingSection").style.display = (mode === "rate" || mode === "review_rate") ? "block" : "none";
     document.getElementById("reviewSection").style.display = (mode === "review" || mode === "review_rate") ? "block" : "none";
 
-    document.getElementById("ratingValue").value = "0";
-    document.getElementById("reviewText").value = "";
+    document.getElementById("tasteValue").value    = "0";
+    document.getElementById("accuracyValue").value = "0";
+    document.getElementById("timingValue").value   = "";
+    document.getElementById("reviewText").value    = "";
+
     for (let star of document.querySelectorAll(".star")) star.style.color = "#ccc";
 
     modal.style.display = "flex";
@@ -194,17 +239,19 @@ function closeReviewModal() {
 
 
 function submitReview() {
-    let rating = parseInt(document.getElementById("ratingValue").value) || null;
-    let body = document.getElementById("reviewText").value.trim();
+    let taste    = parseInt(document.getElementById("tasteValue").value)    || null;
+    let accuracy = parseInt(document.getElementById("accuracyValue").value) || null;
+    let timing   = parseInt(document.getElementById("timingValue").value)   || null;
+    let body     = document.getElementById("reviewText").value.trim();
     let recipeId = getRecipeId();
 
     if (!recipeId) { alert("Missing recipe ID"); return; }
-    if (!rating && !body) { alert("Please add a rating or write a review."); return; }
+    if (!taste && !accuracy && !timing && !body) { alert("Please fill in at least one field."); return; }
 
     fetch("/submit_review", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ recipe_id: recipeId, rating, body })
+        body: JSON.stringify({ recipe_id: recipeId, taste, accuracy, timing, body })
     })
     .then(res => res.json())
     .then(data => {
