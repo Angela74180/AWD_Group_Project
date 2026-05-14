@@ -713,16 +713,15 @@ def update_username():
 @main.route("/upload_avatar", methods=["POST"])
 @login_required
 def upload_avatar():
-
-    signed_in = current_user.is_authenticated
-
-    if not signed_in:
-        return redirect(url_for("need_to_be_logged_in"))
-
     image_data = request.get_json().get("image")
 
     if not image_data:
         return jsonify(success=False, message="No image provided.")
+
+    # base64 string length * 0.75 gives approximate byte size
+    approx_bytes = len(image_data) * 0.75
+    if approx_bytes > 150 * 1024:
+        return jsonify(success=False, message="Image too large. Please upload under 100KB.")
 
     current_user.profile_picture = image_data
     db.session.commit()
