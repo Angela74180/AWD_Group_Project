@@ -20,6 +20,7 @@
         <nav class="navbar banner py-2">
             <div class="container-fluid">
                 <div class="logo">CookBook <i class="bi bi-book"></i></div>
+                {% if current_user.is_authenticated %}
                 <ul class="nav-links">
                     <li><a href="/">Home</a></li>
                     <li><a href="/explore">Explore</a></li>
@@ -29,7 +30,6 @@
                     <li><a href="/shopping_list"><i class="bi bi-cart3"></i></a></li>
                     <!-- <li><a href="/notifications"><i class="bi bi-bell-fill"></i></a></li> -->
                 </ul>
-                {% if current_user.is_authenticated %}
                     <a href="/profile">
                         <div class = "profile-btn">
                             <img src="{{ current_user.profile_picture }}" style="height:40px;">
@@ -37,6 +37,14 @@
                     </a>
 
                 {% else %}
+                <ul class="nav-links">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/explore">Explore</a></li>
+                    <li><a href="/my-recipes" style="color:rgb(209, 66, 66)">My Recipes</a></li>
+                    <li><a href="/create_recipe/0" style="color:rgb(209, 66, 66)">Create a Recipe</a></li>
+                    <li><a href="/saved" style="color:rgb(209, 66, 66)">Saved <i class="bi bi-bookmark"></i></a></li>
+                    <li><a href="/shopping_list" style="color:rgb(209, 66, 66)"><i class="bi bi-cart3"></i></a></li>
+                </ul>
                     <ul class="nav-links">
                         <li><a href="/login">Login</a></li>
                     </ul>
