@@ -82,7 +82,8 @@
             </div>
             <div>
                 <button class="edit-btn" id="uploadPhotoBtn">Upload Photo</button>
-  
+                <br>
+                <span id="avatarSizeHint" class="avatar-hint">Max 100KB</span>
             </div>
         </div>
 
@@ -133,6 +134,6 @@
 <!-- Reviews Tab -->
 <div class="review-tab tab-pane" id="reviews-tab" hidden></div>
 
-<h4><a href="/logout">Logout</a></h4>
+<h4><a href="{{ url_for('main.logout') }}">Logout</a></h4>
 
 {% endblock %}

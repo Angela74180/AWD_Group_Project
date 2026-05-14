@@ -764,3 +764,17 @@ select {
   order: 999;
   flex-shrink: 0;
 }
+.avatar-hint {
+    font-size: 0.7rem;
+    color: #999;
+    margin-top: 4px;
+    display: inline-block;
+}
+
+.avatar-hint-error {
+    color: #e74c3c;
+}
+
+.avatar-hint-success {
+    color: #27ae60;
+}
