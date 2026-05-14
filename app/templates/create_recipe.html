@@ -21,6 +21,7 @@
 <br>
 <div>{{ error }}</div>
     <form name = "Create Recipe" action="{{ url_for('main.publish_recipe') }}" method="POST" onsubmit="return handleRecipeForm()">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <input id = "recipeName" name="recipe_name" type = "text" style="width: 100%" maxlength="100" placeholder="Recipe Name (100 character Limit)"required>
         <br>
         <br>

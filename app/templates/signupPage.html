@@ -10,6 +10,7 @@
 {% endif %}
 
 <form name="Sign Up" action="{{ url_for('main.signup') }}" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
     <br>
 
     <fieldset class="outer_fieldset">
