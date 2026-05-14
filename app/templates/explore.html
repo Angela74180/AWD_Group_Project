@@ -3,7 +3,6 @@
 {% block title %}Explore - CookBook{% endblock %}
 
 {% block scripts %}
-<script src="{{ url_for('static', filename='Explore/data.js') }}"></script>
 <script src="{{ url_for('static', filename='Explore/getRandomRecipes.js') }}"></script>
 <script src="{{ url_for('static', filename='Explore/displayRecipes.js') }}"></script>
 <script src="{{ url_for('static', filename='Explore/populateExplore.js') }}"></script>
@@ -33,6 +32,23 @@
             <br>
             <button type="button" style =" width: 100%;" class="btn btn-primary" onclick="filterRecipes()">Apply Filters</button>
             <br><br>
+            <div class="filter-group">
+                <label>Recipe Type</label>
+                <select id="type" data-filter="type">
+                    <option value="All">All</option>
+                    <option value = Breakfast>Breakfast</option>
+                    <option value = Lunch>Lunch</option>
+                    <option value = Dinner>Dinner</option>
+                    <option value = Dessert>Dessert</option>
+                    <option value = Sweet_treat>Sweet Treat</option>
+                    <option value = Baked_good>Baked Good</option>
+                    <option value = Drink>Drink</option>
+                    <option value = Snack>Snack</option>
+                    <option value = Side>Side</option>
+                    <option value = Other>Other</option>
+                </select>
+            </div>
+
             <div class="filter-group">
                 <label>Difficulty</label>
                 <select id="difficulty" data-filter="difficulty">
