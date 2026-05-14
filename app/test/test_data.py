@@ -80,8 +80,10 @@ class BasicTests(unittest.TestCase):
         db.session.add(user)
         db.session.commit()
 
-        with self.client.session_transaction() as sess:
-            sess["authorId"] = user.id
+        self.client.post('/login', data={
+            "username": "chef",
+            "password": "abc"
+        }, follow_redirects=True)
 
         response = self.client.post(
             "/publish_recipe",
