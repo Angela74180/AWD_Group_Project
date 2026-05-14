@@ -201,7 +201,7 @@ def saved():
     return render_template("savedPage.html", username=user.username, savedRecipes=recipes_list[::-1])
 
 
-@main.route("/my-recipes")
+@main.route("/myRecipes")
 def myRecipes():
 
     signed_in = current_user.is_authenticated
@@ -516,14 +516,14 @@ def publish_recipe():
         try:
             db.session.add(recipe)
             db.session.commit()
-            app.logger.info("No Errors")
-            return redirect(url_for("main.my-recipes"))
+            # app.logger.info("No Errors")
+            return redirect(url_for("main.myRecipes"))
         
         except Exception as e:
             current_app.logger.error(e)
             db.session.rollback()
             error = "Recipe could not be saved."
-            return render_template("/create_recipe", error=error)
+            return render_template("create_recipe.html", error=error)
 
 
 @main.route('/create_recipe/<recipe_num>')
