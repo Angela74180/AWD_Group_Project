@@ -47,6 +47,10 @@ function filterRecipes() {
             searchReqs.difficulty === "All" ||
             recipe.recipeDifficulty === searchReqs.difficulty;
 
+        const matchesType =
+            searchReqs.type === "All" ||
+            recipe.recipeType === searchReqs.type;
+
         const matchesTags =
             searchReqs.tags_list.length === 0 ||
 
@@ -77,6 +81,7 @@ function filterRecipes() {
         return matchesSearch &&
             matchesTime &&
             matchesDifficulty &&
+            matchesType &&
             matchesTags &&
             matchesIngredients &&
             matchesAppliances;

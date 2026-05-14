@@ -78,7 +78,16 @@ select {
   margin-bottom: 5px;
 }
 .btn-tag:hover{
-  background-color: rgb(247, 195, 35);
+  background-color: rgb(255, 210, 75);
+}
+button:active {
+  background-color: rgb(255, 210, 75);
+  /* padding-top: 2px;
+  padding-bottom: 0px;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-right: 5px;
+  margin-bottom: 5px; */
 }
 
 .tag {

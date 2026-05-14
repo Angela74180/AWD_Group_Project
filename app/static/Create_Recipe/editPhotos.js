@@ -4,8 +4,6 @@ function validatePhoto(photo) {
 
     if (photo.value != "") {
 
-        // .jpg, .png, .jpeg, .webp
-
         // Read and display the image
         let reader = new FileReader();
         let image = document.createElement("img");
@@ -27,6 +25,13 @@ function validatePhoto(photo) {
         reader.onerror = function () {
             alert('Error reading file.');
         };
+
+        let file_extension = photo.value.split('.').pop();
+        if (file_extension != "jpg" && file_extension != "png" && file_extension != "jpeg" && file_extension != "webp"){
+            alert("The image must be a .jpg, .jpeg, .png or a .webp");
+            photo.value = "";
+            return;
+        }
 
         reader.readAsDataURL(photo.files[0]); // Convert file to base64 string
 
