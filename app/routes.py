@@ -400,7 +400,6 @@ def publish_recipe():
                 return render_template('somethingWentWrong.html') 
 
             if step_photo != "":
-                print(step_photo[0:40])
                 if not step_photo.startswith("data:image/webp") and not step_photo.startswith("data:image/jpeg") and not step_photo.startswith("data:image/jpg") and not step_photo.startswith("data:image/png"):
                     app.logger.error("Step Photo Incorrect")
                     return render_template('somethingWentWrong.html') 
@@ -508,6 +507,7 @@ def publish_recipe():
         try:
             db.session.add(recipe)
             db.session.commit()
+            app.logger.info("No Errors")
             return redirect("/my-recipes")
         
         except Exception as e:
