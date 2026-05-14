@@ -1,19 +1,5 @@
 document.addEventListener("DOMContentLoaded", function() {
-
     displayRecipes(latest_recipes);
-
-    document.getElementById("searchBar").addEventListener("input", () => {
-        let query = document.getElementById("searchBar").value.toLowerCase().trim();
-
-        let filtered = latest_recipes.filter(r =>
-            r.title.toLowerCase().includes(query) ||
-            r.author.toLowerCase().includes(query) ||
-            r.tags?.some(t => t.toLowerCase().includes(query))
-        );
-
-        displayRecipes(filtered);
-    });
-
 });
 
 
