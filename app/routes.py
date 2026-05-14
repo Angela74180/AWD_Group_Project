@@ -713,6 +713,12 @@ def update_username():
 @main.route("/upload_avatar", methods=["POST"])
 @login_required
 def upload_avatar():
+
+    signed_in = current_user.is_authenticated
+
+    if not signed_in:
+        return redirect(url_for("need_to_be_logged_in"))
+
     image_data = request.get_json().get("image")
 
     if not image_data:
