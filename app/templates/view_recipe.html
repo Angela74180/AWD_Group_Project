@@ -12,5 +12,9 @@
 {% endblock %}
 
 {% block content %}
-<div id="recipe_banner_div" user_id="{{ current_user.id }}" recipe_id="{{ recipe_details_dict['recipeId'] }}"></div>
+<div id="recipe_banner_div"
+     user_id="{{ current_user.id }}"
+     data-recipe-id="{{ recipe_details_dict['recipeId'] }}">
+</div>
+
 {% endblock %}

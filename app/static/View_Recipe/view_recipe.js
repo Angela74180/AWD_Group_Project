@@ -152,9 +152,6 @@ function view_recipe(recipe_details_dict) {
         
     }
 
-
-
-
     div_main.innerHTML += `<br><br>`;
 
     if (recipe_details_dict["allowRatings"] && !recipe_details_dict["allowReviews"]){
@@ -167,5 +164,4 @@ function view_recipe(recipe_details_dict) {
         div_main.innerHTML += `<button type="button" class="btn btn-add" onclick="review_rate(event)">Leave a Review</button>`;
     }
 
-    
 }
