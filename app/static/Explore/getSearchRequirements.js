@@ -21,6 +21,7 @@ function get_search_reqs(){
         "search_bar": document.getElementById("searchBar").value,
         "time": document.getElementById("time").value,
         "difficulty": document.getElementById("difficulty").value,
+        "type": document.getElementById("type").value,
         "tags_list": tags,
         "ingredients_list": ingredients,
         "exclude_appliance_list": appliances
