@@ -7,6 +7,13 @@ from app.makeRecipeBannerDict import make_recipe_banner_dict
 from app.makeRecipeDict import make_recipe_dict
 from sqlalchemy.exc import IntegrityError
 
+def is_number(given_string):
+    try:
+        float(given_string)
+        return True
+    except ValueError:
+        return False
+
 
 @app.route('/')
 @app.route('/index')
@@ -219,6 +226,7 @@ def myRecipes():
     return render_template("myRecipesPage.html", username=user.username, userRecipes=my_recipes_list[::-1])
 
 
+# This route is used to publish a recipe to the database
 @app.route('/publish_recipe', methods=["POST"])
 def publish_recipe():
 
@@ -236,18 +244,39 @@ def publish_recipe():
         ingredient_descriptions = request.form.getlist("ingredientDescription")
 
         if len(ingredient_names) != len(ingredient_quantities) or len(ingredient_quantities) != len(ingredient_units) or len(ingredient_units) != len(ingredient_descriptions):
-            raise Exception("Unequal number of ingredient parameters")
+            app.logger.error("Inconsitent Number of Ingredient Details")
+            return render_template('somethingWentWrong.html') 
+
 
         ingredients_list = []
 
         for i in range(len(ingredient_names)):
-            ingredient_name = ingredient_names[i]
-            ingredient_quantity = ingredient_quantities[i]
-            ingredient_unit = ingredient_units[i]
-            ingredient_description = ingredient_descriptions[i]
+            ingredient_name = ingredient_names[i].strip()
+            ingredient_quantity = ingredient_quantities[i].strip()
+            ingredient_unit = ingredient_units[i].strip()
+            ingredient_description = ingredient_descriptions[i].strip()
 
             ingredient = Ingredient.query.filter_by(name=ingredient_name).first()
 
+            # Validate that the ingredient details are valid
+            if len(ingredient_name) >= 50 or ingredient_name == "":
+                app.logger.error("Ingredient Name Incorrect")
+                return render_template('somethingWentWrong.html') 
+
+            if not is_number(ingredient_quantity) or float(ingredient_quantity) < 0:
+                app.logger.error("Ingredient Quantity Incorrect")
+                return render_template('somethingWentWrong.html') 
+
+            if len(ingredient_unit) >= 50 or ingredient_unit == "":
+                app.logger.error("Ingredient Unit Incorrect")
+                return render_template('somethingWentWrong.html') 
+
+            if len(ingredient_description) >= 500:
+                app.logger.error("Ingredient Description Incorrect")
+                return render_template('somethingWentWrong.html') 
+
+
+            # If an ingredient of the given name has never appeared in a recipe before, it will not be in the database and needs to be added
             if ingredient == None:
                 ingredient = Ingredient(
                     name = ingredient_name
@@ -267,12 +296,17 @@ def publish_recipe():
             ingredients_list.append(recipe_ingredient)
 
 
-
         tag_names = request.form.getlist("tagName")
         tag_list = []
         for tag_name in (tag_names):
-            tag = Tag.query.filter_by(name=tag_name).first()
+            
+            # Validate that the tag details are valid
+            if len(tag_name) >= 50 or tag_name == "":
+                app.logger.error("Tag Name Incorrect")
+                return render_template('somethingWentWrong.html') 
 
+            # If a tag of the given name has never appeared in a recipe before, it will not be in the database and needs to be added
+            tag = Tag.query.filter_by(name=tag_name).first()
             if tag == None:
                 tag = Tag(
                     name = tag_name
@@ -294,17 +328,32 @@ def publish_recipe():
         appliance_descriptions  = request.form.getlist("applianceDescription")
 
         if len(appliance_names) != len(appliance_extra_details) or len(appliance_extra_details) != len(appliance_descriptions):
-            raise Exception("Unequal number of appliance parameters")
+            return render_template('somethingWentWrong.html') 
         
         appliance_list = []
 
         for i in range(len(appliance_names)):
-            appliance_name = appliance_names[i]
-            appliance_extra_data = appliance_extra_details[i]
-            appliance_description = appliance_descriptions[i]
+            appliance_name = appliance_names[i].strip()
+            appliance_extra_data = appliance_extra_details[i].strip()
+            appliance_description = appliance_descriptions[i].strip()
 
+            # Validate that the appliance details are valid
+            if len(appliance_name) >= 50 or appliance_name == "":
+                app.logger.error("Appliance Name Incorrect")
+                return render_template('somethingWentWrong.html') 
+
+            if len(appliance_extra_data) >= 50:
+                app.logger.error("Appliance Extra Data Incorrect")
+                return render_template('somethingWentWrong.html') 
+
+            if len(appliance_description) >= 500:
+                app.logger.error("Appliance Description Incorrect")
+                return render_template('somethingWentWrong.html') 
+
+
+
+            # If an appliance of the given name has never appeared in a recipe before, it will not be in the database and needs to be added
             appliance = Appliance.query.filter_by(name=appliance_name).first()
-
             if appliance == None:
                 appliance = Appliance(
                     name = appliance_name
@@ -328,17 +377,34 @@ def publish_recipe():
         step_photos = request.form.getlist("stepPhoto")
 
         if len(step_names) != len(step_descriptions) or len(step_descriptions) != len(step_photos):
-            raise Exception("Unequal number of step parameters")
+            app.logger.error("Inconsitent Number of Step Details")
+            return render_template('somethingWentWrong.html') 
         
         step_list = []
 
         for i in range(len(step_names)):
-            step_name = step_names[i]
-            step_description = step_descriptions[i]
-            step_photo = step_photos[i]
+            step_name = step_names[i].strip()
+            step_description = step_descriptions[i].strip()
+            step_photo = step_photos[i].strip()
 
             if not step_photo:
                 step_photo = ""
+
+            # Validate that the step details are valid
+            if len(step_name) >= 50:
+                app.logger.error("Step Name Incorrect")
+                return render_template('somethingWentWrong.html') 
+
+            if len(step_description) >= 500 or step_description == "":
+                app.logger.error("Step Description Incorrect")
+                return render_template('somethingWentWrong.html') 
+
+            if step_photo != "":
+                print(step_photo[0:40])
+                if not step_photo.startswith("data:image/webp") and not step_photo.startswith("data:image/jpeg") and not step_photo.startswith("data:image/jpg") and not step_photo.startswith("data:image/png"):
+                    app.logger.error("Step Photo Incorrect")
+                    return render_template('somethingWentWrong.html') 
+
 
             step = Step(
                 name        = step_name,
@@ -355,25 +421,83 @@ def publish_recipe():
         else:
             status = "Draft"
 
+
+
+        # Validate the remainder of the recipe table details
+        name = request.form["recipe_name"].strip()
+        if len(name) >= 200 or name == "":
+            app.logger.error("Recipe Name Incorrect")
+            return render_template('somethingWentWrong.html') 
+
+        recipe_type = request.form["recipeType"].strip()
+        if len(name) >= 30 or recipe_type == "":
+            app.logger.error("Recipe Type Incorrect")
+            return render_template('somethingWentWrong.html') 
+
+        difficulty = request.form["recipeDifficulty"].strip()
+        if len(difficulty) >= 20 or difficulty == "":
+            app.logger.error("Recipe Difficulty Incorrect")
+            return render_template('somethingWentWrong.html') 
+
+        serves = request.form["serves"].strip()
+        if not is_number(serves) or float(serves) < 0:
+            app.logger.error("Recipe Serves Incorrect")
+            return render_template('somethingWentWrong.html') 
+
+        description = request.form["Description"].strip()
+        if len(description) >= 1000 or description == "":
+            app.logger.error("Recipe Description Incorrect")
+            return render_template('somethingWentWrong.html') 
+
+        cover_image = request.form["coverPhoto"].strip()
+        if cover_image != "":
+            if not cover_image.startswith("data:image/webp") and not cover_image.startswith("data:image/jpeg") and not cover_image.startswith("data:image/jpg") and not cover_image.startswith("data:image/png"):
+                app.logger.error("Recipe Cover Image Incorrect")
+                return render_template('somethingWentWrong.html') 
+        
+        prep_minutes  = request.form.get("prepMins", "0").strip()
+        cook_minutes  = request.form.get("cookMins", "0").strip()
+        total_minutes = request.form.get("totalMins", "0").strip()
+        prep_hours    = request.form.get("prepHours", "0").strip()
+        cook_hours    = request.form.get("cookHours", "0").strip()
+        total_hours   = request.form.get("totalHours", "0").strip()
+
+        times = [prep_minutes, cook_minutes, total_minutes, prep_hours, cook_hours, total_hours]
+        for time in times:
+            if not is_number(time) or float(time) < 0:
+                app.logger.error("Recipe Timings Incorrect")
+                return render_template('somethingWentWrong.html') 
+
+        visibility = request.form["visibility"].strip()
+        if len(visibility) >= 20 or visibility == "":
+            app.logger.error("Recipe Visibility Incorrect")
+            return render_template('somethingWentWrong.html') 
+
+        time_split    = bool(request.form.get("timeSplit"))
+        allow_ratings = bool(request.form.get("allowRatings"))
+        allow_reviews = bool(request.form.get("allowReviews"))
+
+
+        # Create the Rcipe object and populate it with the data
         recipe = Recipe(
             author_id     = current_user.id,
             # prev_version_id = db.Column(db.Integer, db.ForeignKey("recipe.id")) ####this column needs to be nullable ######
-            name          = request.form["recipe_name"],
-            recipe_type   = request.form["recipeType"],
-            difficulty    = request.form["recipeDifficulty"],
-            serves        = request.form["serves"],
-            description   = request.form["Description"],
-            cover_image   = request.form["coverPhoto"],
-            time_split    = bool(request.form.get("timeSplit")),
-            prep_minutes  = request.form.get("prepMins", 0),
-            cook_minutes  = request.form.get("cookMins", 0),
-            total_minutes = request.form.get("totalMins", 0),
-            prep_hours    = request.form.get("prepHours", 0),
-            cook_hours    = request.form.get("cookHours", 0),
-            total_hours   = request.form.get("totalHours", 0),
-            visibility    = request.form["visibility"],
-            allow_ratings = bool(request.form.get("allowRatings")),
-            allow_reviews = bool(request.form.get("allowReviews")),
+            name          = name,
+            recipe_type   = recipe_type,
+            difficulty    = difficulty,
+            serves        = serves,
+            description   = description,
+            cover_image   = cover_image,
+            time_split    = time_split,
+            prep_minutes  = prep_minutes,
+            cook_minutes  = cook_minutes,
+            total_minutes = total_minutes,
+            prep_hours    = prep_hours,
+            cook_hours    = cook_hours,
+            total_hours   = total_hours,
+            visibility    = visibility,
+            allow_ratings = allow_ratings,
+            allow_reviews = allow_reviews,
             status        = status,
             ingredients   = ingredients_list,
             tags          = tag_list,
