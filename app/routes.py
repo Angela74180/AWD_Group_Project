@@ -1,11 +1,12 @@
-from flask import render_template, request, redirect, url_for, session, jsonify
-from app import app, db
+from flask import render_template, request, redirect, url_for, session, jsonify, current_app
+from app import db
 from flask_login import login_user, logout_user, login_required, current_user
 from sqlalchemy.exc import SQLAlchemyError #############################################################
 from app.models import User, Recipe, Ingredient, RecipeIngredient, Tag, RecipeTag, Appliance, RecipeAppliance, Step, Bookmark, ShoppingList
 from app.makeRecipeBannerDict import make_recipe_banner_dict
 from app.makeRecipeDict import make_recipe_dict
 from sqlalchemy.exc import IntegrityError
+from app.blueprint import main
 
 def is_number(given_string):
     try:
@@ -15,12 +16,25 @@ def is_number(given_string):
         return False
 
 
-@app.route('/')
-@app.route('/index')
+@main.route('/')
+@main.route('/index')
 def index():
-    return render_template("homePage.html")
+    userId    = session.get('authorId')
+    signed_in = userId is not None
 
-@app.route("/explore")
+    # Grab the 6 most recent recipes
+    recipes = Recipe.query.order_by(Recipe.id.desc()).limit(6).all()
+
+    latest_recipes = []
+    for recipe in recipes:
+        author   = User.query.filter_by(id=recipe.author_id).first().username
+        tag_list = [Tag.query.filter_by(id=rt.tag_id).first().name for rt in recipe.tags]
+        latest_recipes.append(make_recipe_banner_dict(recipe, author, tag_list, signed_in=signed_in, bookmark_on=False, cart_on=False))
+
+    return render_template("homePage.html", latest_recipes=latest_recipes)
+
+
+@main.route("/explore")
 def explore():
     recipes_list = []
 
@@ -77,17 +91,13 @@ def explore():
     return render_template("explore.html", foundRecipes=recipes_list[::-1])
 
 
-def explore():
-    return render_template("explore.html")
-
-
-@app.route("/shopping_list")
+@main.route("/shopping_list")
 def shopping_list():
 
     signed_in = current_user.is_authenticated
 
     if not signed_in:
-        return redirect(url_for("need_to_be_logged_in"))
+        return redirect(url_for("main.need_to_be_logged_in"))
     
     userId = current_user.id
     user = User.query.filter_by(id=userId).first()
@@ -150,13 +160,13 @@ def shopping_list():
 
 
 
-@app.route("/saved")
+@main.route("/saved")
 def saved():
 
     signed_in = current_user.is_authenticated
 
     if not signed_in:
-        return redirect(url_for("need_to_be_logged_in"))
+        return redirect(url_for("main.need_to_be_logged_in"))
 
     userId = current_user.id
     user = User.query.filter_by(id=userId).first()
@@ -191,13 +201,13 @@ def saved():
     return render_template("savedPage.html", username=user.username, savedRecipes=recipes_list[::-1])
 
 
-@app.route("/my-recipes")
+@main.route("/my-recipes")
 def myRecipes():
 
     signed_in = current_user.is_authenticated
 
     if not signed_in:
-        return redirect(url_for("need_to_be_logged_in"))
+        return redirect(url_for("main.need_to_be_logged_in"))
 
     userId = current_user.id
     user = User.query.filter_by(id=userId).first()
@@ -226,14 +236,13 @@ def myRecipes():
     return render_template("myRecipesPage.html", username=user.username, userRecipes=my_recipes_list[::-1])
 
 
-# This route is used to publish a recipe to the database
-@app.route('/publish_recipe', methods=["POST"])
+@main.route('/publish_recipe', methods=["POST"])
 def publish_recipe():
 
     signed_in = current_user.is_authenticated
 
     if not signed_in:
-        return redirect(url_for("need_to_be_logged_in"))
+        return redirect(url_for("main.need_to_be_logged_in"))
 
 
     if request.method == "POST":
@@ -508,21 +517,21 @@ def publish_recipe():
             db.session.add(recipe)
             db.session.commit()
             app.logger.info("No Errors")
-            return redirect("/my-recipes")
+            return redirect(url_for("main.my-recipes"))
         
         except Exception as e:
-            app.logger.error(e)
+            current_app.logger.error(e)
             db.session.rollback()
             error = "Recipe could not be saved."
             return render_template("/create_recipe", error=error)
 
 
-@app.route('/create_recipe/<recipe_num>')
+@main.route('/create_recipe/<recipe_num>')
 def create_recipe(recipe_num):
     signed_in = current_user.is_authenticated
 
     if not signed_in:
-        return redirect(url_for("need_to_be_logged_in"))
+        return redirect(url_for("main.need_to_be_logged_in"))
 
     authorId = current_user.id
     author = User.query.filter_by(id=authorId).first().username
@@ -631,7 +640,7 @@ def create_recipe(recipe_num):
 
 
 
-@app.route('/login', methods=['GET', 'POST'])
+@main.route('/login', methods=['GET', 'POST'])
 def login():
 
     if request.method == 'POST':
@@ -643,15 +652,15 @@ def login():
 
         if user and user.check_password(password):
             login_user(user)
-            # session['authorId'] = user.id ###################################################################################################
-            return redirect(url_for('index'))
+            session['authorId'] = user.id
+            return redirect(url_for('main.index'))
 
         return render_template('loginPage.html', error="Invalid credentials")
 
     return render_template('loginPage.html')
 
 
-@app.route('/signup', methods=['GET', 'POST'])
+@main.route('/signup', methods=['GET', 'POST'])
 def signup():
 
     if request.method == 'POST':
@@ -667,7 +676,7 @@ def signup():
 
         try:
             db.session.commit()
-            return redirect(url_for('login'))
+            return redirect(url_for('main.login'))
 
         except IntegrityError:
             db.session.rollback()
@@ -680,22 +689,22 @@ def signup():
 
 
 
-@app.route("/logout")
+@main.route("/logout")
 def logout():
     logout_user()
-    return redirect(url_for("index"))
+    return redirect(url_for("main.index"))
 
 
 
 
 
-@app.route("/updateBookmark", methods=["POST"])
+@main.route("/updateBookmark", methods=["POST"])
 def updateBookmark():
 
     signed_in = current_user.is_authenticated
 
     if not signed_in:
-        return redirect(url_for("need_to_be_logged_in"))
+        return redirect(url_for("main.need_to_be_logged_in"))
 
     recipe_id       = request.json.get("recipe_id")
     user_id         = current_user.id
@@ -732,13 +741,13 @@ def updateBookmark():
 
 
 
-@app.route("/updateShoppingList", methods=["POST"])
+@main.route("/updateShoppingList", methods=["POST"])
 def updateShoppingList():
 
     signed_in = current_user.is_authenticated
 
     if not signed_in:
-        return redirect(url_for("need_to_be_logged_in"))
+        return redirect(url_for("main.need_to_be_logged_in"))
 
     recipe_id       = request.json.get("recipe_id")
     user_id         = current_user.id
@@ -774,13 +783,13 @@ def updateShoppingList():
 
 
 
-@app.route("/profile")
+@main.route("/profile")
 def profile():
 
     signed_in = current_user.is_authenticated
 
     if not signed_in:
-        return redirect(url_for("need_to_be_logged_in"))
+        return redirect(url_for("main.need_to_be_logged_in"))
 
     userId = current_user.id
     user = User.query.filter_by(id=userId).first()
@@ -801,14 +810,14 @@ def profile():
     )
 
 
-@app.route("/update_username", methods=["POST"])
+@main.route("/update_username", methods=["POST"])
 @login_required
 def update_username():
 
     signed_in = current_user.is_authenticated
 
     if not signed_in:
-        return redirect(url_for("need_to_be_logged_in"))
+        return redirect(url_for("main.need_to_be_logged_in"))
 
     new_name = request.get_json().get("username", "").strip()
 
@@ -824,33 +833,37 @@ def update_username():
     return jsonify(success=True)
 
 
-@app.route("/upload_avatar", methods=["POST"])
+@main.route("/upload_avatar", methods=["POST"])
 @login_required
 def upload_avatar():
 
     signed_in = current_user.is_authenticated
 
     if not signed_in:
-        return redirect(url_for("need_to_be_logged_in"))
+        return redirect(url_for("main.need_to_be_logged_in"))
 
     image_data = request.get_json().get("image")
 
     if not image_data:
         return jsonify(success=False, message="No image provided.")
 
+    approx_bytes = len(image_data) * 0.75
+    if approx_bytes > 150 * 1024:
+        return jsonify(success=False, message="Image too large. Please upload under 100KB.")
+
     current_user.profile_picture = image_data
     db.session.commit()
     return jsonify(success=True)
 
 
-@app.route("/update_password", methods=["POST"])
+@main.route("/update_password", methods=["POST"])
 @login_required
 def update_password():
 
     signed_in = current_user.is_authenticated
 
     if not signed_in:
-        return redirect(url_for("need_to_be_logged_in"))
+        return redirect(url_for("main.need_to_be_logged_in"))
 
         
     data   = request.get_json()
@@ -868,7 +881,7 @@ def update_password():
     return jsonify(success=True)
 
 
-@app.route('/view_recipe/<recipe_num>')
+@main.route('/view_recipe/<recipe_num>')
 def view_recipe(recipe_num):
 
     signed_in = current_user.is_authenticated
@@ -949,7 +962,7 @@ def view_recipe(recipe_num):
 
 
 
-@app.route("/outer_profile/<author_id>")
+@main.route("/outer_profile/<author_id>")
 def outer_profile(author_id):
 
     signed_in = current_user.is_authenticated
@@ -983,6 +996,6 @@ def outer_profile(author_id):
     return render_template("outerProfilePage.html", authorUsername=author_username, authorRecipes=their_recipes_list[::-1], authorProfilePic=author.profile_picture)
 
 
-@app.route("/need_to_be_logged_in")
+@main.route("/need_to_be_logged_in")
 def need_to_be_logged_in():
     return render_template("needLogin.html")
