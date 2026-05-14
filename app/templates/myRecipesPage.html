@@ -12,7 +12,7 @@
 {% block content %}
 <h1>Hello, {{ username }}, these are your recipes:</h1>
 <br>
-<a href="/create_recipe/0"><button type="button" class="btn btn-add">Create a New Recipe</button></a>
+<a href="{{ url_for('create_recipe', recipe_num=0) }}"><button type="button" class="btn btn-add">Create a New Recipe</button></a>
 <br>
 <br>
 <div id="recipe_banner_div" user_id="{{ current_user.id }}"></div>
