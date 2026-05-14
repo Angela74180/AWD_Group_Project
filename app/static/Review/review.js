@@ -169,9 +169,11 @@ function makeReviewCard(review) {
 
 
 function likeReview(reviewId, btn) {
+    let csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+
     fetch("/like_review", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", "X-CSRFToken": csrfToken },
         body: JSON.stringify({ review_id: reviewId })
     })
     .then(res => res.json())
@@ -248,9 +250,11 @@ function submitReview() {
     if (!recipeId) { alert("Missing recipe ID"); return; }
     if (!taste && !accuracy && !timing && !body) { alert("Please fill in at least one field."); return; }
 
+    let csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+
     fetch("/submit_review", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", "X-CSRFToken": csrfToken },
         body: JSON.stringify({ recipe_id: recipeId, taste, accuracy, timing, body })
     })
     .then(res => res.json())

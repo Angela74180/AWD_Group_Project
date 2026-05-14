@@ -16,10 +16,13 @@ function makeBookmark(bookmark_on) {
 function addBookmark(bookmark) {
     let recipe_id = bookmark.target.parentElement.getAttribute("recipe_id");
 
+    let csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+
     fetch("/updateBookmark", {
         method: "POST",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrfToken
         },
         body: JSON.stringify({ recipe_id: recipe_id, bookmark_status: "on"})
     })
@@ -43,10 +46,13 @@ function removeBookmark(bookmark) {
 
     let recipe_id = bookmark.target.parentElement.getAttribute("recipe_id");
 
+    let csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+
     fetch("/updateBookmark", {
         method: "POST",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrfToken
         },
         body: JSON.stringify({ recipe_id: recipe_id, bookmark_status: "off"})
     })
