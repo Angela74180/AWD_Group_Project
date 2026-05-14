@@ -90,7 +90,7 @@ def shopping_list():
     signed_in = current_user.is_authenticated
 
     if not signed_in:
-        return redirect(url_for("need_to_be_logged_in"))
+        return redirect(url_for("main.need_to_be_logged_in"))
     
     userId = current_user.id
     user = User.query.filter_by(id=userId).first()
@@ -159,7 +159,7 @@ def saved():
     signed_in = current_user.is_authenticated
 
     if not signed_in:
-        return redirect(url_for("need_to_be_logged_in"))
+        return redirect(url_for("main.need_to_be_logged_in"))
 
     userId = current_user.id
     user = User.query.filter_by(id=userId).first()
@@ -200,7 +200,7 @@ def myRecipes():
     signed_in = current_user.is_authenticated
 
     if not signed_in:
-        return redirect(url_for("need_to_be_logged_in"))
+        return redirect(url_for("main.need_to_be_logged_in"))
 
     userId = current_user.id
     user = User.query.filter_by(id=userId).first()
@@ -235,7 +235,7 @@ def publish_recipe():
     signed_in = current_user.is_authenticated
 
     if not signed_in:
-        return redirect(url_for("need_to_be_logged_in"))
+        return redirect(url_for("main.need_to_be_logged_in"))
 
 
     if request.method == "POST":
@@ -408,7 +408,7 @@ def create_recipe(recipe_num):
     signed_in = current_user.is_authenticated
 
     if not signed_in:
-        return redirect(url_for("need_to_be_logged_in"))
+        return redirect(url_for("main.need_to_be_logged_in"))
 
     authorId = current_user.id
     author = User.query.filter_by(id=authorId).first().username
@@ -581,7 +581,7 @@ def updateBookmark():
     signed_in = current_user.is_authenticated
 
     if not signed_in:
-        return redirect(url_for("need_to_be_logged_in"))
+        return redirect(url_for("main.need_to_be_logged_in"))
 
     recipe_id       = request.json.get("recipe_id")
     user_id         = current_user.id
@@ -624,7 +624,7 @@ def updateShoppingList():
     signed_in = current_user.is_authenticated
 
     if not signed_in:
-        return redirect(url_for("need_to_be_logged_in"))
+        return redirect(url_for("main.need_to_be_logged_in"))
 
     recipe_id       = request.json.get("recipe_id")
     user_id         = current_user.id
@@ -666,7 +666,7 @@ def profile():
     signed_in = current_user.is_authenticated
 
     if not signed_in:
-        return redirect(url_for("need_to_be_logged_in"))
+        return redirect(url_for("main.need_to_be_logged_in"))
 
     userId = current_user.id
     user = User.query.filter_by(id=userId).first()
@@ -694,7 +694,7 @@ def update_username():
     signed_in = current_user.is_authenticated
 
     if not signed_in:
-        return redirect(url_for("need_to_be_logged_in"))
+        return redirect(url_for("main.need_to_be_logged_in"))
 
     new_name = request.get_json().get("username", "").strip()
 
@@ -713,6 +713,12 @@ def update_username():
 @main.route("/upload_avatar", methods=["POST"])
 @login_required
 def upload_avatar():
+
+    signed_in = current_user.is_authenticated
+
+    if not signed_in:
+        return redirect(url_for("main.need_to_be_logged_in"))
+
     image_data = request.get_json().get("image")
 
     if not image_data:
@@ -734,7 +740,7 @@ def update_password():
     signed_in = current_user.is_authenticated
 
     if not signed_in:
-        return redirect(url_for("need_to_be_logged_in"))
+        return redirect(url_for("main.need_to_be_logged_in"))
 
         
     data   = request.get_json()
