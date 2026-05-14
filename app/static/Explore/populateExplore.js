@@ -7,7 +7,8 @@ document.addEventListener("DOMContentLoaded", function () {
 function populate(recipes_list) {
 
     let container = document.getElementById("recipe_banner_div");
-    container.innerHTML = `No Recipes Meet Your Requirements..`;
+    container.innerHTML = `No Recipes Meet Your Requirements...`;
+    container.innerHTML += `<br><br>Make sure you don't have any unused filters open...`;
     if (recipes_list != ""){
         container.innerHTML = ``;
         for (let recipe_dict of recipes_list){

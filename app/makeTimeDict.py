@@ -12,7 +12,7 @@ def makeTimeDict(timeDict):
         total_mins = prep_mins + cook_mins
         total_hours = prep_hours + cook_hours
 
-
+    print(total_hours, total_mins)
     total_time = total_hours * 60 + total_mins
     total_hours = total_time//60
     total_mins = total_time - (total_hours * 60)

@@ -47,10 +47,10 @@
                 <label>Time</label>
                 <select id = "time" data-filter="time">
                     <option value="All">All</option>
-                    <option value="Under 15 min">Under 15 min</option>
-                    <option value="15-30 min">15-30 min</option>
-                    <option value="30-60 min">30-60 min</option>
-                    <option value="60+">60+</option>
+                    <option value="Under 15 min">Under 15 mins</option>
+                    <option value="Under 30 mins">Under 30 mins</option>
+                    <option value="Under 1 hour">Under 1 hour</option>
+                    <option value="Over 1 hour">Over 1 hour</option>
                 </select>
             </div>
 
@@ -58,19 +58,19 @@
             <div id="filter_tags" class="filter-group">
                 <label>Includes Tags:</label>
                 <br>
-                <button type="button" class="btn btn-tag" onclick="makeFilterTag()">New Tag</button>
+                <button type="button" class="btn btn-tag" onclick="makeFilterTag()">Filter Tag</button>
             </div>
 
             <div id="filter_ingredients" class="filter-group">
                 <label>Includes Ingredients:</label>
                 <br>
-                <button type="button" class="btn btn-tag" onclick="makeFilterIngredient()">New Ingredient</button>
+                <button type="button" class="btn btn-tag" onclick="makeFilterIngredient()">Filter Ingredient</button>
             </div>
 
             <div id="filter_appliances" class="filter-group">
                 <label>Exclude Appliances:</label>
                 <br>
-                <button type="button" class="btn btn-tag" onclick="makeFilterAppliance()">New Appliance</button>
+                <button type="button" class="btn btn-tag" onclick="makeFilterAppliance()">Filter Appliance</button>
             </div>
          </div>
      </div>
