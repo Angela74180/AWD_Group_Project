@@ -384,7 +384,7 @@ def publish_recipe():
         try:
             db.session.add(recipe)
             db.session.commit()
-            return redirect(url_for("profile"))
+            return redirect("/my-recipes")
         
         except Exception as e:
             app.logger.error(e)
