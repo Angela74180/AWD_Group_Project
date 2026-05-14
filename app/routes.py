@@ -856,8 +856,6 @@ def outer_profile(author_id):
 
         their_recipes_list.append(make_recipe_banner_dict(recipe, author_username, tag_list, bookmark_on, cart_on, signed_in=signed_in))
 
-        print(author.profile_picture)
-
     return render_template("outerProfilePage.html", authorUsername=author_username, authorRecipes=their_recipes_list[::-1], authorProfilePic=author.profile_picture)
 
 
