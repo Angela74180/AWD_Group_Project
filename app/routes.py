@@ -724,6 +724,10 @@ def upload_avatar():
     if not image_data:
         return jsonify(success=False, message="No image provided.")
 
+    approx_bytes = len(image_data) * 0.75
+    if approx_bytes > 150 * 1024:
+        return jsonify(success=False, message="Image too large. Please upload under 100KB.")
+
     current_user.profile_picture = image_data
     db.session.commit()
     return jsonify(success=True)
