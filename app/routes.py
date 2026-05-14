@@ -71,55 +71,6 @@ def explore():
     return render_template("explore.html", foundRecipes=recipes_list[::-1])
 
 
-@main.route("/api/recipes")
-def api_recipes():
-
-    db_recipes = Recipe.query.all()
-
-    data = []
-
-    for recipe in db_recipes:
-        data.append({
-            "title": recipe.name,
-            "difficulty": recipe.difficulty,
-            "time": recipe.total_minutes,
-            "cuisine": recipe.recipe_type,
-            "tags": [t.tag.name for t in recipe.tags]
-        })
-
-    return jsonify(data)
-
-@main.route("/api/tags")
-def api_tags():
-    tags = Tag.query.all()
-    return jsonify([t.name for t in tags])
-
-@main.route("/api/filters")
-def api_filters():
-
-    cuisines = sorted({r.recipe_type for r in Recipe.query.all()})
-    difficulties = sorted({r.difficulty for r in Recipe.query.all()})
-    
-    DIET_TAGS = {
-        "Vegan",
-        "Vegetarian",
-        "Gluten-free",
-        "Dairy-free"
-    }
-
-    all_tags = [t.name for t in Tag.query.all()]
-
-    diet_tags = sorted([
-        tag for tag in all_tags
-        if tag in DIET_TAGS
-    ])
-
-    return jsonify({
-        "cuisines": cuisines,
-        "difficulties": difficulties,
-        "tags": diet_tags
-    })
-
 @main.route("/shopping_list")
 def shopping_list():
 
