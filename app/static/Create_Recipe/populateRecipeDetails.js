@@ -23,10 +23,12 @@ function populate(recipe_details_dict) {
     
     let coverPhoto = document.getElementById("coverPhoto");
     let photo_div = coverPhoto.nextElementSibling;
-    let image = document.createElement("img");
-    image.setAttribute("src", recipe_details_dict["recipeCoverImage"]);
-    image.setAttribute("class", "preview_image");
-    photo_div.appendChild(image);
+    if (recipe_details_dict["recipeCoverImage"]){
+        let image = document.createElement("img");
+        image.setAttribute("src", recipe_details_dict["recipeCoverImage"]);
+        image.setAttribute("class", "preview_image");
+        photo_div.appendChild(image);
+    }
     photo_div.nextElementSibling.value = recipe_details_dict["recipeCoverImage"];
 
     document.getElementById("Description").value = recipe_details_dict["recipeDescription"];

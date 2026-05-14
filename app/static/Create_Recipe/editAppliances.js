@@ -67,7 +67,7 @@ function addAppliance(applianceDict) {
             <option value = "Thermometers"></option>
             <option value = "Digital Scales"></option>
         </datalist>
-        <div id="applianceDetails"><input name="extraData" type = "hidden" value = ""></input></div>
+        <div id="applianceDetails"><input name="extraData" maxlength="50" type = "hidden" value = ""></input></div>
         <textarea name="applianceDescription"placeholder="(Optional) Notes: 500 Character Limit" rows = "2" maxlength="500">${handleQuotes(applianceDict["desc"])}</textarea>
     `;
     container.appendChild(newAppliance);
