@@ -9,14 +9,18 @@ function handleQuotes(str) {
 function view_recipe(recipe_details_dict) {
     let div_main = document.getElementsByClassName("div_main")[0]
 
-    document.getElementById("recipe_banner_div").appendChild(makeBookmark(recipe_details_dict["bookmark_on"]));
-    document.getElementById("recipe_banner_div").innerHTML += `&nbsp;&nbsp;`
-    document.getElementById("recipe_banner_div").appendChild(makeCart(recipe_details_dict["cart_on"]));
+    if (recipe_details_dict["signed_in"]){
+        document.getElementById("recipe_banner_div").appendChild(makeBookmark(recipe_details_dict["bookmark_on"]));
+        document.getElementById("recipe_banner_div").innerHTML += `&nbsp;&nbsp;`
+        document.getElementById("recipe_banner_div").appendChild(makeCart(recipe_details_dict["cart_on"]));
+    }
 
-    div_main.innerHTML += `<img src=${recipe_details_dict["recipeCoverImage"]} class = "recipeImage recipeBannerImage">`;
+    if (recipe_details_dict["recipeCoverImage"] != ""){
+        div_main.innerHTML += `<img src=${recipe_details_dict["recipeCoverImage"]} class = "recipeImage recipeBannerImage">`;
+    }
     div_main.innerHTML += `<br><h1>~ ${recipe_details_dict["recipeName"]} ~</h1>`;
 
-    div_main.innerHTML += `<p>- ${recipe_details_dict["author"]}</p>`;
+    div_main.innerHTML += `<p>- <a href="/outer_profile/${recipe_details_dict["authorId"]}">${recipe_details_dict["author"]}<a></p>`;
 
     //Tags
     if (recipe_details_dict["tagList"].length > 0) {
@@ -137,7 +141,7 @@ function view_recipe(recipe_details_dict) {
         }
         newStep += "</h5></legend>";
 
-        if (step["photo"] !== ""){
+        if (step["photo"]){
             newStep += `<img src=${step["photo"]} class = "recipeImage recipeStepImage"></img>`;
         }
 

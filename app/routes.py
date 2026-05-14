@@ -7,6 +7,7 @@ from app.makeRecipeBannerDict import make_recipe_banner_dict
 from app.makeRecipeDict import make_recipe_dict
 from sqlalchemy.exc import IntegrityError
 
+
 @app.route('/')
 @app.route('/index')
 def index():
@@ -16,15 +17,8 @@ def index():
 def explore():
     recipes_list = []
 
-    ############### You will nedd to actually check for a User
-    signed_in = True
+    signed_in = current_user.is_authenticated
 
-    userId = session.get('authorId')
-    user = User.query.filter_by(id=userId).first()
-
-
-    ############################### CHOSEN RECIPES IS WHERE YOU STORE THE RECIPE OBJECTS THAT YOU WANT TO DISPLAY BASED ON YOUR QUERIES 
-    ########## IT NEEDS TO BE A LIST 
     chosen_recipes = Recipe.query.filter_by(visibility="Public").all()
     
     
@@ -33,14 +27,14 @@ def explore():
 
         bookmark_on = True
         cart_on = True
-
         if signed_in:
+            userId = current_user.id
+            user = User.query.filter_by(id=userId).first()
+
             bookmark = Bookmark.query.filter_by(user_id=userId, recipe_id=recipe.id).first()
             cart = ShoppingList.query.filter_by(user_id=userId, recipe_id=recipe.id).first()
-
             if not bookmark:
                 bookmark_on = False
-
             if not cart:
                 cart_on = False
 
@@ -83,10 +77,12 @@ def explore():
 @app.route("/shopping_list")
 def shopping_list():
 
-    ############### You will nedd to actually check for a User
-    signed_in = True
+    signed_in = current_user.is_authenticated
+
+    if not signed_in:
+        return redirect(url_for("need_to_be_logged_in"))
     
-    userId = session.get('authorId')
+    userId = current_user.id
     user = User.query.filter_by(id=userId).first()
 
     shopping_lists = user.shopping_lists
@@ -98,7 +94,6 @@ def shopping_list():
         recipe_id = shopping_list.recipe_id
         recipe = Recipe.query.filter_by(id=recipe_id).first()
 
-        # print(recipe.author_id)
         author = User.query.filter_by(id=recipe.author_id).first().username
         bookmark = Bookmark.query.filter_by(user_id=userId, recipe_id=recipe.id).first()
         cart = ShoppingList.query.filter_by(user_id=userId, recipe_id=recipe.id).first()
@@ -118,7 +113,6 @@ def shopping_list():
 
         recipes_list.append(make_recipe_banner_dict(recipe, author, tag_list, bookmark_on, cart_on, signed_in=signed_in))
 
-        print(recipe_id)
 
         recipe = Recipe.query.filter_by(id=recipe_id).first()
 
@@ -152,10 +146,12 @@ def shopping_list():
 @app.route("/saved")
 def saved():
 
-    ############### You will nedd to actually check for a User
-    signed_in = True
+    signed_in = current_user.is_authenticated
 
-    userId = session.get('authorId')
+    if not signed_in:
+        return redirect(url_for("need_to_be_logged_in"))
+
+    userId = current_user.id
     user = User.query.filter_by(id=userId).first()
 
     bookmarks = user.bookmarks
@@ -190,10 +186,13 @@ def saved():
 
 @app.route("/my-recipes")
 def myRecipes():
-    ############### You will nedd to actually check for a User
-    signed_in = True
 
-    userId = session.get('authorId')
+    signed_in = current_user.is_authenticated
+
+    if not signed_in:
+        return redirect(url_for("need_to_be_logged_in"))
+
+    userId = current_user.id
     user = User.query.filter_by(id=userId).first()
 
     my_recipes_list = []
@@ -222,6 +221,13 @@ def myRecipes():
 
 @app.route('/publish_recipe', methods=["POST"])
 def publish_recipe():
+
+    signed_in = current_user.is_authenticated
+
+    if not signed_in:
+        return redirect(url_for("need_to_be_logged_in"))
+
+
     if request.method == "POST":
 
         ingredient_names        = request.form.getlist("ingredientName")
@@ -331,6 +337,9 @@ def publish_recipe():
             step_description = step_descriptions[i]
             step_photo = step_photos[i]
 
+            if not step_photo:
+                step_photo = ""
+
             step = Step(
                 name        = step_name,
                 desc        = step_description,
@@ -347,7 +356,7 @@ def publish_recipe():
             status = "Draft"
 
         recipe = Recipe(
-            author_id     = session.get('authorId'),
+            author_id     = current_user.id,
             # prev_version_id = db.Column(db.Integer, db.ForeignKey("recipe.id")) ####this column needs to be nullable ######
             name          = request.form["recipe_name"],
             recipe_type   = request.form["recipeType"],
@@ -386,11 +395,12 @@ def publish_recipe():
 
 @app.route('/create_recipe/<recipe_num>')
 def create_recipe(recipe_num):
-    ############### You will nedd to actually check for a User
-    signed_in = True
+    signed_in = current_user.is_authenticated
 
+    if not signed_in:
+        return redirect(url_for("need_to_be_logged_in"))
 
-    authorId = session.get('authorId')
+    authorId = current_user.id
     author = User.query.filter_by(id=authorId).first().username
 
     empty_dict = {
@@ -426,7 +436,7 @@ def create_recipe(recipe_num):
         
     allowed_to_view=True
 
-    userId = session.get('authorId')
+    userId = current_user.id
     user = User.query.filter_by(id=userId).first()
 
     recipe = Recipe.query.filter_by(id=recipe_num).first()
@@ -509,7 +519,7 @@ def login():
 
         if user and user.check_password(password):
             login_user(user)
-            session['authorId'] = user.id
+            # session['authorId'] = user.id ###################################################################################################
             return redirect(url_for('index'))
 
         return render_template('loginPage.html', error="Invalid credentials")
@@ -557,9 +567,16 @@ def logout():
 
 @app.route("/updateBookmark", methods=["POST"])
 def updateBookmark():
+
+    signed_in = current_user.is_authenticated
+
+    if not signed_in:
+        return redirect(url_for("need_to_be_logged_in"))
+
     recipe_id       = request.json.get("recipe_id")
-    user_id         = request.json.get("user_id")
+    user_id         = current_user.id
     bookmark_status = request.json.get("bookmark_status")
+
 
     bookmark = Bookmark.query.filter_by(user_id=user_id, recipe_id=recipe_id).first()
 
@@ -593,8 +610,14 @@ def updateBookmark():
 
 @app.route("/updateShoppingList", methods=["POST"])
 def updateShoppingList():
+
+    signed_in = current_user.is_authenticated
+
+    if not signed_in:
+        return redirect(url_for("need_to_be_logged_in"))
+
     recipe_id       = request.json.get("recipe_id")
-    user_id         = request.json.get("user_id")
+    user_id         = current_user.id
     cart_status = request.json.get("cart_status")
 
     cart = ShoppingList.query.filter_by(user_id=user_id, recipe_id=recipe_id).first()
@@ -629,8 +652,13 @@ def updateShoppingList():
 
 @app.route("/profile")
 def profile():
-    signed_in = True
-    userId = session.get('authorId')
+
+    signed_in = current_user.is_authenticated
+
+    if not signed_in:
+        return redirect(url_for("need_to_be_logged_in"))
+
+    userId = current_user.id
     user = User.query.filter_by(id=userId).first()
 
     my_recipes_list = []
@@ -652,6 +680,12 @@ def profile():
 @app.route("/update_username", methods=["POST"])
 @login_required
 def update_username():
+
+    signed_in = current_user.is_authenticated
+
+    if not signed_in:
+        return redirect(url_for("need_to_be_logged_in"))
+
     new_name = request.get_json().get("username", "").strip()
 
     if not new_name:
@@ -669,6 +703,12 @@ def update_username():
 @app.route("/upload_avatar", methods=["POST"])
 @login_required
 def upload_avatar():
+
+    signed_in = current_user.is_authenticated
+
+    if not signed_in:
+        return redirect(url_for("need_to_be_logged_in"))
+
     image_data = request.get_json().get("image")
 
     if not image_data:
@@ -682,6 +722,13 @@ def upload_avatar():
 @app.route("/update_password", methods=["POST"])
 @login_required
 def update_password():
+
+    signed_in = current_user.is_authenticated
+
+    if not signed_in:
+        return redirect(url_for("need_to_be_logged_in"))
+
+        
     data   = request.get_json()
     current = data.get("current")
     new_pw  = data.get("new")
@@ -700,28 +747,26 @@ def update_password():
 @app.route('/view_recipe/<recipe_num>')
 def view_recipe(recipe_num):
 
-    ############### You will nedd to actually check for a User
-    signed_in = True
+    signed_in = current_user.is_authenticated
 
-    userId = session.get('authorId')
-    user = User.query.filter_by(id=userId).first()
-
-
-    #########################Currently hardcoded so that anyone can view anything
     allowed_to_view=True
 
     recipe = Recipe.query.filter_by(id=recipe_num).first()
 
     author = User.query.filter_by(id=recipe.author_id).first().username
 
-    bookmark = Bookmark.query.filter_by(user_id=userId, recipe_id=recipe.id).first()
-    cart = ShoppingList.query.filter_by(user_id=userId, recipe_id=recipe.id).first()
     bookmark_on = True
-    if not bookmark:
-        bookmark_on = False
     cart_on = True
-    if not cart:
-        cart_on = False
+    if signed_in:
+        userId = current_user.id
+        user = User.query.filter_by(id=userId).first()
+
+        bookmark = Bookmark.query.filter_by(user_id=userId, recipe_id=recipe.id).first()
+        cart = ShoppingList.query.filter_by(user_id=userId, recipe_id=recipe.id).first()
+        if not bookmark:
+            bookmark_on = False
+        if not cart:
+            cart_on = False
     
 
     tag_list = []
@@ -782,27 +827,27 @@ def view_recipe(recipe_num):
 
 @app.route("/outer_profile/<author_id>")
 def outer_profile(author_id):
-    ############### You will nedd to actually check for a User
-    signed_in = True
 
-    current_user_id = session.get('authorId')
-    current_user = User.query.filter_by(id=current_user_id).first()
+    signed_in = current_user.is_authenticated
 
     author = User.query.filter_by(id=author_id).first()
 
     their_recipes_list = []
     for recipe in author.recipes:
-        author_username = User.query.filter_by(id=recipe.author_id).first().username
-        bookmark = Bookmark.query.filter_by(user_id=current_user_id, recipe_id=recipe.id).first()
-        cart = ShoppingList.query.filter_by(user_id=current_user_id, recipe_id=recipe.id).first()
+        author_username = author.username
 
         bookmark_on = True
-        if not bookmark:
-            bookmark_on = False
-
         cart_on = True
-        if not cart:
-            cart_on = False
+        if signed_in:
+            userId = current_user.id
+            user = User.query.filter_by(id=userId).first()
+
+            bookmark = Bookmark.query.filter_by(user_id=userId, recipe_id=recipe.id).first()
+            cart = ShoppingList.query.filter_by(user_id=userId, recipe_id=recipe.id).first()
+            if not bookmark:
+                bookmark_on = False
+            if not cart:
+                cart_on = False
 
         tag_list = []
         
@@ -811,6 +856,9 @@ def outer_profile(author_id):
 
         their_recipes_list.append(make_recipe_banner_dict(recipe, author_username, tag_list, bookmark_on, cart_on, signed_in=signed_in))
 
-        print(author.profile_picture)
-
     return render_template("outerProfilePage.html", authorUsername=author_username, authorRecipes=their_recipes_list[::-1], authorProfilePic=author.profile_picture)
+
+
+@app.route("/need_to_be_logged_in")
+def need_to_be_logged_in():
+    return render_template("needLogin.html")

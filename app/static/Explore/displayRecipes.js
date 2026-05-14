@@ -31,18 +31,16 @@ function filterRecipes() {
         const matchesTime =
             searchReqs.time === "All" ||
 
-            (searchReqs.time === "Under 15 min" &&
+            (searchReqs.time === "Under 15 mins" &&
                 recipeMinutes < 15) ||
 
-            (searchReqs.time === "15-30 min" &&
-                recipeMinutes >= 15 &&
+            (searchReqs.time === "Under 30 mins" &&
                 recipeMinutes <= 30) ||
 
-            (searchReqs.time === "30-60 min" &&
-                recipeMinutes > 30 &&
+            (searchReqs.time === "Under 1 hour" &&
                 recipeMinutes <= 60) ||
 
-            (searchReqs.time === "60+" &&
+            (searchReqs.time === "Over 1 hour" &&
                 recipeMinutes > 60);
 
         const matchesDifficulty =
