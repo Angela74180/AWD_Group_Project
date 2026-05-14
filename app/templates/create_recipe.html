@@ -9,7 +9,6 @@
 <script src="{{ url_for('static', filename='Create_Recipe/editSteps.js') }}"></script>
 <script src="{{ url_for('static', filename='Create_Recipe/editTime.js') }}"></script>
 <script src="{{ url_for('static', filename='Create_Recipe/editPhotos.js') }}"></script>
-<script src="{{ url_for('static', filename='Create_Recipe/getRecipeInfo.js') }}"></script>
 <script src="{{ url_for('static', filename='Create_Recipe/previewRecipe.js') }}"></script>
 <script src="{{ url_for('static', filename='Create_Recipe/submitRecipeForm.js') }}"></script>
 <script src="{{ url_for('static', filename='Create_Recipe/populateRecipeDetails.js') }}"></script>
@@ -25,7 +24,7 @@
 <h1>Create a Recipe</h1>
 <br>
 <div>{{ error }}</div>
-    <form name = "Create Recipe" action="/publish_recipe" method="POST" ZZZonsubmit="return handleRecipeForm()">
+    <form name = "Create Recipe" action="/publish_recipe" method="POST" onsubmit="return handleRecipeForm()">
         <input id = "recipeName" name="recipe_name" type = "text" style="width: 100%" maxlength="100" placeholder="Recipe Name (100 character Limit)"required>
         <br>
         <br>
@@ -56,7 +55,7 @@
         <br>
 
         Serves:
-        <input id="serves" name="serves" type = "number" min = "0" style="width: 60px;" required>
+        <input id="serves" name="serves" maxlength="50" type = "number" min = "0" style="width: 60px;" required>
         <br>
         <br>
         
@@ -71,7 +70,7 @@
             <legend>Time</legend>
             <b>Split Time into Prep and Cooking: </b><input name="timeSplit" id = "timeCheckbox" type = "checkbox" onchange='splitTime({"totalTime": ["", ""], "prepTime": ["", ""], "cookingTime": ["", ""]})'>
             <div id="Time">
-                <span style="display: inline-block; width: 90px; margin-top: 2%">Total Time: </span><input name="totalHours" type = "number" min = "0" style="width: 60px; height: 25px;" required> hour/s <input name="totalMins" type = "number" min = "0" style="width: 60px; height: 25px;" required> min/s
+                <span style="display: inline-block; width: 90px; margin-top: 2%">Total Time: </span><input name="totalHours" type = "number" min = "0" style="width: 60px; height: 25px;"> hour/s <input name="totalMins" type = "number" min = "0" style="width: 60px; height: 25px;"> min/s
             </div>
         </fieldset>
         <br>
@@ -116,7 +115,6 @@
         Visibility: 
         <select name="visibility" id="visibility">
             <option value = Private>Private</option>
-            <option value = Friends_Only>Friends Only</option>
             <option value = Public>Public</option>
         </select>
         <br>
@@ -127,12 +125,6 @@
         <br>
         <br>
         <br>
-        <!-- <button type="button" class="btn btn-primary" onclick="previewRecipe(getRecipeInfo())">Preview Recipe</button>
-        <br>
-        <br> -->
-        <!-- <button name="saveDraftButton" type="button" class="btn btn-primary" onclick="getRecipeInfo()">Save as Draft</button>
-        <br>
-        <br> -->
         <button name="publishButton" type="submit" id="publishRecipe" class="btn btn-primary">Publish Recipe</button>
     </form>
 {% endblock %}
