@@ -345,7 +345,8 @@ def submit_review():
     data = request.get_json()
 
     recipe_id = data.get("recipe_id")
-    if not recipe_id:
+    if not recipe_id or not Recipe.query.get(recipe_id):
+        current_app.logger.error("Submit Review Missing Recipe Id")
         return jsonify({"success": False, "message": "Missing recipe_id"}), 400
 
     review = Review(
@@ -772,8 +773,16 @@ def login():
 
     if request.method == 'POST':
 
-        username = request.form['username']
+        username = request.form['username'].strip()
         password = request.form['password']
+
+        if username == "" or len(username) >= 50:
+            current_app.logger.error("Login Username Incorrect")
+            return render_template('loginPage.html', error="Invalid username or password.")
+
+        if password == "" or len(password) >= 128:
+            current_app.logger.error("Login Password Incorrect")
+            return render_template('loginPage.html', error="Invalid username or password.")
 
         user = User.query.filter_by(username=username).first()
 
@@ -792,8 +801,8 @@ def signup():
 
     if request.method == 'POST':
 
-        username = request.form['username']
-        email = request.form['email']
+        username = request.form['username'].strip()
+        email = request.form['email'].strip()
         password = request.form['password']
         confirm_password = request.form['confirm_password']
 
@@ -803,6 +812,16 @@ def signup():
                 error="Password and Confirm Password must be the same"
             )
 
+        if username == "" or len(username) >= 50:
+            current_app.logger.error("Signup Username Incorrect")
+            return render_template('signupPage.html', error="Username must be 1-49 characters.")
+        if email == "" or len(email) >= 120 or "@" not in email:
+            current_app.logger.error("Signup Email Incorrect")
+            return render_template('signupPage.html', error="Please enter a valid email address.")
+        if password == "" or len(password) >= 128:
+            current_app.logger.error("Signup Password Incorrect")
+            return render_template('signupPage.html', error="Password must be 1-127 characters.")
+        
         user = User(username=username, email=email)
         user.set_password(password)
 
@@ -956,6 +975,11 @@ def update_username():
     if not new_name:
         return jsonify(success=False, message="Name cannot be empty.")
 
+    if len(new_name) >= 50:
+        current_app.logger.error("Update Username Too Long")
+        return jsonify(success=False, message="Username must be under 50 characters.")
+
+
     existing = User.query.filter_by(username=new_name).first()
     if existing and existing.id != current_user.id:
         return jsonify(success=False, message="Username already taken.")
@@ -1002,11 +1026,22 @@ def update_password():
     current = data.get("current")
     new_pw  = data.get("new")
 
-    if not current_user.check_password(current):
-        return jsonify(success=False, message="Current password is incorrect.")
+
+
 
     if not new_pw or len(new_pw) < 3:
         return jsonify(success=False, message="New password must be at least 3 characters.")
+        
+    if current == "":
+        current_app.logger.error("Update Password Empty Field")
+        return jsonify(success=False, message="Please fill in both fields.")
+
+    if len(new_pw) >= 128:
+        current_app.logger.error("Update Password Too Long")
+        return jsonify(success=False, message="Password must be under 128 characters.")
+
+    if not current_user.check_password(current):
+        return jsonify(success=False, message="Current password is incorrect.")
 
     current_user.set_password(new_pw)
     db.session.commit()
