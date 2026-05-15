@@ -58,18 +58,6 @@ function filterRecipes() {
 
         const matchesIngredients =
             searchReqs.ingredients_list.length === 0 ||
-<<<<<<< HEAD
-            searchReqs.ingredients_list.every(ing =>
-                recipe.ingredients
-                    .map(i => i.toLowerCase())
-                    .includes(ing.toLowerCase())
-            );
-        
-        const matchesAppliances =
-            searchReqs.appliances_list.length === 0 ||
-            !searchReqs.appliances_list.some(app =>
-                recipe.appliances
-=======
 
             searchReqs.ingredients_list.every(ing =>
                 (recipe.ingredients || [])
@@ -82,7 +70,6 @@ function filterRecipes() {
 
             !searchReqs.exclude_appliance_list.some(app =>
                 (recipe.appliances || [])
->>>>>>> 6f3c2ec72f56ec8435d5cc78db21c8456faa9675
                     .map(a => a.toLowerCase())
                     .includes(app.toLowerCase())
             );
@@ -90,10 +77,7 @@ function filterRecipes() {
         return matchesSearch &&
             matchesTime &&
             matchesDifficulty &&
-<<<<<<< HEAD
-=======
             matchesType &&
->>>>>>> 6f3c2ec72f56ec8435d5cc78db21c8456faa9675
             matchesTags &&
             matchesIngredients &&
             matchesAppliances;

@@ -48,9 +48,6 @@ def create_app(config_class=Config):
 
     return app
 
-app = create_app()
-
-
 ##################################################################
 # import os
 # from dotenv import load_dotenv, set_key
