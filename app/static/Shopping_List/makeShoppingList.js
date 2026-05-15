@@ -1,3 +1,4 @@
+// This function creates a shopping list of all the ingredients in the selected recipes
 function makeShoppingList(){
     ingredient_dict = {}
 
