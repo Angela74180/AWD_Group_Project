@@ -782,7 +782,7 @@ def login():
             session['authorId'] = user.id
             return redirect(url_for('main.index'))
 
-        return render_template('loginPage.html', error="Invalid credentials")
+        return render_template('loginPage.html', error="Incorrect Username or Password")
 
     return render_template('loginPage.html')
 
@@ -820,8 +820,6 @@ def signup():
             )
 
     return render_template('signupPage.html', error="")
-
-
 
 @main.route("/logout")
 def logout():

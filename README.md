@@ -71,6 +71,12 @@ This will open the application on a local host. Navigate to the url it provides 
 (Should look something like: http://127.0.0.1:5000) 
 
 
+Running the test files:
+ensure Selenium is installed: pip install selenium 
+
+Unittest file (test_data.py): python -m unittest app.test.test_data
+Selenium file: python -m unittest app.test.test_selenium
+
 
 
 
