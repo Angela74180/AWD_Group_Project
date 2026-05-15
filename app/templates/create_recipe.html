@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+<meta name="csrf-token" content="{{ csrf_token() }}">
+
 {% block title %}Create Recipe - CookBook{% endblock %}
 
 {% block scripts %}
@@ -21,6 +23,7 @@
 <br>
 <div>{{ error }}</div>
     <form name = "Create Recipe" action="{{ url_for('main.publish_recipe') }}" method="POST" onsubmit="return handleRecipeForm()">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <input id = "recipeName" name="recipe_name" type = "text" style="width: 100%" maxlength="100" placeholder="Recipe Name (100 character Limit)"required>
         <br>
         <br>
@@ -115,8 +118,8 @@
         </select>
         <br>
         <br>
-        <span style="display: inline-block; width: 100px">Allow Ratings: </span><input name="allowRatings" type = "checkbox" id="allowRatings" checked>
-        <br>
+        <!-- This functionality has been removed -->
+        <!-- <span style="display: inline-block; width: 100px">Allow Ratings: </span><input name="allowRatings" type = "checkbox" id="allowRatings" checked> -->
         <span style="display: inline-block; width: 100px">Allow Reviews: </span><input name="allowReviews" type = "checkbox" id="allowReviews" vertical-align = "middle" checked>
         <br>
         <br>

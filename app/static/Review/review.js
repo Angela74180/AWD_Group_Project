@@ -1,5 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
-    injectModal();
+    console.log(recipe_details_dict["signed_in"])
+    if (recipe_details_dict["signed_in"]){ 
+        injectModal();
+    }
     injectReviewsSection();
     setupStars();
     loadReviews();
@@ -15,7 +18,7 @@ function injectModal() {
     box.className = "review-modal-box";
 
     box.innerHTML = `
-        <button class="review-modal-close" onclick="closeReviewModal()">&times;</button>
+        <!--<button class="review-modal-close" style="float:right" onclick="closeReviewModal()">&times;</button>-->
 
         <h5 id="reviewModalTitle" class="review-modal-title">Leave a Review</h5>
 
@@ -59,13 +62,13 @@ function injectModal() {
         </div>
 
         <div class="review-modal-actions">
-            <button onclick="closeReviewModal()" class="btn btn-secondary btn-sm">Cancel</button>
+            <!--<button onclick="closeReviewModal()" class="btn btn-secondary btn-sm">Cancel</button>-->
             <button onclick="submitReview()" class="btn btn-primary btn-sm">Submit</button>
         </div>
     `;
 
     modal.appendChild(box);
-    document.body.appendChild(modal);
+    document.getElementById("addReviews").appendChild(modal);
 
     modal.addEventListener("click", e => { if (e.target === modal) closeReviewModal(); });
 }
@@ -78,14 +81,14 @@ function injectReviewsSection() {
     let section = document.createElement("div");
     section.id = "reviewsSection";
     section.className = "reviews-section";
-    section.innerHTML = `<h3>Reviews</h3><div id="reviewsList"></div>`;
+    // section.innerHTML = `<h3>Reviews</h3><div id="reviewsList"></div>`;
 
     divMain.appendChild(section);
 }
 
 
 function getRecipeId() {
-    return document.getElementById("recipe_banner_div")?.getAttribute("data-recipe-id");
+    return document.getElementById("recipe_banner_div")?.getAttribute("recipe_id");
 }
 
 
@@ -96,7 +99,7 @@ function loadReviews() {
     fetch(`/get_reviews/${recipeId}`)
         .then(res => res.json())
         .then(data => {
-            let list = document.getElementById("reviewsList");
+            let list = document.getElementById("displayReviews");
             if (!list) return;
 
             list.innerHTML = "";
@@ -105,6 +108,12 @@ function loadReviews() {
                 let tasteStars    = data.avg_taste    ? "★".repeat(Math.round(data.avg_taste))    + "☆".repeat(5 - Math.round(data.avg_taste))    : "N/A";
                 let accuracyStars = data.avg_accuracy ? "★".repeat(Math.round(data.avg_accuracy)) + "☆".repeat(5 - Math.round(data.avg_accuracy)) : "N/A";
                 list.innerHTML += `
+                    <p class="review-avg-rating">
+                        <b>Avg Taste: ${tasteStars} (${data.avg_taste ?? "N/A"} / 5)</b> &nbsp;|&nbsp;
+                        <b>Avg Accuracy: ${accuracyStars} (${data.avg_accuracy ?? "N/A"} / 5)</b>
+                    </p>
+                `;
+                document.getElementById("avgs").innerHTML += `
                     <p class="review-avg-rating">
                         <b>Avg Taste: ${tasteStars} (${data.avg_taste ?? "N/A"} / 5)</b> &nbsp;|&nbsp;
                         <b>Avg Accuracy: ${accuracyStars} (${data.avg_accuracy ?? "N/A"} / 5)</b>
@@ -169,9 +178,11 @@ function makeReviewCard(review) {
 
 
 function likeReview(reviewId, btn) {
+    let csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+
     fetch("/like_review", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", "X-CSRFToken": csrfToken },
         body: JSON.stringify({ review_id: reviewId })
     })
     .then(res => res.json())
@@ -212,30 +223,30 @@ function highlightStarRow(className, val) {
 }
 
 
-function openReviewModal(mode) {
-    let modal = document.getElementById("reviewModal");
-    if (!modal) return;
+// function openReviewModal(mode) {
+//     let modal = document.getElementById("reviewModal");
+//     if (!modal) return;
 
-    let titles = { review: "Leave a Review", rate: "Rate this Recipe", review_rate: "Rate & Review" };
-    document.getElementById("reviewModalTitle").textContent = titles[mode] ?? "Leave a Review";
+//     let titles = { review: "Leave a Review", rate: "Rate this Recipe", review_rate: "Rate & Review" };
+//     document.getElementById("reviewModalTitle").textContent = titles[mode] ?? "Leave a Review";
 
-    document.getElementById("ratingSection").style.display = (mode === "rate" || mode === "review_rate") ? "block" : "none";
-    document.getElementById("reviewSection").style.display = (mode === "review" || mode === "review_rate") ? "block" : "none";
+//     document.getElementById("ratingSection").style.display = (mode === "rate" || mode === "review_rate") ? "block" : "none";
+//     document.getElementById("reviewSection").style.display = (mode === "review" || mode === "review_rate") ? "block" : "none";
 
-    document.getElementById("tasteValue").value    = "0";
-    document.getElementById("accuracyValue").value = "0";
-    document.getElementById("timingValue").value   = "";
-    document.getElementById("reviewText").value    = "";
+//     document.getElementById("tasteValue").value    = "0";
+//     document.getElementById("accuracyValue").value = "0";
+//     document.getElementById("timingValue").value   = "";
+//     document.getElementById("reviewText").value    = "";
 
-    for (let star of document.querySelectorAll(".star")) star.style.color = "#ccc";
+//     for (let star of document.querySelectorAll(".star")) star.style.color = "#ccc";
 
-    modal.style.display = "flex";
-}
+//     modal.style.display = "flex";
+// }
 
-function closeReviewModal() {
-    let modal = document.getElementById("reviewModal");
-    if (modal) modal.style.display = "none";
-}
+// function closeReviewModal() {
+//     let modal = document.getElementById("reviewModal");
+//     if (modal) modal.style.display = "none";
+// }
 
 
 function submitReview() {
@@ -248,9 +259,11 @@ function submitReview() {
     if (!recipeId) { alert("Missing recipe ID"); return; }
     if (!taste && !accuracy && !timing && !body) { alert("Please fill in at least one field."); return; }
 
+    let csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+
     fetch("/submit_review", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", "X-CSRFToken": csrfToken },
         body: JSON.stringify({ recipe_id: recipeId, taste, accuracy, timing, body })
     })
     .then(res => res.json())

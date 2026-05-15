@@ -154,14 +154,23 @@ function view_recipe(recipe_details_dict) {
 
     div_main.innerHTML += `<br><br>`;
 
-    if (recipe_details_dict["allowRatings"] && !recipe_details_dict["allowReviews"]){
-        div_main.innerHTML += `<button type="button" class="btn btn-add" onclick="rate(event)">Leave a Rating</button>`;
+    // if ( recipe_details_dict["allowReviews"] && recipe_details_dict["signed_in"]){
+    //     div_main.innerHTML += `<button type="button" class="btn btn-add" onclick="review(event)">Leave a Review</button>`;
+    // }
+
+    if ( recipe_details_dict["allowReviews"]){
+        div_main.innerHTML += `<br>`;
+        div_main.innerHTML += `<div id="addReviews"></div>`;
+        div_main.innerHTML += `<br>`;
+        div_main.innerHTML += `<br>`;
+        div_main.innerHTML += `<h3>Reviews:</h3>`;
+        div_main.innerHTML += `<br>`;
+        div_main.innerHTML += `<div id="displayReviews"></div>`;
     }
-    else if (!recipe_details_dict["allowRatings"] && recipe_details_dict["allowReviews"]){
-        div_main.innerHTML += `<button type="button" class="btn btn-add" onclick="review(event)">Leave a Review</button>`;
-    }
-    else if (recipe_details_dict["allowRatings"] && recipe_details_dict["allowReviews"]){
-        div_main.innerHTML += `<button type="button" class="btn btn-add" onclick="review_rate(event)">Leave a Review</button>`;
-    }
+    // else{
+    //     div_main.innerHTML += `<div id="addReviews"></div>`;
+
+    //     div_main.innerHTML += `<div id="displayReviews"></div>`;
+    // }
 
 }

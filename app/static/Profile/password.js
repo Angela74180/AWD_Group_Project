@@ -18,9 +18,11 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     document.getElementById("pwSaveBtn").addEventListener("click", () => {
+        let csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+
         fetch("/update_password", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", "X-CSRFToken": csrfToken },
             body: JSON.stringify({
                 current: document.getElementById("pwCurrent").value,
                 new: document.getElementById("pwNext").value

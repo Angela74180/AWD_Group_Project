@@ -21,9 +21,11 @@ document.addEventListener("DOMContentLoaded", function() {
         let val = document.getElementById("nameInput").value.trim();
         if (!val) return;
 
+        let csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+        
         fetch("/update_username", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", "X-CSRFToken": csrfToken },
             body: JSON.stringify({ username: val })
         })
         .then(res => res.json())
