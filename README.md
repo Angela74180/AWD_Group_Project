@@ -38,7 +38,7 @@ Login Page:
 Allows users to login. It takes their username and password and authenticates them.
 
 Sign Up Page:
-Allows new users to create an account. It takes a username, email and password and adds the user to the database.
+Allows new users to create an account. It takes a username, email and password and adds the user to the database, with teh passwords stored a s a salted hash.
 
 
 

@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-    console.log(recipe_details_dict["signed_in"])
     if (recipe_details_dict["signed_in"]){ 
         injectModal();
     }
@@ -49,7 +48,7 @@ function injectModal() {
                 <option value="1">Took Much More Time</option>
                 <option value="2">Took More Time</option>
                 <option value="3">Took a Little More Time</option>
-                <option value="4">Perfect</option>
+                <option value="4">About Right</option>
                 <option value="5">Took a Little Less Time</option>
                 <option value="6">Took Less Time</option>
                 <option value="7">Took Much Less Time</option>
@@ -138,7 +137,7 @@ const TIMING_LABELS = {
     1: "Took Much More Time",
     2: "Took More Time",
     3: "Took a Little More Time",
-    4: "Perfect",
+    4: "About Right",
     5: "Took a Little Less Time",
     6: "Took Less Time",
     7: "Took Much Less Time"
