@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+    console.log(recipe_details_dict["signed_in"])
     if (recipe_details_dict["signed_in"]){ 
         injectModal();
     }
@@ -107,6 +108,12 @@ function loadReviews() {
                 let tasteStars    = data.avg_taste    ? "★".repeat(Math.round(data.avg_taste))    + "☆".repeat(5 - Math.round(data.avg_taste))    : "N/A";
                 let accuracyStars = data.avg_accuracy ? "★".repeat(Math.round(data.avg_accuracy)) + "☆".repeat(5 - Math.round(data.avg_accuracy)) : "N/A";
                 list.innerHTML += `
+                    <p class="review-avg-rating">
+                        <b>Avg Taste: ${tasteStars} (${data.avg_taste ?? "N/A"} / 5)</b> &nbsp;|&nbsp;
+                        <b>Avg Accuracy: ${accuracyStars} (${data.avg_accuracy ?? "N/A"} / 5)</b>
+                    </p>
+                `;
+                document.getElementById("avgs").innerHTML += `
                     <p class="review-avg-rating">
                         <b>Avg Taste: ${tasteStars} (${data.avg_taste ?? "N/A"} / 5)</b> &nbsp;|&nbsp;
                         <b>Avg Accuracy: ${accuracyStars} (${data.avg_accuracy ?? "N/A"} / 5)</b>

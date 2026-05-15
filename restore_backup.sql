@@ -119,8 +119,8 @@ INSERT INTO "step" ("id", "recipe_id", "step_number", "name", "desc", "photo") V
 INSERT INTO "step" ("id", "recipe_id", "step_number", "name", "desc", "photo") VALUES ('17', '5', '1', '2', 'Rub in margarine.', '');
 INSERT INTO "step" ("id", "recipe_id", "step_number", "name", "desc", "photo") VALUES ('18', '5', '2', '3', 'Add cheese and milk and mix to a soft dough.', '');
 INSERT INTO "step" ("id", "recipe_id", "step_number", "name", "desc", "photo") VALUES ('19', '5', '3', '4', 'Place 8 spoonsful on a paper-lined baking tray and shape into rounds.', '');
-INSERT INTO "step" ("id", "recipe_id", "step_number", "name", "desc", "photo") VALUES ('20', '5', '4', '5', 'Bake at 200 celcius for 14 minutes.', '');
-INSERT INTO "step" ("id", "recipe_id", "step_number", "name", "desc", "photo") VALUES ('21', '5', '5', '6', 'Slice in half and butter.', '');
-INSERT INTO "review_like" ("id", "user_id", "review_id", "liked_at") VALUES ('1', '1', '1', '2026-05-15 01:19:40.116320');
-INSERT INTO "review_like" ("id", "user_id", "review_id", "liked_at") VALUES ('2', '3', '1', '2026-05-15 01:20:03.304973');
-INSERT INTO "review" ("id", "author_id", "recipe_id", "title", "body", "taste_rating", "accuracy_rating", "timing_rating", "like_count", "created_at", "updated_at") VALUES ('1', '1', '5', 'Review', 'Really Good. Thanks!', '3', '4', '3', '2', '2026-05-15 01:19:18.187195', '2026-05-15 01:20:03.293977');
+INSERT INTO "review_like" ("id", "user_id", "review_id", "liked_at") VALUES ('1', '2', '2', '2026-05-15 01:30:21.490156');
+INSERT INTO "review_like" ("id", "user_id", "review_id", "liked_at") VALUES ('2', '2', '1', '2026-05-15 01:30:22.352469');
+INSERT INTO "review" ("id", "author_id", "recipe_id", "title", "body", "taste_rating", "accuracy_rating", "timing_rating", "like_count", "created_at", "updated_at") VALUES ('1', '1', '5', 'Review', 'Really Good. Thanks!', '3', '4', '3', '3', '2026-05-15 01:19:18.187195', '2026-05-15 01:30:22.347426');
+INSERT INTO "review" ("id", "author_id", "recipe_id", "title", "body", "taste_rating", "accuracy_rating", "timing_rating", "like_count", "created_at", "updated_at") VALUES ('2', '2', '5', 'Review', 'I struggled to get this recipe done in the time it said.', '4', '4', '2', '1', '2026-05-15 01:29:55.955948', '2026-05-15 01:30:21.482123');
+INSERT INTO "review" ("id", "author_id", "recipe_id", "title", "body", "taste_rating", "accuracy_rating", "timing_rating", "like_count", "created_at", "updated_at") VALUES ('3', '2', '1', 'Review', 'Loved This!', '5', '5', '4', '0', '2026-05-15 01:35:50.627071', '2026-05-15 01:35:50.627074');
