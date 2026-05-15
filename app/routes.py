@@ -782,7 +782,7 @@ def login():
             session['authorId'] = user.id
             return redirect(url_for('main.index'))
 
-        return render_template('loginPage.html', error="Invalid credentials")
+        return render_template('loginPage.html', error="Incorrect Username or Password")
 
     return render_template('loginPage.html')
 
@@ -795,6 +795,13 @@ def signup():
         username = request.form['username']
         email = request.form['email']
         password = request.form['password']
+        confirm_password = request.form['confirm_password']
+
+        if password != confirm_password:
+            return render_template(
+                'signupPage.html',
+                error="Passwords do not match"
+            )
 
         user = User(username=username, email=email)
         user.set_password(password)
@@ -813,8 +820,6 @@ def signup():
             )
 
     return render_template('signupPage.html')
-
-
 
 @main.route("/logout")
 def logout():

@@ -6,8 +6,11 @@
 <h1>Sign up</h1>
 
 {% if error %}
-    <p class="error-message">{{ error }}</p>
+    <p class="error-message" style="color:red; font-weight:bold;">
+        {{ error }}
+    </p>
 {% endif %}
+
 
 <form name="Sign Up" action="{{ url_for('main.signup') }}" method="POST">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">

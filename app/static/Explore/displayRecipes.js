@@ -5,10 +5,6 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("searchBar")
         .addEventListener("input", filterRecipes);
 
-    document.querySelectorAll(".filter-bar select")
-        .forEach(select => {
-            select.addEventListener("change", filterRecipes);
-        });
 });
 
 function filterRecipes() {
