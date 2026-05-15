@@ -1,9 +1,4 @@
-function addRecipeBanner(recipe_details_dict){
-    let newRecipeBanner = document.createElement("fieldset");
-    newRecipeBanner.innerHTML = `<button type="button" class="btn btn-remove" onclick="removeIngredient(event)">- Remove</button>`;
-    document.getElementById("recipes_for_shopping_list").appendChild(newRecipeBanner);
-}
-
+// This function creates and returns an element that acts as a recipe banner
 function makeRecipeBanner(recipe_details_dict, editable){
     let recipe_id = recipe_details_dict["recipeId"];
 
