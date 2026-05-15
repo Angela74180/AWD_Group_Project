@@ -6,6 +6,7 @@ function handleQuotes(str) {
   return str.replace(/&/g, "&amp;").replace(/"/g, "&quot;");
 }
 
+// This function populates the view recipe page with the contents of a recipe
 function view_recipe(recipe_details_dict) {
     let div_main = document.getElementsByClassName("div_main")[0]
 
