@@ -816,10 +816,10 @@ def signup():
             db.session.rollback()
             return render_template(
                 'signupPage.html',
-                error="Username or email already exists"
+                error="Username or email already in use"
             )
 
-    return render_template('signupPage.html')
+    return render_template('signupPage.html', error="")
 
 @main.route("/logout")
 def logout():

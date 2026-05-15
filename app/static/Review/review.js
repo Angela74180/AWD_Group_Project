@@ -223,30 +223,6 @@ function highlightStarRow(className, val) {
 }
 
 
-// function openReviewModal(mode) {
-//     let modal = document.getElementById("reviewModal");
-//     if (!modal) return;
-
-//     let titles = { review: "Leave a Review", rate: "Rate this Recipe", review_rate: "Rate & Review" };
-//     document.getElementById("reviewModalTitle").textContent = titles[mode] ?? "Leave a Review";
-
-//     document.getElementById("ratingSection").style.display = (mode === "rate" || mode === "review_rate") ? "block" : "none";
-//     document.getElementById("reviewSection").style.display = (mode === "review" || mode === "review_rate") ? "block" : "none";
-
-//     document.getElementById("tasteValue").value    = "0";
-//     document.getElementById("accuracyValue").value = "0";
-//     document.getElementById("timingValue").value   = "";
-//     document.getElementById("reviewText").value    = "";
-
-//     for (let star of document.querySelectorAll(".star")) star.style.color = "#ccc";
-
-//     modal.style.display = "flex";
-// }
-
-// function closeReviewModal() {
-//     let modal = document.getElementById("reviewModal");
-//     if (modal) modal.style.display = "none";
-// }
 
 
 function submitReview() {
@@ -266,11 +242,24 @@ function submitReview() {
         headers: { "Content-Type": "application/json", "X-CSRFToken": csrfToken },
         body: JSON.stringify({ recipe_id: recipeId, taste, accuracy, timing, body })
     })
-    .then(res => res.json())
+    .then(res => {
+        if (res.status === 401) {
+            alert("You must be logged in to submit a review.");
+            return null;
+        }
+        return res.json();
+        })
+        
     .then(data => {
+        if (!data) return; 
         if (data.success) {
-            closeReviewModal();
             loadReviews();
+            document.getElementById("tasteValue").value = "0";
+            document.getElementById("accuracyValue").value = "0";
+            document.getElementById("timingValue").value = "";
+            document.getElementById("reviewText").value = "";
+            highlightStarRow("taste-star", 0);
+            highlightStarRow("accuracy-star", 0);
         } else {
             alert(data.message || "Error submitting review");
         }
@@ -278,7 +267,3 @@ function submitReview() {
     .catch(err => { console.error("Fetch error:", err); alert("You must be logged in to submit a review."); });
 }
 
-
-window.review      = () => openReviewModal("review");
-window.rate        = () => openReviewModal("rate");
-window.review_rate = () => openReviewModal("review_rate");

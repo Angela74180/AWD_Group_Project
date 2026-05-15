@@ -4,12 +4,16 @@
 
 {% block content %}
 <h1>Log in</h1>
+<<<<<<< HEAD
 
 {% if error %}
     <p style="color: red; font-weight: bold;">
         {{ error }}
     </p>
 {% endif %}
+=======
+<p class="error-message" id="error">{{ error }}</p>
+>>>>>>> 2080a614984d315eb377e27b632bbd2113203213
 
 <form name="Log In" action="{{ url_for('main.login') }}" method="POST">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
