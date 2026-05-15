@@ -3,28 +3,26 @@
 {% block title %}Home - CookBook{% endblock %}
 
 {% block scripts %}
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=DM+Sans&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+<!-- <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=DM+Sans&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script> -->
 
 <script>
-    let latest_recipes = {{ latest_recipes | tojson }};
+    let chosen_recipes = {{ chosen_recipes | tojson }};
 </script>
 
 <script src="{{ url_for('static', filename='Home/displayLatestRecipes.js') }}"></script>
 {% endblock %}
 
 {% block content %}
-
 <div class="intro">
     <div>
         <h1>Find recipes you'll <em>actually</em> love</h1>
-        <p>Discover dishes tailored to your kitchen, your ingredients, and the appliances you actually own.</p>
-        <button onclick="window.location.href='/create_recipe'">Create a recipe</button>
-        <button onclick="window.location.href='/explore'">Explore recipes</button>
+        <p>Discover dishes tailored to your kitchen, your ingredients, and your needs.</p>
+        <a href="{{ url_for('main.explore') }}"><button>Explore recipes</button></a>
     </div>
 </div>
-
-<h3 class="section-heading">Latest Recipes</h3>
-<div id="latestRecipes"></div>
+<br>
+<h3>Why not check out a random selection of recipes:</h3>
+<div id="recipe_banner_div"></div>
 
 {% endblock %}

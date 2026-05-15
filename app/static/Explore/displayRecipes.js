@@ -5,10 +5,6 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("searchBar")
         .addEventListener("input", filterRecipes);
 
-    document.querySelectorAll(".filter-bar select")
-        .forEach(select => {
-            select.addEventListener("change", filterRecipes);
-        });
 });
 
 function filterRecipes() {
@@ -47,6 +43,10 @@ function filterRecipes() {
             searchReqs.difficulty === "All" ||
             recipe.recipeDifficulty === searchReqs.difficulty;
 
+        const matchesType =
+            searchReqs.type === "All" ||
+            recipe.recipeType === searchReqs.type;
+
         const matchesTags =
             searchReqs.tags_list.length === 0 ||
 
@@ -77,6 +77,7 @@ function filterRecipes() {
         return matchesSearch &&
             matchesTime &&
             matchesDifficulty &&
+            matchesType &&
             matchesTags &&
             matchesIngredients &&
             matchesAppliances;

@@ -3,7 +3,6 @@
 {% block title %}Explore - CookBook{% endblock %}
 
 {% block scripts %}
-<script src="{{ url_for('static', filename='Explore/data.js') }}"></script>
 <script src="{{ url_for('static', filename='Explore/getRandomRecipes.js') }}"></script>
 <script src="{{ url_for('static', filename='Explore/displayRecipes.js') }}"></script>
 <script src="{{ url_for('static', filename='Explore/populateExplore.js') }}"></script>
@@ -21,10 +20,10 @@
      <div class="row">
 
          <div class="col div_main">
-             <h1>Explore Page</h1>
+             <h1>Explore</h1>
             <input type="search" id="searchBar" style = "width: 100%" placeholder="Search recipes...">
             <br><br>
-            <div id="recipe_banner_div" user_id="{{ current_user.id }}"></div>
+            <div id="recipe_banner_div"></div>
          </div>
 
 
@@ -33,6 +32,23 @@
             <br>
             <button type="button" style =" width: 100%;" class="btn btn-primary" onclick="filterRecipes()">Apply Filters</button>
             <br><br>
+            <div class="filter-group">
+                <label>Recipe Type</label>
+                <select id="type" data-filter="type">
+                    <option value="All">All</option>
+                    <option value = Breakfast>Breakfast</option>
+                    <option value = Lunch>Lunch</option>
+                    <option value = Dinner>Dinner</option>
+                    <option value = Dessert>Dessert</option>
+                    <option value = Sweet_treat>Sweet Treat</option>
+                    <option value = Baked_good>Baked Good</option>
+                    <option value = Drink>Drink</option>
+                    <option value = Snack>Snack</option>
+                    <option value = Side>Side</option>
+                    <option value = Other>Other</option>
+                </select>
+            </div>
+
             <div class="filter-group">
                 <label>Difficulty</label>
                 <select id="difficulty" data-filter="difficulty">
@@ -58,19 +74,19 @@
             <div id="filter_tags" class="filter-group">
                 <label>Includes Tags:</label>
                 <br>
-                <button type="button" class="btn btn-tag" onclick="makeFilterTag()">Filter Tag</button>
+                <button type="button" class="btn btn-add" onclick="makeFilterTag()">Filter Tag</button>
             </div>
 
             <div id="filter_ingredients" class="filter-group">
                 <label>Includes Ingredients:</label>
                 <br>
-                <button type="button" class="btn btn-tag" onclick="makeFilterIngredient()">Filter Ingredient</button>
+                <button type="button" class="btn btn-add" onclick="makeFilterIngredient()">Filter Ingredient</button>
             </div>
 
             <div id="filter_appliances" class="filter-group">
                 <label>Exclude Appliances:</label>
                 <br>
-                <button type="button" class="btn btn-tag" onclick="makeFilterAppliance()">Filter Appliance</button>
+                <button type="button" class="btn btn-add" onclick="makeFilterAppliance()">Filter Appliance</button>
             </div>
          </div>
      </div>

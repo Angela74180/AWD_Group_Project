@@ -4,7 +4,11 @@
 
 {% block content %}
 <h1>Log in</h1>
+
+<p class="error-message" id="error">{{ error }}</p>
+
 <form name="Log In" action="{{ url_for('main.login') }}" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
     <br>
 
     <fieldset class="outer_fieldset">

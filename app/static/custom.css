@@ -65,7 +65,7 @@ select {
   padding-right: 10px;
 }
 .btn-add:hover{
-  background-color: rgb(247, 195, 35);
+  background-color: rgb(255, 210, 75);
 }
 
 .btn-tag {
@@ -77,8 +77,8 @@ select {
   margin-right: 5px;
   margin-bottom: 5px;
 }
-.btn-tag:hover{
-  background-color: rgb(247, 195, 35);
+.btn-tag:hover {
+  background-color: rgb(255, 210, 75);
 }
 
 .tag {
@@ -111,7 +111,6 @@ select {
   gap:20px;
   align-items:center;
   margin-bottom:20px;
-  position:relative;
 }
 
 .intro button{
@@ -119,7 +118,7 @@ select {
   margin-right: 10px;
 
   background: white;
-  border: 1px solid #625d5b;
+  border: 1px solid #56534e;
 
   font-family:'DM Sans',sans-serif;
   font-size: 15px;
@@ -129,52 +128,10 @@ select {
 }
 
 .intro button:hover {
-  background: #fff3e0;
+  background: #ececec;
   transform: translateY(-2px);
 }
 
-@media (max-width: 768px) {
-  .intro {
-    flex-direction: column;
-    text-align: center;
-    padding: 30px;
-  }
-
-  .intro h1 {
-    font-size: 2rem;
-  }
-
-  .explore-bar {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 10px;
-  }
-}
-
-.explore-bar {
-  display: flex;
-  align-items: center;
-  gap: 30px;
-
-  background-color: rgb(247, 195, 35);
-  padding: 20px;
-}
-
-.explore-bar h3 {
-  font-family:'Playfair Display';
-  color: white;
-  margin: 0;
-}
-
-.search-bar {
-  flex: 1;
-
-  padding: 10px 14px;
-  border-radius: 8px;
-  border: none;
-
-  font-size: 14px;
-}
 
 .navbar {
   display: flex;
@@ -245,33 +202,6 @@ select {
   object-fit: cover;
 }
 
-
-#spotlight {
-  display: flex;
-  gap: 20px;
-  margin-top: 20px;
-}
-
-.recipe-card {
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  padding: 15px;
-  width: 180px;
-  background-color: #f9f9f9;
-
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  text-align: center;
-}
-
-.recipe-card h3 {
-  margin: 10px 0 5px;
-}
-
-.recipe-card p {
-  color: #666;
-  font-size: 14px;
-}
-
 .outerRecipeBanner {
   border-color: rgba(255, 255, 255, 0);
 }
@@ -315,49 +245,6 @@ select {
   margin-top: 40px;
 }
 
-.latest-recipe-card {
-  display: block;
-  width: 300px;
-
-  border: none;
-  background: rgb(255, 244, 217);
-  padding: 0;
-  cursor: pointer;
-  text-align: left;
-
-  border-radius: 12px;
-  overflow: hidden;
-
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-  transition: all 0.2s ease;
-}
-
-.latest-recipe-card:focus {
-  outline: none;
-}
-
-.latest-recipe-card:focus-visible {
-  outline: 3px solid #ffcc4b;
-  outline-offset: 2px;
-}
-
-.latest-recipe-card img {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-}
-
-.latest-recipe-card h3 {
-  padding: 10px;
-  font-size: 16px;
-  margin: 0;
-}
-
-.latest-recipe-card:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 14px rgba(0,0,0,0.1);
-}
-
 .recipe-block {
   background: white;
   border: 3px solid rgb(247, 195, 35);
@@ -373,8 +260,7 @@ select {
   align-items: center;
   gap: 20px;
   padding: 40px 32px 28px;
-  background: #ffbf1d;
-  font-family: 'DM Sans', 'Segoe UI', sans-serif;
+  background: rgb(255, 204, 75);
   overflow: hidden;
   z-index: -9999;
 }
@@ -383,13 +269,6 @@ select {
   font-size: 22px;
   font-weight: 700;
   color: white;
-}
-
-.header-meta {
-  margin-top: 4px;
-  font-size: 12px;
-  text-transform: uppercase;
-  color: rgba(255,255,255,.55);
 }
 
 
@@ -441,7 +320,7 @@ select {
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  border: 3px solid rgba(255, 213, 149, 0.6);
+  border: 3px solid rgb(255, 204, 75);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -727,6 +606,11 @@ select {
 }
 
 
+.reviews-section {
+  width: 100%;
+  order: 999;
+  flex-shrink: 0;
+}
 .avatar-hint {
     font-size: 0.7rem;
     color: #999;
@@ -740,4 +624,34 @@ select {
 
 .avatar-hint-success {
     color: #27ae60;
+}
+
+
+.review-modal-select {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 0.95rem;
+}
+
+.review-modal {
+  background-color: white;
+  border: 1px solid rgb(0, 0, 0);
+  padding: 2%;
+}
+.review-card {
+  background-color: white;
+  border: 1px solid rgb(0, 0, 0);
+  padding: 2%;
+  margin: 2%;
+}
+
+.review-card-ratings {
+    display: flex;
+    gap: 16px;
+    margin: 8px 0;
+    font-size: 0.9rem;
+    flex-wrap: wrap;
 }

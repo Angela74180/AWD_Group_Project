@@ -30,7 +30,7 @@ function addAppliance(applianceDict) {
     newAppliance.setAttribute("class", "appliance");
     newAppliance.innerHTML = `
         <button type="button" class="btn btn-remove" onclick="removeAppliance(event)">- Remove</button>
-        <input name="applianceName" class="equipment_input" list="equipment" style="margin-bottom: 2%" placeholder = "Appliance/Equipment" onchange="chosenAppliance(event.target, '')" value = "${handleQuotes(applianceDict["name"])}" required>
+        <input name="applianceName" maxlength="100" class="equipment_input" list="equipment" style="margin-bottom: 2%" placeholder = "Appliance/Equipment" onchange="chosenAppliance(event.target, '')" value = "${handleQuotes(applianceDict["name"])}" required>
         <datalist id="equipment">
             <option value = "Other"></option>
             <option value = "Oven"></option>
@@ -67,7 +67,7 @@ function addAppliance(applianceDict) {
             <option value = "Thermometers"></option>
             <option value = "Digital Scales"></option>
         </datalist>
-        <div id="applianceDetails"><input name="extraData" maxlength="50" type = "hidden" value = ""></input></div>
+        <div id="applianceDetails"><input name="extraData" maxlength="100" type = "hidden" value = ""></input></div>
         <textarea name="applianceDescription"placeholder="(Optional) Notes: 500 Character Limit" rows = "2" maxlength="500">${handleQuotes(applianceDict["desc"])}</textarea>
     `;
     container.appendChild(newAppliance);
