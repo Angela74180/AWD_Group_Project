@@ -1,3 +1,5 @@
+# Initialises and configures the Flask application, database, authentication, CSRF protection, and environment variables
+
 from flask import Flask
 from flask_migrate import Migrate 
 from flask_sqlalchemy import SQLAlchemy

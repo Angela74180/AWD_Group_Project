@@ -1,3 +1,6 @@
+# Defines the database schema using SQLAlchemy models, including users, recipes, tags, ingredients, appliances
+# and relationship tables used to store and manage recipe data and user interactions
+
 from datetime import datetime
 from typing import Optional
 from app import db, login
