@@ -4,6 +4,7 @@ Repository for the UWA Agile Web Development 2026 Group Project
 CookBook is a website that allows users to create their own recipes and allows other users to see and review those recipes. Users can bookmark recipes to return to, or add them to a shopping cart that will compile a shopping list of ingredients for them. 
 
 |  UWA ID  |        Name         |  Github User Name  |
+|----------|---------------------|--------------------|
 | 24223498 | Angela Hewitt       | Angela74180        |
 | 22971029 | Aiden Blampain      | aidenblampain      |
 | 24469587 | Grace Wong          | ix-cyn             |
@@ -46,12 +47,12 @@ venv\Scripts\Activate.ps1
 
 
 Install Requirements.txt:
-Use the following command to install teh requirements:
+Use the following command to install the requirements:
 pip install -r requirements.txt
 
 
 Upgrade the Database:
-Use the following command to fill in the empty tables in teh database:
+Use the following command to create the empty tables in the database:
 flask db upgrade
 
 
@@ -59,13 +60,17 @@ Include the Database Contents:
 We have a sparsely populated database. If you want to include it, do the following:
 sqlite3 app.db < restore_backup.sql
 
-If You don't want to Populate the database, skip this step.
+If you don't want to Populate the database, skip this step.
 
 
 Flask Run
 To start the appliaction, use the following command:
 flask run
 
-This will open the appliacation on a local host. Navigate to the url it provides you.
+This will open the application on a local host. Navigate to the url it provides you.
 (Should look something like: http://127.0.0.1:5000) 
+
+
+
+
 
