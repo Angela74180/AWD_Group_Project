@@ -65,7 +65,7 @@ select {
   padding-right: 10px;
 }
 .btn-add:hover{
-  background-color: rgb(247, 195, 35);
+  background-color: rgb(255, 210, 75);
 }
 
 .btn-tag {
@@ -77,17 +77,8 @@ select {
   margin-right: 5px;
   margin-bottom: 5px;
 }
-.btn-tag:hover{
+.btn-tag:hover {
   background-color: rgb(255, 210, 75);
-}
-.btn-tag:active {
-  background-color: rgb(255, 210, 75);
-  /* padding-top: 2px;
-  padding-bottom: 0px;
-  padding-left: 10px;
-  padding-right: 10px;
-  margin-right: 5px;
-  margin-bottom: 5px; */
 }
 
 .tag {
@@ -727,24 +718,7 @@ select {
   padding: 10px;
 }
 
-.card-info {
-    padding: 10px 14px 14px;
-}
 
-.card-author {
-    font-size: 12px;
-    color: #888;
-    margin: 2px 0 6px;
-}
-
-.card-tags {
-    font-size: 11px;
-    color: #aaa;
-    margin: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
 
 .no-results {
     color: #999;

@@ -58,9 +58,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
         document.getElementById("avatarSmall").innerHTML = `<img src="${imageData}" class="avatar-small-img">`;
 
+        let csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+
         fetch("/upload_avatar", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", "X-CSRFToken": csrfToken },
             body: JSON.stringify({ image: imageData })
         })
         .then(res => res.json())
