@@ -9,4 +9,10 @@ CookBook is a website that allows users to create their own recipes and allows o
 | 24469587 | Grace Wong          | ix-cyn             |
 | 23994884 | Kefan Yang          | 272mpzgqvk-create  |
 
+
+
 pip install -r requirements.txt
+
+
+We have a sparsely populated database. If you want to include it, in a terminal window, use the command:
+.read restore_backup.sql
