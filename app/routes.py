@@ -58,6 +58,7 @@ def index():
                     for ra in recipe.appliances
                 ],
 
+    
                 ingredients=[
                     Ingredient.query.filter_by(id=ri.ingredient_id).first().name
                     for ri in recipe.ingredients
