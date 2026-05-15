@@ -338,7 +338,7 @@ select {
   align-items: center;
   gap: 20px;
   padding: 40px 32px 28px;
-  background: rgb(255, 204, 75);
+  background: rgb(247, 195, 35);
   overflow: hidden;
   z-index: -9999;
 }
