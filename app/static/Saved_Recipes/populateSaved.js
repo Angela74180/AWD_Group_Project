@@ -8,7 +8,7 @@ function populate(recipes_list) {
     if (recipes_list != ""){
         container.innerHTML = ``;
         for (let recipe_dict of recipes_list){
-            container.appendChild(makeRecipeBanner(recipe_dict));
+            container.appendChild(makeRecipeBanner(recipe_dict, false));
         }
     }
 }

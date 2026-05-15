@@ -77,7 +77,7 @@ Running the test files:
 Ensure Selenium is installed: 
 pip install selenium 
 
-Unittest file (test_data.py): 
+Unittest file (test_data.py) run the following in the terminal window: 
 python -m unittest app.test.test_data
 
 Selenium file: 
