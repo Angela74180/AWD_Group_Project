@@ -1,40 +1,48 @@
 document.addEventListener("DOMContentLoaded", function() {
 
-  const pwCurrent= document.getElementById("pwCurrent");
-  const pwNext = document.getElementById("pwNext");
-  const pwConfirm = document.getElementById("pwConfirm");
-  const pwSaveBtn= document.getElementById("pwSaveBtn");
-  const pwSuccess = document.getElementById("pwSuccess");
-  const pwMismatch = document.getElementById("pwMismatch");
-  let successTimer = null;
+    let successTimer = null;
 
-  function validate() {
-    const mismatch = pwNext.value && pwConfirm.value && pwNext.value !== pwConfirm.value;
-    pwMismatch.hidden = !mismatch;
-    pwSaveBtn.disabled = !(pwCurrent.value && pwNext.value && pwConfirm.value && !mismatch);
-  }
+    function validate() {
+        let pwNext = document.getElementById("pwNext").value;
+        let pwConfirm = document.getElementById("pwConfirm").value;
+        let mismatch = pwNext && pwConfirm && pwNext !== pwConfirm;
 
-  [pwCurrent, pwNext, pwConfirm].forEach(el => el.addEventListener("input", validate));
+        document.getElementById("pwMismatch").hidden = !mismatch;
+        document.getElementById("pwSaveBtn").disabled = !(
+            document.getElementById("pwCurrent").value && pwNext && pwConfirm && !mismatch
+        );
+    }
 
-  pwSaveBtn.addEventListener("click", () => {
-    fetch("/update_password", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ current: pwCurrent.value, new: pwNext.value })
-    })
-    .then(res => res.json())
-    .then(data => {
-      if (data.success) {
-        pwCurrent.value = pwNext.value = pwConfirm.value = "";
-        validate();
-        pwSuccess.hidden = false;
-        clearTimeout(successTimer);
-        successTimer = setTimeout(() => { pwSuccess.hidden = true; }, 3000);
-      } else {
-        alert(data.message);
-      }
-    })
-    .catch(() => alert("Something went wrong. Please try again."));
-  });
+    for (let el of document.querySelectorAll("#pwCurrent, #pwNext, #pwConfirm")) {
+        el.addEventListener("input", validate);
+    }
+
+    document.getElementById("pwSaveBtn").addEventListener("click", () => {
+        let csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+
+        fetch("/update_password", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "X-CSRFToken": csrfToken },
+            body: JSON.stringify({
+                current: document.getElementById("pwCurrent").value,
+                new: document.getElementById("pwNext").value
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById("pwCurrent").value = "";
+                document.getElementById("pwNext").value = "";
+                document.getElementById("pwConfirm").value = "";
+                validate();
+                document.getElementById("pwSuccess").hidden = false;
+                clearTimeout(successTimer);
+                successTimer = setTimeout(() => { document.getElementById("pwSuccess").hidden = true; }, 3000);
+            } else {
+                alert(data.message);
+            }
+        })
+        .catch(() => alert("Something went wrong. Please try again."));
+    });
 
 });

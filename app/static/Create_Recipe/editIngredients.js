@@ -12,9 +12,9 @@ function addIngredient(ingredientDict) {
     newIngredient.setAttribute("class", "ingredient");
     newIngredient.innerHTML = `
         <button type="button" class="btn btn-remove" onclick="removeIngredient(event)">- Remove</button>
-        <input name="ingredientName" type = "text" style="margin-bottom: 2%" placeholder = "Ingredient Name" value = "${handleQuotes(ingredientDict["name"])}" required> 
+        <input name="ingredientName" maxlength="100" type = "text" style="margin-bottom: 2%" placeholder = "Ingredient Name" value = "${handleQuotes(ingredientDict["name"])}" required> 
         <input name="ingredientQuantity" type = "number" step="0.001" style="width: 100px; margin-bottom: 2%" min = "0" placeholder = "Quantity (e.g 750, 0.25)" value = "${ingredientDict["quantity"]}" required>
-        <input name="ingredientUnits" list="units" style="width: 100px; margin-bottom: 2%" placeholder = "Units" value = "${handleQuotes(ingredientDict["units"])}" required>
+        <input name="ingredientUnits" maxlength="30" list="units" style="width: 100px; margin-bottom: 2%" placeholder = "Units" value = "${handleQuotes(ingredientDict["units"])}" required>
         <datalist id="units">
             <option value = '"Whole"'>(For ingredients that aren't to be divided, e.g eggs)</option>
             <option value = "mL">Millilitres</option>

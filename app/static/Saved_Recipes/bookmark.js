@@ -15,14 +15,16 @@ function makeBookmark(bookmark_on) {
 
 function addBookmark(bookmark) {
     let recipe_id = bookmark.target.parentElement.getAttribute("recipe_id");
-    let user_id = document.getElementById("recipe_banner_div").getAttribute("user_id");
+
+    let csrfToken = document.querySelector('meta[name="csrf-token"]').content;
 
     fetch("/updateBookmark", {
         method: "POST",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrfToken
         },
-        body: JSON.stringify({ recipe_id: recipe_id, user_id: user_id, bookmark_status: "on"})
+        body: JSON.stringify({ recipe_id: recipe_id, bookmark_status: "on"})
     })
     .then(response => response.json())
     .then(data => {
@@ -43,14 +45,16 @@ function addBookmark(bookmark) {
 function removeBookmark(bookmark) {
 
     let recipe_id = bookmark.target.parentElement.getAttribute("recipe_id");
-    let user_id = document.getElementById("recipe_banner_div").getAttribute("user_id");
+
+    let csrfToken = document.querySelector('meta[name="csrf-token"]').content;
 
     fetch("/updateBookmark", {
         method: "POST",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrfToken
         },
-        body: JSON.stringify({ recipe_id: recipe_id, user_id: user_id, bookmark_status: "off"})
+        body: JSON.stringify({ recipe_id: recipe_id, bookmark_status: "off"})
     })
     .then(response => response.json())
     .then(data => {

@@ -5,10 +5,6 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("searchBar")
         .addEventListener("input", filterRecipes);
 
-    document.querySelectorAll(".filter-bar select")
-        .forEach(select => {
-            select.addEventListener("change", filterRecipes);
-        });
 });
 
 function filterRecipes() {
@@ -31,23 +27,25 @@ function filterRecipes() {
         const matchesTime =
             searchReqs.time === "All" ||
 
-            (searchReqs.time === "Under 15 min" &&
+            (searchReqs.time === "Under 15 mins" &&
                 recipeMinutes < 15) ||
 
-            (searchReqs.time === "15-30 min" &&
-                recipeMinutes >= 15 &&
+            (searchReqs.time === "Under 30 mins" &&
                 recipeMinutes <= 30) ||
 
-            (searchReqs.time === "30-60 min" &&
-                recipeMinutes > 30 &&
+            (searchReqs.time === "Under 1 hour" &&
                 recipeMinutes <= 60) ||
 
-            (searchReqs.time === "60+" &&
+            (searchReqs.time === "Over 1 hour" &&
                 recipeMinutes > 60);
 
         const matchesDifficulty =
             searchReqs.difficulty === "All" ||
             recipe.recipeDifficulty === searchReqs.difficulty;
+
+        const matchesType =
+            searchReqs.type === "All" ||
+            recipe.recipeType === searchReqs.type;
 
         const matchesTags =
             searchReqs.tags_list.length === 0 ||
@@ -60,6 +58,7 @@ function filterRecipes() {
 
         const matchesIngredients =
             searchReqs.ingredients_list.length === 0 ||
+<<<<<<< HEAD
             searchReqs.ingredients_list.every(ing =>
                 recipe.ingredients
                     .map(i => i.toLowerCase())
@@ -70,6 +69,20 @@ function filterRecipes() {
             searchReqs.appliances_list.length === 0 ||
             !searchReqs.appliances_list.some(app =>
                 recipe.appliances
+=======
+
+            searchReqs.ingredients_list.every(ing =>
+                (recipe.ingredients || [])
+                    .map(i => i.toLowerCase())
+                    .includes(ing.toLowerCase())
+            );
+
+        const matchesAppliances =
+            searchReqs.exclude_appliance_list.length === 0 ||
+
+            !searchReqs.exclude_appliance_list.some(app =>
+                (recipe.appliances || [])
+>>>>>>> 6f3c2ec72f56ec8435d5cc78db21c8456faa9675
                     .map(a => a.toLowerCase())
                     .includes(app.toLowerCase())
             );
@@ -77,6 +90,10 @@ function filterRecipes() {
         return matchesSearch &&
             matchesTime &&
             matchesDifficulty &&
+<<<<<<< HEAD
+=======
+            matchesType &&
+>>>>>>> 6f3c2ec72f56ec8435d5cc78db21c8456faa9675
             matchesTags &&
             matchesIngredients &&
             matchesAppliances;

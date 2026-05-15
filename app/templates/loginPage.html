@@ -4,7 +4,11 @@
 
 {% block content %}
 <h1>Log in</h1>
-<form name="Log In" action="/login" method="POST">
+
+<p class="error-message" id="error">{{ error }}</p>
+
+<form name="Log In" action="{{ url_for('main.login') }}" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
     <br>
 
     <fieldset class="outer_fieldset">
@@ -22,6 +26,6 @@
     <button type="submit" class="btn btn-primary">Log in</button>
     <br>
     <br>
-    <p>Don't have an account? <a href="/signup">Sign up</a></p>
+    <p>Don't have an account? <a href="{{ url_for('main.signup') }}">Sign up</a></p>
 </form>
 {% endblock %}

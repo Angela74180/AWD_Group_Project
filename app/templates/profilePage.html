@@ -31,7 +31,6 @@
 
     <div>
         <p class="header-name" id="headerName">{{ username }}</p>
-        <p class="header-meta">{{ recipecount }} recipes · (review count) reviews</p>
     </div>
 </div>
 
@@ -39,7 +38,7 @@
 <div class="tabs">
     <button class="tab-btn active" data-tab="profile">Profile</button>
     <button class="tab-btn" data-tab="recipes">Recipes ({{ recipecount }})</button>
-    <button class="tab-btn" data-tab="reviews">Reviews (3)</button>
+    <!-- <button class="tab-btn" data-tab="reviews">Reviews (3)</button> -->
 </div>
 
 <!-- Profile Tab -->
@@ -82,7 +81,8 @@
             </div>
             <div>
                 <button class="edit-btn" id="uploadPhotoBtn">Upload Photo</button>
-  
+                <br>
+                <span id="avatarSizeHint" class="avatar-hint">Max 100KB</span>
             </div>
         </div>
 
@@ -130,9 +130,9 @@
     </div>
 </div>
 
-<!-- Reviews Tab -->
-<div class="review-tab tab-pane" id="reviews-tab" hidden></div>
+<!-- Reviews Tab 
+<div class="review-tab tab-pane" id="reviews-tab"></div>-->
 
-<h4><a href="/logout">Logout</a></h4>
+<h4><a href="{{ url_for('main.logout') }}">Logout</a></h4>
 
 {% endblock %}

@@ -1,30 +1,28 @@
-from flask import render_template, request, redirect, url_for, session, jsonify
-from app import app, db
+from flask import render_template, request, redirect, url_for, session, jsonify, current_app
+from app import db
 from flask_login import login_user, logout_user, login_required, current_user
 from sqlalchemy.exc import SQLAlchemyError #############################################################
-from app.models import User, Recipe, Ingredient, RecipeIngredient, Tag, RecipeTag, Appliance, RecipeAppliance, Step, Bookmark, ShoppingList
+from app.models import User, Recipe, Ingredient, RecipeIngredient, Tag, RecipeTag, Appliance, RecipeAppliance, Step, Bookmark, ShoppingList, Review, ReviewLike
 from app.makeRecipeBannerDict import make_recipe_banner_dict
 from app.makeRecipeDict import make_recipe_dict
 from sqlalchemy.exc import IntegrityError
+from app.blueprint import main
 
-@app.route('/')
-@app.route('/index')
+def is_number(given_string):
+    try:
+        float(given_string)
+        return True
+    except ValueError:
+        return False
+
+
+@main.route('/')
+@main.route('/index')
 def index():
-    return render_template("homePage.html")
-
-@app.route("/explore")
-def explore():
     recipes_list = []
 
-    ############### You will nedd to actually check for a User
-    signed_in = True
+    signed_in = current_user.is_authenticated
 
-    userId = session.get('authorId')
-    user = User.query.filter_by(id=userId).first()
-
-
-    ############################### CHOSEN RECIPES IS WHERE YOU STORE THE RECIPE OBJECTS THAT YOU WANT TO DISPLAY BASED ON YOUR QUERIES 
-    ########## IT NEEDS TO BE A LIST 
     chosen_recipes = Recipe.query.filter_by(visibility="Public").all()
     
     
@@ -33,14 +31,14 @@ def explore():
 
         bookmark_on = True
         cart_on = True
-
         if signed_in:
+            userId = current_user.id
+            user = User.query.filter_by(id=userId).first()
+
             bookmark = Bookmark.query.filter_by(user_id=userId, recipe_id=recipe.id).first()
             cart = ShoppingList.query.filter_by(user_id=userId, recipe_id=recipe.id).first()
-
             if not bookmark:
                 bookmark_on = False
-
             if not cart:
                 cart_on = False
 
@@ -49,22 +47,100 @@ def explore():
         for recipeTag in recipe.tags:
             tag_list.append(Tag.query.filter_by(id=recipeTag.tag_id).first().name)
 
-        recipes_list.append(make_recipe_dict(recipe,author,tag_list,appliances=[],ingredients=[],steps=[],bookmark_on=bookmark_on,cart_on=cart_on,signed_in=signed_in,allowed_to_view=True))
+        recipes_list.append(
+            make_recipe_dict(
+                recipe,
+                author,
+                tag_list,
+
+                appliances=[
+                    Appliance.query.filter_by(id=ra.appliance_id).first().name
+                    for ra in recipe.appliances
+                ],
+
+                ingredients=[
+                    Ingredient.query.filter_by(id=ri.ingredient_id).first().name
+                    for ri in recipe.ingredients
+                ],
+
+                steps=[],
+                bookmark_on=bookmark_on,
+                cart_on=cart_on,
+                signed_in=signed_in,
+                allowed_to_view=True
+            )
+        )
+
+    return render_template("homePage.html", chosen_recipes=recipes_list)
+
+
+
+@main.route("/explore")
+def explore():
+    recipes_list = []
+
+    signed_in = current_user.is_authenticated
+
+    chosen_recipes = Recipe.query.filter_by(visibility="Public").all()
+    
+    
+    for recipe in chosen_recipes:
+        author = recipe.author.username
+
+        bookmark_on = True
+        cart_on = True
+        if signed_in:
+            userId = current_user.id
+            user = User.query.filter_by(id=userId).first()
+
+            bookmark = Bookmark.query.filter_by(user_id=userId, recipe_id=recipe.id).first()
+            cart = ShoppingList.query.filter_by(user_id=userId, recipe_id=recipe.id).first()
+            if not bookmark:
+                bookmark_on = False
+            if not cart:
+                cart_on = False
+
+        tag_list = []
+        
+        for recipeTag in recipe.tags:
+            tag_list.append(Tag.query.filter_by(id=recipeTag.tag_id).first().name)
+
+        recipes_list.append(
+            make_recipe_dict(
+                recipe,
+                author,
+                tag_list,
+
+                appliances=[
+                    Appliance.query.filter_by(id=ra.appliance_id).first().name
+                    for ra in recipe.appliances
+                ],
+
+                ingredients=[
+                    Ingredient.query.filter_by(id=ri.ingredient_id).first().name
+                    for ri in recipe.ingredients
+                ],
+
+                steps=[],
+                bookmark_on=bookmark_on,
+                cart_on=cart_on,
+                signed_in=signed_in,
+                allowed_to_view=True
+            )
+        )
 
     return render_template("explore.html", foundRecipes=recipes_list[::-1])
 
 
-def explore():
-    return render_template("explore.html")
-
-
-@app.route("/shopping_list")
+@main.route("/shopping_list")
 def shopping_list():
 
-    ############### You will nedd to actually check for a User
-    signed_in = True
+    signed_in = current_user.is_authenticated
+
+    if not signed_in:
+        return redirect(url_for("main.need_to_be_logged_in"))
     
-    userId = session.get('authorId')
+    userId = current_user.id
     user = User.query.filter_by(id=userId).first()
 
     shopping_lists = user.shopping_lists
@@ -76,7 +152,6 @@ def shopping_list():
         recipe_id = shopping_list.recipe_id
         recipe = Recipe.query.filter_by(id=recipe_id).first()
 
-        # print(recipe.author_id)
         author = User.query.filter_by(id=recipe.author_id).first().username
         bookmark = Bookmark.query.filter_by(user_id=userId, recipe_id=recipe.id).first()
         cart = ShoppingList.query.filter_by(user_id=userId, recipe_id=recipe.id).first()
@@ -96,7 +171,6 @@ def shopping_list():
 
         recipes_list.append(make_recipe_banner_dict(recipe, author, tag_list, bookmark_on, cart_on, signed_in=signed_in))
 
-        print(recipe_id)
 
         recipe = Recipe.query.filter_by(id=recipe_id).first()
 
@@ -127,13 +201,15 @@ def shopping_list():
 
 
 
-@app.route("/saved")
+@main.route("/saved")
 def saved():
 
-    ############### You will nedd to actually check for a User
-    signed_in = True
+    signed_in = current_user.is_authenticated
 
-    userId = session.get('authorId')
+    if not signed_in:
+        return redirect(url_for("main.need_to_be_logged_in"))
+
+    userId = current_user.id
     user = User.query.filter_by(id=userId).first()
 
     bookmarks = user.bookmarks
@@ -166,13 +242,79 @@ def saved():
     return render_template("savedPage.html", username=user.username, savedRecipes=recipes_list[::-1])
 
 
-@app.route("/my-recipes")
-def myRecipes():
-    ############### You will nedd to actually check for a User
-    signed_in = True
+@main.route("/like_review", methods=["POST"])
+@login_required
+def like_review():
+    data = request.get_json()
+    review_id = data.get("review_id")
 
-    userId = session.get('authorId')
+    if not review_id:
+        return jsonify({"success": False, "message": "Missing review_id"}), 400
+
+    review = Review.query.get(review_id)
+    if not review:
+        return jsonify({"success": False, "message": "Review not found"}), 404
+
+    existing = ReviewLike.query.filter_by(
+        user_id=current_user.id,
+        review_id=review_id
+    ).first()
+
+    if existing:
+        db.session.delete(existing)
+        review.like_count = max(0, review.like_count - 1)
+        liked = False
+    else:
+        like = ReviewLike(user_id=current_user.id, review_id=review_id)
+        db.session.add(like)
+        review.like_count += 1
+        liked = True
+
+    db.session.commit()
+    return jsonify({"success": True, "like_count": review.like_count, "liked": liked})
+
+
+
+@main.route("/get_reviews/<int:recipe_id>", methods=["GET"])
+def get_reviews(recipe_id):
+    reviews = Review.query.filter_by(recipe_id=recipe_id)\
+        .order_by(Review.created_at.asc()).all()
+
+    reviews_data = [{
+        "id":               review.id,
+        "author":           review.author.username,
+        "taste_rating":     review.taste_rating,
+        "accuracy_rating":  review.accuracy_rating,
+        "timing_rating":    review.timing_rating,
+        "body":             review.body,
+        "created_at":       review.created_at.strftime("%Y-%m-%d %H:%M"),
+        "like_count":       review.like_count,
+        "liked_by_me":      any(l.user_id == current_user.id for l in review.liked_by) if current_user.is_authenticated else False,
+    } for review in reviews]
+
+    taste_ratings    = [r.taste_rating    for r in reviews if r.taste_rating    is not None]
+    accuracy_ratings = [r.accuracy_rating for r in reviews if r.accuracy_rating is not None]
+
+    avg_taste    = round(sum(taste_ratings)    / len(taste_ratings),    1) if taste_ratings    else None
+    avg_accuracy = round(sum(accuracy_ratings) / len(accuracy_ratings), 1) if accuracy_ratings else None
+
+    return jsonify({"reviews": reviews_data, "avg_taste": avg_taste, "avg_accuracy": avg_accuracy})
+
+
+@main.route("/myRecipes")
+def myRecipes():
+
+    signed_in = current_user.is_authenticated
+
+    if not signed_in:
+        return redirect(url_for("main.need_to_be_logged_in"))
+
+    userId = current_user.id
     user = User.query.filter_by(id=userId).first()
+
+    if user is None:
+        logout_user()
+        return redirect(url_for("login"))
 
     my_recipes_list = []
     for recipe in user.recipes:
@@ -197,9 +339,39 @@ def myRecipes():
 
     return render_template("myRecipesPage.html", username=user.username, userRecipes=my_recipes_list[::-1])
 
+@main.route("/submit_review", methods=["POST"])
+@login_required
+def submit_review():
+    data = request.get_json()
 
-@app.route('/publish_recipe', methods=["POST"])
+    recipe_id = data.get("recipe_id")
+    if not recipe_id:
+        return jsonify({"success": False, "message": "Missing recipe_id"}), 400
+
+    review = Review(
+        author_id      = current_user.id,
+        recipe_id      = recipe_id,
+        taste_rating   = data.get("taste"),
+        accuracy_rating= data.get("accuracy"),
+        timing_rating  = data.get("timing"),
+        body           = data.get("body"),
+        title          = "Review"
+    )
+    db.session.add(review)
+    db.session.commit()
+
+    return jsonify({"success": True})
+
+
+@main.route('/publish_recipe', methods=["POST"])
 def publish_recipe():
+
+    signed_in = current_user.is_authenticated
+
+    if not signed_in:
+        return redirect(url_for("main.need_to_be_logged_in"))
+
+
     if request.method == "POST":
 
         ingredient_names        = request.form.getlist("ingredientName")
@@ -208,18 +380,39 @@ def publish_recipe():
         ingredient_descriptions = request.form.getlist("ingredientDescription")
 
         if len(ingredient_names) != len(ingredient_quantities) or len(ingredient_quantities) != len(ingredient_units) or len(ingredient_units) != len(ingredient_descriptions):
-            raise Exception("Unequal number of ingredient parameters")
+            current_app.logger.error("Inconsistent Number of Ingredient Details")
+            return render_template('somethingWentWrong.html') 
+
 
         ingredients_list = []
 
         for i in range(len(ingredient_names)):
-            ingredient_name = ingredient_names[i]
-            ingredient_quantity = ingredient_quantities[i]
-            ingredient_unit = ingredient_units[i]
-            ingredient_description = ingredient_descriptions[i]
+            ingredient_name = ingredient_names[i].strip()
+            ingredient_quantity = ingredient_quantities[i].strip()
+            ingredient_unit = ingredient_units[i].strip()
+            ingredient_description = ingredient_descriptions[i].strip()
 
             ingredient = Ingredient.query.filter_by(name=ingredient_name).first()
 
+            # Validate that the ingredient details are valid
+            if len(ingredient_name) >= 50 or ingredient_name == "":
+                current_app.logger.error("Ingredient Name Incorrect")
+                return render_template('somethingWentWrong.html') 
+
+            if not is_number(ingredient_quantity) or float(ingredient_quantity) < 0:
+                current_app.logger.error("Ingredient Quantity Incorrect")
+                return render_template('somethingWentWrong.html') 
+
+            if len(ingredient_unit) >= 50 or ingredient_unit == "":
+                current_app.logger.error("Ingredient Unit Incorrect")
+                return render_template('somethingWentWrong.html') 
+
+            if len(ingredient_description) >= 500:
+                current_app.logger.error("Ingredient Description Incorrect")
+                return render_template('somethingWentWrong.html') 
+
+
+            # If an ingredient of the given name has never appeared in a recipe before, it will not be in the database and needs to be added
             if ingredient == None:
                 ingredient = Ingredient(
                     name = ingredient_name
@@ -239,12 +432,17 @@ def publish_recipe():
             ingredients_list.append(recipe_ingredient)
 
 
-
         tag_names = request.form.getlist("tagName")
         tag_list = []
         for tag_name in (tag_names):
-            tag = Tag.query.filter_by(name=tag_name).first()
+            
+            # Validate that the tag details are valid
+            if len(tag_name) >= 50 or tag_name == "":
+                current_app.logger.error("Tag Name Incorrect")
+                return render_template('somethingWentWrong.html') 
 
+            # If a tag of the given name has never appeared in a recipe before, it will not be in the database and needs to be added
+            tag = Tag.query.filter_by(name=tag_name).first()
             if tag == None:
                 tag = Tag(
                     name = tag_name
@@ -266,17 +464,32 @@ def publish_recipe():
         appliance_descriptions  = request.form.getlist("applianceDescription")
 
         if len(appliance_names) != len(appliance_extra_details) or len(appliance_extra_details) != len(appliance_descriptions):
-            raise Exception("Unequal number of appliance parameters")
+            return render_template('somethingWentWrong.html') 
         
         appliance_list = []
 
         for i in range(len(appliance_names)):
-            appliance_name = appliance_names[i]
-            appliance_extra_data = appliance_extra_details[i]
-            appliance_description = appliance_descriptions[i]
+            appliance_name = appliance_names[i].strip()
+            appliance_extra_data = appliance_extra_details[i].strip()
+            appliance_description = appliance_descriptions[i].strip()
 
+            # Validate that the appliance details are valid
+            if len(appliance_name) >= 50 or appliance_name == "":
+                current_app.logger.error("Appliance Name Incorrect")
+                return render_template('somethingWentWrong.html') 
+
+            if len(appliance_extra_data) >= 50:
+                current_app.logger.error("Appliance Extra Data Incorrect")
+                return render_template('somethingWentWrong.html') 
+
+            if len(appliance_description) >= 500:
+                current_app.logger.error("Appliance Description Incorrect")
+                return render_template('somethingWentWrong.html') 
+
+
+
+            # If an appliance of the given name has never appeared in a recipe before, it will not be in the database and needs to be added
             appliance = Appliance.query.filter_by(name=appliance_name).first()
-
             if appliance == None:
                 appliance = Appliance(
                     name = appliance_name
@@ -300,14 +513,33 @@ def publish_recipe():
         step_photos = request.form.getlist("stepPhoto")
 
         if len(step_names) != len(step_descriptions) or len(step_descriptions) != len(step_photos):
-            raise Exception("Unequal number of step parameters")
+            current_app.logger.error("Inconsitent Number of Step Details")
+            return render_template('somethingWentWrong.html') 
         
         step_list = []
 
         for i in range(len(step_names)):
-            step_name = step_names[i]
-            step_description = step_descriptions[i]
-            step_photo = step_photos[i]
+            step_name = step_names[i].strip()
+            step_description = step_descriptions[i].strip()
+            step_photo = step_photos[i].strip()
+
+            if not step_photo:
+                step_photo = ""
+
+            # Validate that the step details are valid
+            if len(step_name) >= 50:
+                current_app.logger.error("Step Name Incorrect")
+                return render_template('somethingWentWrong.html') 
+
+            if len(step_description) >= 500 or step_description == "":
+                current_app.logger.error("Step Description Incorrect")
+                return render_template('somethingWentWrong.html') 
+
+            if step_photo != "":
+                if not step_photo.startswith("data:image/webp") and not step_photo.startswith("data:image/jpeg") and not step_photo.startswith("data:image/jpg") and not step_photo.startswith("data:image/png"):
+                    current_app.logger.error("Step Photo Incorrect")
+                    return render_template('somethingWentWrong.html') 
+
 
             step = Step(
                 name        = step_name,
@@ -324,25 +556,83 @@ def publish_recipe():
         else:
             status = "Draft"
 
+
+
+        # Validate the remainder of the recipe table details
+        name = request.form["recipe_name"].strip()
+        if len(name) >= 200 or name == "":
+            current_app.logger.error("Recipe Name Incorrect")
+            return render_template('somethingWentWrong.html') 
+
+        recipe_type = request.form["recipeType"].strip()
+        if len(name) >= 30 or recipe_type == "":
+            current_app.logger.error("Recipe Type Incorrect")
+            return render_template('somethingWentWrong.html') 
+
+        difficulty = request.form["recipeDifficulty"].strip()
+        if len(difficulty) >= 20 or difficulty == "":
+            current_app.logger.error("Recipe Difficulty Incorrect")
+            return render_template('somethingWentWrong.html') 
+
+        serves = request.form["serves"].strip()
+        if not is_number(serves) or float(serves) < 0:
+            current_app.logger.error("Recipe Serves Incorrect")
+            return render_template('somethingWentWrong.html') 
+
+        description = request.form["Description"].strip()
+        if len(description) >= 1000 or description == "":
+            current_app.logger.error("Recipe Description Incorrect")
+            return render_template('somethingWentWrong.html') 
+
+        cover_image = request.form["coverPhoto"].strip()
+        if cover_image != "":
+            if not cover_image.startswith("data:image/webp") and not cover_image.startswith("data:image/jpeg") and not cover_image.startswith("data:image/jpg") and not cover_image.startswith("data:image/png"):
+                current_app.logger.error("Recipe Cover Image Incorrect")
+                return render_template('somethingWentWrong.html') 
+        
+        prep_minutes  = request.form.get("prepMins", "0").strip()
+        cook_minutes  = request.form.get("cookMins", "0").strip()
+        total_minutes = request.form.get("totalMins", "0").strip()
+        prep_hours    = request.form.get("prepHours", "0").strip()
+        cook_hours    = request.form.get("cookHours", "0").strip()
+        total_hours   = request.form.get("totalHours", "0").strip()
+
+        times = [prep_minutes, cook_minutes, total_minutes, prep_hours, cook_hours, total_hours]
+        for time in times:
+            if not is_number(time) or float(time) < 0:
+                current_app.logger.error("Recipe Timings Incorrect")
+                return render_template('somethingWentWrong.html') 
+
+        visibility = request.form["visibility"].strip()
+        if len(visibility) >= 20 or visibility == "":
+            current_app.logger.error("Recipe Visibility Incorrect")
+            return render_template('somethingWentWrong.html') 
+
+        time_split    = bool(request.form.get("timeSplit"))
+        allow_ratings = bool(request.form.get("allowRatings"))
+        allow_reviews = bool(request.form.get("allowReviews"))
+
+
+        # Create the Rcipe object and populate it with the data
         recipe = Recipe(
-            author_id     = session.get('authorId'),
+            author_id     = current_user.id,
             # prev_version_id = db.Column(db.Integer, db.ForeignKey("recipe.id")) ####this column needs to be nullable ######
-            name          = request.form["recipe_name"],
-            recipe_type   = request.form["recipeType"],
-            difficulty    = request.form["recipeDifficulty"],
-            serves        = request.form["serves"],
-            description   = request.form["Description"],
-            cover_image   = request.form["coverPhoto"],
-            time_split    = bool(request.form.get("timeSplit")),
-            prep_minutes  = request.form.get("prepMins", 0),
-            cook_minutes  = request.form.get("cookMins", 0),
-            total_minutes = request.form.get("totalMins", 0),
-            prep_hours    = request.form.get("prepHours", 0),
-            cook_hours    = request.form.get("cookHours", 0),
-            total_hours   = request.form.get("totalHours", 0),
-            visibility    = request.form["visibility"],
-            allow_ratings = bool(request.form.get("allowRatings")),
-            allow_reviews = bool(request.form.get("allowReviews")),
+            name          = name,
+            recipe_type   = recipe_type,
+            difficulty    = difficulty,
+            serves        = serves,
+            description   = description,
+            cover_image   = cover_image,
+            time_split    = time_split,
+            prep_minutes  = prep_minutes,
+            cook_minutes  = cook_minutes,
+            total_minutes = total_minutes,
+            prep_hours    = prep_hours,
+            cook_hours    = cook_hours,
+            total_hours   = total_hours,
+            visibility    = visibility,
+            allow_ratings = allow_ratings,
+            allow_reviews = allow_reviews,
             status        = status,
             ingredients   = ingredients_list,
             tags          = tag_list,
@@ -353,22 +643,24 @@ def publish_recipe():
         try:
             db.session.add(recipe)
             db.session.commit()
-            return redirect(url_for("profile"))
+            # app.logger.info("No Errors")
+            return redirect(url_for("main.myRecipes"))
         
         except Exception as e:
-            app.logger.error(e)
+            current_app.logger.error(e)
             db.session.rollback()
             error = "Recipe could not be saved."
-            return render_template("/create_recipe", error=error)
+            return render_template("create_recipe.html", error=error)
 
 
-@app.route('/create_recipe/<recipe_num>')
+@main.route('/create_recipe/<recipe_num>')
 def create_recipe(recipe_num):
-    ############### You will nedd to actually check for a User
-    signed_in = True
+    signed_in = current_user.is_authenticated
 
+    if not signed_in:
+        return redirect(url_for("main.need_to_be_logged_in"))
 
-    authorId = session.get('authorId')
+    authorId = current_user.id
     author = User.query.filter_by(id=authorId).first().username
 
     empty_dict = {
@@ -404,7 +696,7 @@ def create_recipe(recipe_num):
         
     allowed_to_view=True
 
-    userId = session.get('authorId')
+    userId = current_user.id
     user = User.query.filter_by(id=userId).first()
 
     recipe = Recipe.query.filter_by(id=recipe_num).first()
@@ -475,7 +767,7 @@ def create_recipe(recipe_num):
 
 
 
-@app.route('/login', methods=['GET', 'POST'])
+@main.route('/login', methods=['GET', 'POST'])
 def login():
 
     if request.method == 'POST':
@@ -488,14 +780,14 @@ def login():
         if user and user.check_password(password):
             login_user(user)
             session['authorId'] = user.id
-            return redirect(url_for('index'))
+            return redirect(url_for('main.index'))
 
-        return render_template('loginPage.html', error="Invalid credentials")
+        return render_template('loginPage.html', error="Incorrect Username or Password")
 
     return render_template('loginPage.html')
 
 
-@app.route('/signup', methods=['GET', 'POST'])
+@main.route('/signup', methods=['GET', 'POST'])
 def signup():
 
     if request.method == 'POST':
@@ -503,6 +795,13 @@ def signup():
         username = request.form['username']
         email = request.form['email']
         password = request.form['password']
+        confirm_password = request.form['confirm_password']
+
+        if password != confirm_password:
+            return render_template(
+                'signupPage.html',
+                error="Password and Confirm Password must be the same"
+            )
 
         user = User(username=username, email=email)
         user.set_password(password)
@@ -511,33 +810,38 @@ def signup():
 
         try:
             db.session.commit()
-            return redirect(url_for('login'))
+            return redirect(url_for('main.login'))
 
         except IntegrityError:
             db.session.rollback()
             return render_template(
                 'signupPage.html',
-                error="Username or email already exists"
+                error="Username or email already in use"
             )
 
-    return render_template('signupPage.html')
+    return render_template('signupPage.html', error="")
 
-
-
-@app.route("/logout")
+@main.route("/logout")
 def logout():
     logout_user()
-    return redirect(url_for("index"))
+    return redirect(url_for("main.index"))
 
 
 
 
 
-@app.route("/updateBookmark", methods=["POST"])
+@main.route("/updateBookmark", methods=["POST"])
 def updateBookmark():
+
+    signed_in = current_user.is_authenticated
+
+    if not signed_in:
+        return redirect(url_for("main.need_to_be_logged_in"))
+
     recipe_id       = request.json.get("recipe_id")
-    user_id         = request.json.get("user_id")
+    user_id         = current_user.id
     bookmark_status = request.json.get("bookmark_status")
+
 
     bookmark = Bookmark.query.filter_by(user_id=user_id, recipe_id=recipe_id).first()
 
@@ -569,10 +873,16 @@ def updateBookmark():
 
 
 
-@app.route("/updateShoppingList", methods=["POST"])
+@main.route("/updateShoppingList", methods=["POST"])
 def updateShoppingList():
+
+    signed_in = current_user.is_authenticated
+
+    if not signed_in:
+        return redirect(url_for("main.need_to_be_logged_in"))
+
     recipe_id       = request.json.get("recipe_id")
-    user_id         = request.json.get("user_id")
+    user_id         = current_user.id
     cart_status = request.json.get("cart_status")
 
     cart = ShoppingList.query.filter_by(user_id=user_id, recipe_id=recipe_id).first()
@@ -605,10 +915,15 @@ def updateShoppingList():
 
 
 
-@app.route("/profile")
+@main.route("/profile")
 def profile():
-    signed_in = True
-    userId = session.get('authorId')
+
+    signed_in = current_user.is_authenticated
+
+    if not signed_in:
+        return redirect(url_for("main.need_to_be_logged_in"))
+
+    userId = current_user.id
     user = User.query.filter_by(id=userId).first()
 
     my_recipes_list = []
@@ -627,9 +942,15 @@ def profile():
     )
 
 
-@app.route("/update_username", methods=["POST"])
+@main.route("/update_username", methods=["POST"])
 @login_required
 def update_username():
+
+    signed_in = current_user.is_authenticated
+
+    if not signed_in:
+        return redirect(url_for("main.need_to_be_logged_in"))
+
     new_name = request.get_json().get("username", "").strip()
 
     if not new_name:
@@ -644,22 +965,39 @@ def update_username():
     return jsonify(success=True)
 
 
-@app.route("/upload_avatar", methods=["POST"])
+@main.route("/upload_avatar", methods=["POST"])
 @login_required
 def upload_avatar():
+
+    signed_in = current_user.is_authenticated
+
+    if not signed_in:
+        return redirect(url_for("main.need_to_be_logged_in"))
+
     image_data = request.get_json().get("image")
 
     if not image_data:
         return jsonify(success=False, message="No image provided.")
+
+    approx_bytes = len(image_data) * 0.75
+    if approx_bytes > 150 * 1024:
+        return jsonify(success=False, message="Image too large. Please upload under 100KB.")
 
     current_user.profile_picture = image_data
     db.session.commit()
     return jsonify(success=True)
 
 
-@app.route("/update_password", methods=["POST"])
+@main.route("/update_password", methods=["POST"])
 @login_required
 def update_password():
+
+    signed_in = current_user.is_authenticated
+
+    if not signed_in:
+        return redirect(url_for("main.need_to_be_logged_in"))
+
+        
     data   = request.get_json()
     current = data.get("current")
     new_pw  = data.get("new")
@@ -675,31 +1013,29 @@ def update_password():
     return jsonify(success=True)
 
 
-@app.route('/view_recipe/<recipe_num>')
+@main.route('/view_recipe/<recipe_num>')
 def view_recipe(recipe_num):
 
-    ############### You will nedd to actually check for a User
-    signed_in = True
+    signed_in = current_user.is_authenticated
 
-    userId = session.get('authorId')
-    user = User.query.filter_by(id=userId).first()
-
-
-    #########################Currently hardcoded so that anyone can view anything
     allowed_to_view=True
 
     recipe = Recipe.query.filter_by(id=recipe_num).first()
 
     author = User.query.filter_by(id=recipe.author_id).first().username
 
-    bookmark = Bookmark.query.filter_by(user_id=userId, recipe_id=recipe.id).first()
-    cart = ShoppingList.query.filter_by(user_id=userId, recipe_id=recipe.id).first()
     bookmark_on = True
-    if not bookmark:
-        bookmark_on = False
     cart_on = True
-    if not cart:
-        cart_on = False
+    if signed_in:
+        userId = current_user.id
+        user = User.query.filter_by(id=userId).first()
+
+        bookmark = Bookmark.query.filter_by(user_id=userId, recipe_id=recipe.id).first()
+        cart = ShoppingList.query.filter_by(user_id=userId, recipe_id=recipe.id).first()
+        if not bookmark:
+            bookmark_on = False
+        if not cart:
+            cart_on = False
     
 
     tag_list = []
@@ -758,29 +1094,29 @@ def view_recipe(recipe_num):
 
 
 
-@app.route("/outer_profile/<author_id>")
+@main.route("/outer_profile/<author_id>")
 def outer_profile(author_id):
-    ############### You will nedd to actually check for a User
-    signed_in = True
 
-    current_user_id = session.get('authorId')
-    current_user = User.query.filter_by(id=current_user_id).first()
+    signed_in = current_user.is_authenticated
 
     author = User.query.filter_by(id=author_id).first()
 
     their_recipes_list = []
     for recipe in author.recipes:
-        author_username = User.query.filter_by(id=recipe.author_id).first().username
-        bookmark = Bookmark.query.filter_by(user_id=current_user_id, recipe_id=recipe.id).first()
-        cart = ShoppingList.query.filter_by(user_id=current_user_id, recipe_id=recipe.id).first()
+        author_username = author.username
 
         bookmark_on = True
-        if not bookmark:
-            bookmark_on = False
-
         cart_on = True
-        if not cart:
-            cart_on = False
+        if signed_in:
+            userId = current_user.id
+            user = User.query.filter_by(id=userId).first()
+
+            bookmark = Bookmark.query.filter_by(user_id=userId, recipe_id=recipe.id).first()
+            cart = ShoppingList.query.filter_by(user_id=userId, recipe_id=recipe.id).first()
+            if not bookmark:
+                bookmark_on = False
+            if not cart:
+                cart_on = False
 
         tag_list = []
         
@@ -789,6 +1125,9 @@ def outer_profile(author_id):
 
         their_recipes_list.append(make_recipe_banner_dict(recipe, author_username, tag_list, bookmark_on, cart_on, signed_in=signed_in))
 
-        print(author.profile_picture)
-
     return render_template("outerProfilePage.html", authorUsername=author_username, authorRecipes=their_recipes_list[::-1], authorProfilePic=author.profile_picture)
+
+
+@main.route("/need_to_be_logged_in")
+def need_to_be_logged_in():
+    return render_template("needLogin.html")

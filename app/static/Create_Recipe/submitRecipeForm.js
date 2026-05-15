@@ -1,66 +1,51 @@
 function handleRecipeForm() {
-    let recipe_details_dict = getRecipeInfo()
+    //Time
+    let time_split = document.getElementById("timeCheckbox").checked;
+    let times = document.getElementById("Time").getElementsByTagName("input");
+    let total_time = 0;
+    // If there is no value in a input it sets the time there to 0
+    for (let i = 0; i < times.length; i++){
+        if (times[i].value == ""){
+            times[i].value = "0";
+        }
+        total_time += Number(times[i].value);
+    }
 
-    // Recipe Name
-    if (recipe_details_dict["recipeName"] == "") {
-        alert("Your recipe needs a name");
+    if (total_time == 0){
+        alert("A recipe must take a minimum of 1 minute");
+        times[times.length - 1].focus(); 
         return false;
     }
 
-    // Time
-    if (recipe_details_dict["timeList"]["totalTime"][0] == 0 && recipe_details_dict["timeList"]["totalTime"][1] == 0) {
-        alert("Please Indicate how long your recipe will take to complete");
+    //Description
+    let description = document.getElementById("Description").value;
+
+    if (!description){
+        alert("A recipe must have a description");
+        document.getElementById("Description").focus(); 
         return false;
     }
 
 
-    // DO COVER PHOTO
+    // I am not validating the Units in ingredient as there may be units that I haven't included that you need to use
 
-    // // Ingredients
-    // // Format = [ingredientName, ingredientQuantity, ingredientUnits, ingredientDescription]
-    // let ingredientList = [];
-    // for (ingredient of document.getElementById("Ingredients").childNodes){
-    //     let ingredientDetails = [];
-
-    //     if (ingredient.childNodes[3].value == "") {
-    //         alert("Your ingredient needs name");
-    //         return false;
-    //     }
-    //     if (ingredient.childNodes[5].value == "" && ingredient.childNodes[7].value != '"To Taste"') {
-    //         alert("Your ingredient needs a quantity");
-    //         return false;
-    //     }
-    //     if (ingredient.childNodes[7].value != "") {
-    //         alert("Your ingredient needs units");
-    //         return false;
-    //     }
-
-    //     ingredientDetails.push(ingredient.childNodes[3].value);
-    //     ingredientDetails.push(ingredient.childNodes[5].value);
-    //     ingredientDetails.push(ingredient.childNodes[7].value);
-    //     ingredientDetails.push(ingredient.childNodes[13].value);
-
-    //     ingredientList.push(ingredientDetails);
-
-    //     alert(ingredient.childNodes[7]);
-
-    // }
-
-
-    // if (ingredientList.length == 0) {
-    //     alert("Your recipe must have at least 1 ingredient");
-    //     return false;
-    // }
-
-
-
-    // console.log(tagList);
-
-    // console.log(ingredientList);
-
-    if (recipeValid){
-        alert("Recipe has successfully been published");
+    //Ingredients
+    let ingredients = document.getElementById("Ingredients").childNodes
+    if (ingredients.length == 0){
+        alert("Your recipe must have at least 1 ingredient.");
+        return false;
     }
+    
+
+    //Steps
+    let steps = document.getElementById("Steps").childNodes
+    if (steps.length == 0){
+        alert("Your recipe must have at least 1 Step.");
+        return false;
+    }
+
+    ///////////////////////////////////////VALIDATE PHOTOS!!!!11
 
     return true;
 }
+

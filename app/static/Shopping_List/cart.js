@@ -15,14 +15,16 @@ function makeCart(cart_on) {
 
 function addToCart(cart) {
     let recipe_id = cart.target.parentElement.getAttribute("recipe_id");
-    let user_id = document.getElementById("recipe_banner_div").getAttribute("user_id");
+
+    let csrfToken = document.querySelector('meta[name="csrf-token"]').content;
 
     fetch("/updateShoppingList", {
         method: "POST",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrfToken
         },
-        body: JSON.stringify({ recipe_id: recipe_id, user_id: user_id, cart_status: "on"})
+        body: JSON.stringify({ recipe_id: recipe_id, cart_status: "on"})
     })
     .then(response => response.json())
     .then(data => {
@@ -41,14 +43,16 @@ function addToCart(cart) {
 
 function removeFromCart(cart) {
     let recipe_id = cart.target.parentElement.getAttribute("recipe_id");
-    let user_id = document.getElementById("recipe_banner_div").getAttribute("user_id");
+
+    let csrfToken = document.querySelector('meta[name="csrf-token"]').content;
 
     fetch("/updateShoppingList", {
         method: "POST",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrfToken
         },
-        body: JSON.stringify({ recipe_id: recipe_id, user_id: user_id, cart_status: "off"})
+        body: JSON.stringify({ recipe_id: recipe_id, cart_status: "off"})
     })
     .then(response => response.json())
     .then(data => {
