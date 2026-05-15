@@ -380,7 +380,7 @@ def publish_recipe():
         ingredient_descriptions = request.form.getlist("ingredientDescription")
 
         if len(ingredient_names) != len(ingredient_quantities) or len(ingredient_quantities) != len(ingredient_units) or len(ingredient_units) != len(ingredient_descriptions):
-            app.logger.error("Inconsitent Number of Ingredient Details")
+            current_app.logger.error("Inconsistent Number of Ingredient Details")
             return render_template('somethingWentWrong.html') 
 
 
@@ -396,19 +396,19 @@ def publish_recipe():
 
             # Validate that the ingredient details are valid
             if len(ingredient_name) >= 50 or ingredient_name == "":
-                app.logger.error("Ingredient Name Incorrect")
+                current_app.logger.error("Ingredient Name Incorrect")
                 return render_template('somethingWentWrong.html') 
 
             if not is_number(ingredient_quantity) or float(ingredient_quantity) < 0:
-                app.logger.error("Ingredient Quantity Incorrect")
+                current_app.logger.error("Ingredient Quantity Incorrect")
                 return render_template('somethingWentWrong.html') 
 
             if len(ingredient_unit) >= 50 or ingredient_unit == "":
-                app.logger.error("Ingredient Unit Incorrect")
+                current_app.logger.error("Ingredient Unit Incorrect")
                 return render_template('somethingWentWrong.html') 
 
             if len(ingredient_description) >= 500:
-                app.logger.error("Ingredient Description Incorrect")
+                current_app.logger.error("Ingredient Description Incorrect")
                 return render_template('somethingWentWrong.html') 
 
 
@@ -438,7 +438,7 @@ def publish_recipe():
             
             # Validate that the tag details are valid
             if len(tag_name) >= 50 or tag_name == "":
-                app.logger.error("Tag Name Incorrect")
+                current_app.logger.error("Tag Name Incorrect")
                 return render_template('somethingWentWrong.html') 
 
             # If a tag of the given name has never appeared in a recipe before, it will not be in the database and needs to be added
@@ -475,15 +475,15 @@ def publish_recipe():
 
             # Validate that the appliance details are valid
             if len(appliance_name) >= 50 or appliance_name == "":
-                app.logger.error("Appliance Name Incorrect")
+                current_app.logger.error("Appliance Name Incorrect")
                 return render_template('somethingWentWrong.html') 
 
             if len(appliance_extra_data) >= 50:
-                app.logger.error("Appliance Extra Data Incorrect")
+                current_app.logger.error("Appliance Extra Data Incorrect")
                 return render_template('somethingWentWrong.html') 
 
             if len(appliance_description) >= 500:
-                app.logger.error("Appliance Description Incorrect")
+                current_app.logger.error("Appliance Description Incorrect")
                 return render_template('somethingWentWrong.html') 
 
 
@@ -513,7 +513,7 @@ def publish_recipe():
         step_photos = request.form.getlist("stepPhoto")
 
         if len(step_names) != len(step_descriptions) or len(step_descriptions) != len(step_photos):
-            app.logger.error("Inconsitent Number of Step Details")
+            current_app.logger.error("Inconsitent Number of Step Details")
             return render_template('somethingWentWrong.html') 
         
         step_list = []
@@ -528,16 +528,16 @@ def publish_recipe():
 
             # Validate that the step details are valid
             if len(step_name) >= 50:
-                app.logger.error("Step Name Incorrect")
+                current_app.logger.error("Step Name Incorrect")
                 return render_template('somethingWentWrong.html') 
 
             if len(step_description) >= 500 or step_description == "":
-                app.logger.error("Step Description Incorrect")
+                current_app.logger.error("Step Description Incorrect")
                 return render_template('somethingWentWrong.html') 
 
             if step_photo != "":
                 if not step_photo.startswith("data:image/webp") and not step_photo.startswith("data:image/jpeg") and not step_photo.startswith("data:image/jpg") and not step_photo.startswith("data:image/png"):
-                    app.logger.error("Step Photo Incorrect")
+                    current_app.logger.error("Step Photo Incorrect")
                     return render_template('somethingWentWrong.html') 
 
 
@@ -561,33 +561,33 @@ def publish_recipe():
         # Validate the remainder of the recipe table details
         name = request.form["recipe_name"].strip()
         if len(name) >= 200 or name == "":
-            app.logger.error("Recipe Name Incorrect")
+            current_app.logger.error("Recipe Name Incorrect")
             return render_template('somethingWentWrong.html') 
 
         recipe_type = request.form["recipeType"].strip()
         if len(name) >= 30 or recipe_type == "":
-            app.logger.error("Recipe Type Incorrect")
+            current_app.logger.error("Recipe Type Incorrect")
             return render_template('somethingWentWrong.html') 
 
         difficulty = request.form["recipeDifficulty"].strip()
         if len(difficulty) >= 20 or difficulty == "":
-            app.logger.error("Recipe Difficulty Incorrect")
+            current_app.logger.error("Recipe Difficulty Incorrect")
             return render_template('somethingWentWrong.html') 
 
         serves = request.form["serves"].strip()
         if not is_number(serves) or float(serves) < 0:
-            app.logger.error("Recipe Serves Incorrect")
+            current_app.logger.error("Recipe Serves Incorrect")
             return render_template('somethingWentWrong.html') 
 
         description = request.form["Description"].strip()
         if len(description) >= 1000 or description == "":
-            app.logger.error("Recipe Description Incorrect")
+            current_app.logger.error("Recipe Description Incorrect")
             return render_template('somethingWentWrong.html') 
 
         cover_image = request.form["coverPhoto"].strip()
         if cover_image != "":
             if not cover_image.startswith("data:image/webp") and not cover_image.startswith("data:image/jpeg") and not cover_image.startswith("data:image/jpg") and not cover_image.startswith("data:image/png"):
-                app.logger.error("Recipe Cover Image Incorrect")
+                current_app.logger.error("Recipe Cover Image Incorrect")
                 return render_template('somethingWentWrong.html') 
         
         prep_minutes  = request.form.get("prepMins", "0").strip()
@@ -600,12 +600,12 @@ def publish_recipe():
         times = [prep_minutes, cook_minutes, total_minutes, prep_hours, cook_hours, total_hours]
         for time in times:
             if not is_number(time) or float(time) < 0:
-                app.logger.error("Recipe Timings Incorrect")
+                current_app.logger.error("Recipe Timings Incorrect")
                 return render_template('somethingWentWrong.html') 
 
         visibility = request.form["visibility"].strip()
         if len(visibility) >= 20 or visibility == "":
-            app.logger.error("Recipe Visibility Incorrect")
+            current_app.logger.error("Recipe Visibility Incorrect")
             return render_template('somethingWentWrong.html') 
 
         time_split    = bool(request.form.get("timeSplit"))

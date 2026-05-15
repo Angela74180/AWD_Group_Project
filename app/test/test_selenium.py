@@ -1,31 +1,28 @@
 import unittest
 import threading
 import time
-
 from selenium import webdriver
-
 from app import create_app, db
 from config import TestConfig
 from app.models import User, Recipe, Step
-
-
-localHost = "http://127.0.0.1:5001/"
-
 from werkzeug.serving import make_server
 
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+
+localHost = "http://127.0.0.1:5001/"
 
 class ServerThread(threading.Thread):
     def __init__(self, app):
         super().__init__()
         self.server = make_server("127.0.0.1", 5001, app)
-        self.ctx = app.app_context()
-        self.ctx.push()
 
     def run(self):
         self.server.serve_forever()
 
     def shutdown(self):
         self.server.shutdown()
+
 
 class SeleniumTests(unittest.TestCase):
 
@@ -41,8 +38,8 @@ class SeleniumTests(unittest.TestCase):
         cls.server = ServerThread(cls.testApp)
         cls.server.start()
 
-        time.sleep(1) 
-       
+        time.sleep(1)
+
         options = webdriver.ChromeOptions()
         options.add_argument("--headless=new")
 
@@ -99,9 +96,12 @@ class SeleniumTests(unittest.TestCase):
         with self.assertRaises(Exception):
             db.session.commit()
 
+        db.session.rollback()
+
     def test_step_ordering(self):
         user = User(username="chef", email="chef@test.com")
         user.set_password("abc")
+
         db.session.add(user)
         db.session.commit()
 
@@ -119,13 +119,57 @@ class SeleniumTests(unittest.TestCase):
         db.session.add(recipe)
         db.session.commit()
 
-        step1 = Step(recipe_id=recipe.id, step_number=2, desc="Second")
-        step2 = Step(recipe_id=recipe.id, step_number=1, desc="First")
+        step1 = Step(
+            recipe_id=recipe.id,
+            step_number=2,
+            desc="Second"
+        )
+
+        step2 = Step(
+            recipe_id=recipe.id,
+            step_number=1,
+            desc="First"
+        )
 
         db.session.add_all([step1, step2])
         db.session.commit()
 
-        steps = recipe.steps 
+        steps = recipe.steps
 
         self.assertEqual(steps[0].step_number, 1)
         self.assertEqual(steps[1].step_number, 2)
+
+    def test_login_page(self):
+        user = User(
+            username="test123",
+            email="test@test.com"
+        )
+        user.set_password("abc123")
+
+        db.session.add(user)
+        db.session.commit()
+
+        self.driver.get(localHost + "login")
+
+        username = self.driver.find_element(By.NAME, "username")
+        password = self.driver.find_element(By.NAME, "password")
+
+        username.send_keys("test123")
+        password.send_keys("abc123")
+
+        password.send_keys(Keys.RETURN)
+
+        time.sleep(1)
+
+        self.assertIn("127.0.0.1:5001", self.driver.current_url)
+
+    def test_home_page_loads_and_navbar_exists(self):
+        self.driver.get("http://127.0.0.1:5001/index")
+
+        self.assertIn("CookBook", self.driver.page_source)
+
+        home_link = self.driver.find_element("link text", "Home")
+        explore_link = self.driver.find_element("link text", "Explore")
+
+        self.assertTrue(home_link.is_displayed())
+        self.assertTrue(explore_link.is_displayed())
