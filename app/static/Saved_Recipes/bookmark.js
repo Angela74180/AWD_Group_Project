@@ -1,3 +1,4 @@
+// This function Creates an element that acts as a bookmark
 function makeBookmark(bookmark_on) {
     let bookmark = document.createElement("i");
 
@@ -13,6 +14,7 @@ function makeBookmark(bookmark_on) {
     return bookmark;
 }
 
+// This function is triggered when someone adds a banner. It changes the element presented and updates the database
 function addBookmark(bookmark) {
     let recipe_id = bookmark.target.parentElement.getAttribute("recipe_id");
 
@@ -41,7 +43,7 @@ function addBookmark(bookmark) {
     });
 }
 
-
+// This function is triggered when someone removes a banner. It changes the element presented and updates the database
 function removeBookmark(bookmark) {
 
     let recipe_id = bookmark.target.parentElement.getAttribute("recipe_id");

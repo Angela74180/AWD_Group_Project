@@ -2,6 +2,7 @@ let appliance_id_counter = 0;
 
 // document.addEventListener("DOMContentLoaded", addAppliance);
 
+// This function displays the elements where the author has to add extra data
 function chosenAppliance(appliance, extraData) {
 
     let details = appliance.parentElement.getElementsByTagName("div")[0];
@@ -20,6 +21,7 @@ function chosenAppliance(appliance, extraData) {
     }
 }
 
+// This function adds a new appliance section to the create recipes page
 function addAppliance(applianceDict) {
     appliance_id_counter++;
 
@@ -75,11 +77,12 @@ function addAppliance(applianceDict) {
     chosenAppliance(newAppliance.getElementsByTagName("input")[0], applianceDict["extraData"]);
 }
 
+// This function removes the selected appliance div from the create recipes page
 function removeAppliance(removeButton) {
     removeButton.target.parentElement.remove();
 }
 
-
+// This function adds a new appliance input to the filter bar in the explore page
 function makeFilterAppliance(){
     let line = document.createElement("div");
     let remove = document.createElement("button");

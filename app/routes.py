@@ -30,7 +30,7 @@ def index():
 
     chosen_recipes = Recipe.query.filter_by(visibility="Public").order_by(db.func.random()).limit(6).all()
     
-    
+    # Produces a list of all the recipe details for all the recipes that will be displayed on the page
     for recipe in chosen_recipes:
         author = recipe.author.username
 
@@ -89,7 +89,7 @@ def explore():
 
     chosen_recipes = Recipe.query.filter_by(visibility="Public").all()
     
-    
+    # Produces a list of all the recipe details for all the recipes that will be displayed on the page
     for recipe in chosen_recipes:
         author = recipe.author.username
 
@@ -141,6 +141,7 @@ def explore():
 @main.route("/shopping_list")
 def shopping_list():
 
+    # Confirms user sign in
     signed_in = current_user.is_authenticated
 
     if not signed_in:
@@ -151,7 +152,7 @@ def shopping_list():
 
     shopping_lists = user.shopping_lists
 
-
+    # Produces a list of all the recipe details for all the recipes that will be displayed on the page
     recipes_list = []
     ingredients_list = []
     for shopping_list in shopping_lists:
@@ -210,6 +211,7 @@ def shopping_list():
 @main.route("/saved")
 def saved():
 
+    # Confirms user sign in
     signed_in = current_user.is_authenticated
 
     if not signed_in:
@@ -220,7 +222,7 @@ def saved():
 
     bookmarks = user.bookmarks
 
-
+    # Produces a list of all the recipe details for all the recipes that will be displayed on the page
     recipes_list = []
     for bookmark in bookmarks:
         recipe_id = bookmark.recipe_id
@@ -310,6 +312,7 @@ def get_reviews(recipe_id):
 @main.route("/myRecipes")
 def myRecipes():
 
+    # Confirms user sign in
     signed_in = current_user.is_authenticated
 
     if not signed_in:
@@ -322,6 +325,7 @@ def myRecipes():
         logout_user()
         return redirect(url_for("login"))
 
+    # Produces a list of all the recipe details for all the recipes that will be displayed on the page
     my_recipes_list = []
     for recipe in user.recipes:
         author = User.query.filter_by(id=recipe.author_id).first().username
@@ -390,13 +394,13 @@ def submit_review():
 
 @main.route('/publish_recipe', methods=["POST"])
 def publish_recipe():
-
+    # Confirms user sign in
     signed_in = current_user.is_authenticated
 
     if not signed_in:
         return redirect(url_for("main.need_to_be_logged_in"))
 
-
+    # Gets all the ingredient details to stor in the database and validates them
     if request.method == "POST":
 
         ingredient_names        = request.form.getlist("ingredientName")
@@ -680,6 +684,8 @@ def publish_recipe():
 
 @main.route('/create_recipe/<recipe_num>')
 def create_recipe(recipe_num):
+
+    # Confirms user sign in
     signed_in = current_user.is_authenticated
 
     if not signed_in:
@@ -688,6 +694,7 @@ def create_recipe(recipe_num):
     authorId = current_user.id
     author = User.query.filter_by(id=authorId).first().username
 
+    # If there is no recipe number given, we use a blank recipe dict
     empty_dict = {
         "id": 0,
         "recipeId": 0,
@@ -715,6 +722,7 @@ def create_recipe(recipe_num):
         "allowed_to_view": True
     }
 
+    # If there is a recipe num we get all teh details associated with that recipe and turn them into a dict
     if recipe_num == "0":
         return render_template('create_recipe.html', recipe_details_dict=empty_dict) 
 
@@ -876,6 +884,7 @@ def logout():
 @main.route("/updateBookmark", methods=["POST"])
 def updateBookmark():
 
+    # Confirms user sign in
     signed_in = current_user.is_authenticated
 
     if not signed_in:
@@ -885,7 +894,7 @@ def updateBookmark():
     user_id         = current_user.id
     bookmark_status = request.json.get("bookmark_status")
 
-
+    # Updates teh database
     bookmark = Bookmark.query.filter_by(user_id=user_id, recipe_id=recipe_id).first()
 
     if not bookmark and bookmark_status == "on":
@@ -919,6 +928,7 @@ def updateBookmark():
 @main.route("/updateShoppingList", methods=["POST"])
 def updateShoppingList():
 
+    # Confirms user sign in
     signed_in = current_user.is_authenticated
 
     if not signed_in:
@@ -930,6 +940,7 @@ def updateShoppingList():
 
     cart = ShoppingList.query.filter_by(user_id=user_id, recipe_id=recipe_id).first()
 
+    # Updates teh database
     if not cart and cart_status == "on":
         cart = ShoppingList(
             user_id = user_id,
@@ -961,6 +972,7 @@ def updateShoppingList():
 @main.route("/profile")
 def profile():
 
+    # Confirms user sign in
     signed_in = current_user.is_authenticated
 
     if not signed_in:
@@ -968,6 +980,8 @@ def profile():
 
     userId = current_user.id
     user = User.query.filter_by(id=userId).first()
+
+    # Produces a list of all the recipe details for all the recipes that will be displayed on the page
 
     my_recipes_list = []
     for recipe in user.recipes:
@@ -989,6 +1003,7 @@ def profile():
 @login_required
 def update_username():
 
+    # Confirms user sign in
     signed_in = current_user.is_authenticated
 
     if not signed_in:
@@ -1017,6 +1032,7 @@ def update_username():
 @login_required
 def upload_avatar():
 
+    # Confirms user sign in
     signed_in = current_user.is_authenticated
 
     if not signed_in:
@@ -1040,6 +1056,7 @@ def upload_avatar():
 @login_required
 def update_password():
 
+    # Confirms user sign in
     signed_in = current_user.is_authenticated
 
     if not signed_in:
@@ -1082,6 +1099,8 @@ def view_recipe(recipe_num):
     recipe = Recipe.query.filter_by(id=recipe_num).first()
 
     author = User.query.filter_by(id=recipe.author_id).first().username
+
+    # Produces a list of all the recipe details that will be displayed on the page
 
     bookmark_on = True
     cart_on = True
@@ -1160,6 +1179,7 @@ def outer_profile(author_id):
 
     author = User.query.filter_by(id=author_id).first()
 
+    # Produces a list of all the recipe details for all the recipes that will be displayed on the page
     their_recipes_list = []
     for recipe in author.recipes:
         author_username = author.username

@@ -1,3 +1,4 @@
+// This function Creates an element that acts as a cart symbol, based on what is stored in the database
 function makeCart(cart_on) {
     let cart = document.createElement("i");
 
@@ -13,6 +14,7 @@ function makeCart(cart_on) {
     return cart;
 }
 
+// This function is triggered when someone adds an item to the cart. It changes the element presented and updates the database
 function addToCart(cart) {
     let recipe_id = cart.target.parentElement.getAttribute("recipe_id");
 
@@ -41,6 +43,7 @@ function addToCart(cart) {
     });
 }
 
+// This function is triggered when someone removes an item from cart. It changes the element presented and updates the database
 function removeFromCart(cart) {
     let recipe_id = cart.target.parentElement.getAttribute("recipe_id");
 

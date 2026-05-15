@@ -1,3 +1,4 @@
+// This function validates and displays a photo in create recipe
 function validatePhoto(photo) {
     let photo_div = photo.nextElementSibling;
     photo_div.innerHTML = "";
