@@ -20,7 +20,7 @@
 <!-- Header -->
 <div class="profile-header">
     <label class="avatar-wrap" id="avatarWrap" title="Change profile photo">
-        <input type="file" id="avatar-input" accept="image/*" hidden>
+        <input type="file" id="avatar-input" accept=".jpg, .png, .jpeg, .webp" hidden>
         {% if current_user.profile_picture %}
             <img id="avatarDisplay" src="{{ current_user.profile_picture }}" class="avatar-display-img" alt="Profile Picture">
         {% else %}
@@ -57,7 +57,7 @@
 
         <div class="field-row" id="nameEditRow" hidden>
             <span class="field-label">Name</span>
-            <input class="field-input" type="text" id="nameInput" />
+            <input class="field-input" type="text" id="nameInput" maxlength="50" />
             <button class="save-btn" id="nameSaveBtn">Save</button>
             <button class="cancel-btn" id="nameCancelBtn">✕</button>
         </div>
