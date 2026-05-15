@@ -20,7 +20,7 @@
 <!-- Header -->
 <div class="profile-header">
     <label class="avatar-wrap" id="avatarWrap" title="Change profile photo">
-        <input type="file" id="avatar-input" accept="image/*" hidden>
+        <input type="file" id="avatar-input" accept=".jpg, .png, .jpeg, .webp" hidden>
         {% if current_user.profile_picture %}
             <img id="avatarDisplay" src="{{ current_user.profile_picture }}" class="avatar-display-img" alt="Profile Picture">
         {% else %}
@@ -57,7 +57,7 @@
 
         <div class="field-row" id="nameEditRow" hidden>
             <span class="field-label">Name</span>
-            <input class="field-input" type="text" id="nameInput" />
+            <input class="field-input" type="text" id="nameInput" maxlength="50" />
             <button class="save-btn" id="nameSaveBtn">Save</button>
             <button class="cancel-btn" id="nameCancelBtn">✕</button>
         </div>
@@ -96,7 +96,7 @@
         <div class="pw-field">
             <label class="pw-label">Current Password</label>
             <div class="pw-input-wrap">
-                <input class="pw-input" type="password" id="pwCurrent" placeholder="Enter current password" />
+                <input class="pw-input" type="password" id="pwCurrent" placeholder="Enter current password" maxlength="128" />
                 <button class="eye-btn" data-target="pwCurrent">👁️</button>
             </div>
         </div>
@@ -104,7 +104,7 @@
         <div class="pw-field">
             <label class="pw-label">New Password</label>
             <div class="pw-input-wrap">
-                <input class="pw-input" type="password" id="pwNext" placeholder="Enter new password" />
+                <input class="pw-input" type="password" id="pwNext" placeholder="Enter new password" maxlength="128" />
                 <button class="eye-btn" data-target="pwNext">👁️</button>
             </div>
         </div>
@@ -112,7 +112,7 @@
         <div class="pw-field">
             <label class="pw-label">Confirm New Password</label>
             <div class="pw-input-wrap">
-                <input class="pw-input" type="password" id="pwConfirm" placeholder="Confirm new password" />
+                <input class="pw-input" type="password" id="pwConfirm" placeholder="Confirm new password" maxlength="128" />
                 <button class="eye-btn" data-target="pwConfirm">👁️</button>
             </div>
             <p class="pw-mismatch" id="pwMismatch" hidden>Passwords don't match</p>
