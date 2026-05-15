@@ -50,5 +50,22 @@ Use the following command to install teh requirements:
 pip install -r requirements.txt
 
 
-We have a sparsely populated database. If you want to include it, in a terminal window, use the command:
-.read restore_backup.sql
+Upgrade the Database:
+Use the following command to fill in the empty tables in teh database:
+flask db upgrade
+
+
+Include the Database Contents:
+We have a sparsely populated database. If you want to include it, do the following:
+sqlite3 app.db < restore_backup.sql
+
+If You don't want to Populate the database, skip this step.
+
+
+Flask Run
+To start the appliaction, use the following command:
+flask run
+
+This will open the appliacation on a local host. Navigate to the url it provides you.
+(Should look something like: http://127.0.0.1:5000) 
+
