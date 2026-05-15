@@ -80,7 +80,7 @@ select {
 .btn-tag:hover{
   background-color: rgb(255, 210, 75);
 }
-button:active {
+.btn-tag:active {
   background-color: rgb(255, 210, 75);
   /* padding-top: 2px;
   padding-bottom: 0px;
@@ -382,8 +382,7 @@ button:active {
   align-items: center;
   gap: 20px;
   padding: 40px 32px 28px;
-  background: #ffbf1d;
-  font-family: 'DM Sans', 'Segoe UI', sans-serif;
+  background: rgb(255, 204, 75);
   overflow: hidden;
   z-index: -9999;
 }
@@ -392,13 +391,6 @@ button:active {
   font-size: 22px;
   font-weight: 700;
   color: white;
-}
-
-.header-meta {
-  margin-top: 4px;
-  font-size: 12px;
-  text-transform: uppercase;
-  color: rgba(255,255,255,.55);
 }
 
 
@@ -450,7 +442,7 @@ button:active {
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  border: 3px solid rgba(255, 213, 149, 0.6);
+  border: 3px solid rgb(255, 204, 75);
   display: flex;
   align-items: center;
   justify-content: center;
