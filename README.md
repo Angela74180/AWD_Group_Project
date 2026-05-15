@@ -15,8 +15,14 @@ CookBook is a website that allows users to create their own recipes and allows o
 
 Launching the application:
 
-Python3:
+NOTE: The selenium tests can only be run in a Windows Command Prompt (and possibly a pure Linux Terminal Window (not in WSL), but we haven't tested this)
+This May mean that you want to consider this during the installation.
+
+python3:
 Ensure you have python3 installed.
+
+sqlite3:
+Ensure you have sqlite3 installed.
 
 
 Cloning the Github Repository:
@@ -77,10 +83,11 @@ Running the test files:
 Ensure Selenium is installed: 
 pip install selenium 
 
-Unittest file (test_data.py): 
+Unittest file (test_data.py) run the following in the terminal window: 
 python -m unittest app.test.test_data
 
 Selenium file: 
+This file MUST be run in Windows Command Prompt or Linux Terminal Window (untested) and cannot be done through WSL.
 python -m unittest app.test.test_selenium
 
 

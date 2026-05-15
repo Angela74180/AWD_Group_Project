@@ -350,13 +350,31 @@ def submit_review():
         current_app.logger.error("Submit Review Missing Recipe Id")
         return jsonify({"success": False, "message": "Missing recipe_id"}), 400
 
+    taste = data.get("taste")
+    accuracy = data.get("accuracy")
+    timing = data.get("timing")
+    body = data.get("body")
+
+    if taste != None and (taste > 5 or taste < 0):
+        return jsonify({"success": False, "message": "Taste Rating Not Valid"}), 400
+
+    if accuracy != None and (accuracy > 5 or accuracy < 0):
+        return jsonify({"success": False, "message": "Accuracy Rating Not Valid"}), 400
+
+    if timing != None and (timing > 7 or timing < 0):
+        return jsonify({"success": False, "message": "Timing Not Valid"}), 400
+
+    if len(body) > 500:
+        return jsonify({"success": False, "message": "Body is Not Valid"}), 400
+
+
     review = Review(
         author_id      = current_user.id,
         recipe_id      = recipe_id,
-        taste_rating   = data.get("taste"),
-        accuracy_rating= data.get("accuracy"),
-        timing_rating  = data.get("timing"),
-        body           = data.get("body"),
+        taste_rating   = taste,
+        accuracy_rating= accuracy,
+        timing_rating  = timing,
+        body           = body,
         title          = "Review"
     )
     db.session.add(review)

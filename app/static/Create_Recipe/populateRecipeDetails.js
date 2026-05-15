@@ -46,7 +46,7 @@ function populate(recipe_details_dict) {
     }
 
     document.getElementById("visibility").value = handleQuotes(recipe_details_dict["visibility"]);
-    document.getElementById("allowRatings").checked = recipe_details_dict["allowRatings"];
+    // document.getElementById("allowRatings").checked = recipe_details_dict["allowRatings"];
     document.getElementById("allowReviews").checked = recipe_details_dict["allowReviews"];
 
 }

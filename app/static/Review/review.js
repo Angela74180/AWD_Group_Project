@@ -58,7 +58,7 @@ function injectModal() {
 
         <div id="reviewSection" class="review-modal-section">
             <label for="reviewText" class="review-modal-label">Your Review</label>
-            <textarea id="reviewText" class="review-modal-textarea" rows="4" placeholder="Share your thoughts about this recipe..."></textarea>
+            <textarea id="reviewText" class="review-modal-textarea" rows="4" maxlength="500" placeholder="Share your thoughts about this recipe..."></textarea>
         </div>
 
         <div class="review-modal-actions">
@@ -70,7 +70,7 @@ function injectModal() {
     modal.appendChild(box);
     document.getElementById("addReviews").appendChild(modal);
 
-    modal.addEventListener("click", e => { if (e.target === modal) closeReviewModal(); });
+    // modal.addEventListener("click", e => { if (e.target === modal) closeReviewModal(); });
 }
 
 
