@@ -135,50 +135,36 @@ select {
 
 .navbar {
   display: flex;
-  flex-wrap: nowrap;
-  align-items: center;
-  justify-content: space-between;
+  flex-wrap: wrap;
   background-color: rgb(255, 204, 75);
   padding: 10px 20px;
   color: white;
   position: sticky;
   top: 0;
-  gap: 16px;
+  gap: 5px;
 }
 
 .logo {
   font-size: 20px;
   font-weight: bold;
   text-shadow: 0.5px 0.5px 2px rgb(161, 127, 39);
-  flex-shrink: 0;
 }
 
 .nav-links {
+  gap: 5px 20px;
+  flex-wrap: wrap;
   font-size: 18px;
   list-style: none;
   display: flex;
-  gap: 48px;
-  flex-wrap: nowrap;
-  justify-content: center;
-  align-items: center;
   padding: 0;
   margin: 0;
-  flex: 1 1 auto;
-  min-width: 0;
   text-shadow: 0.2px 0.2px 5px rgb(161, 127, 39);
 }
 
-.nav-links li {
-  flex-shrink: 1;
-  white-space: nowrap;
-  min-width: 0;
-}
 
 .nav-links li a {
   text-decoration: none;
   color: white;
-  display: inline-block;
-  padding: 6px 4px;
 }
 
 .nav-links li a:hover {
@@ -190,78 +176,15 @@ select {
   border-radius: 50%;
   width:40px;
   height:40px;
+  margin-left: 20px;
   overflow: hidden;
   display: flex;
   object-fit: cover;
   justify-content: center;
   align-items: center;
   background-color: rgb(0, 0, 0);
-  flex-shrink: 0;
 }
 
-/* Responsive: reduce gaps and font size on smaller screens */
-@media (max-width: 1024px) {
-  .nav-links {
-    gap: 32px;
-    font-size: 18px;
-  }
-}
-
-@media (max-width: 768px) {
-  .navbar {
-    gap: 12px;
-    padding: 8px 16px;
-  }
-  .logo {
-    font-size: 18px;
-  }
-  .nav-links {
-    gap: 20px;
-    font-size: 17px;
-  }
-  .nav-links li a {
-    padding: 4px 2px;
-  }
-}
-
-@media (max-width: 600px) {
-  .navbar {
-    gap: 10px;
-    padding: 6px 12px;
-  }
-  .logo {
-    font-size: 16px;
-  }
-  .nav-links {
-    gap: 12px;
-    font-size: 14px;
-  }
-  .profile-btn {
-    width: 36px;
-    height: 36px;
-  }
-}
-
-@media (max-width: 480px) {
-  .navbar {
-    gap: 8px;
-    padding: 4px 10px;
-  }
-  .logo {
-    font-size: 13px;
-  }
-  .nav-links {
-    gap: 8px;
-    font-size: 10px;
-  }
-  .nav-links li a {
-    padding: 2px 1px;
-  }
-  .profile-btn {
-    width: 30px;
-    height: 30px;
-  }
-}
 
 .profilePic{
   border-radius: 50%;
