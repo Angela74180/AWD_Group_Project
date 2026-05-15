@@ -19,18 +19,59 @@ def is_number(given_string):
 @main.route('/')
 @main.route('/index')
 def index():
-    userId    = session.get('authorId')
-    signed_in = userId is not None
+    recipes_list = []
 
-    recipes = Recipe.query.order_by(Recipe.id.desc()).limit(6).all()
+    signed_in = current_user.is_authenticated
 
-    latest_recipes = []
-    for recipe in recipes:
-        author   = User.query.filter_by(id=recipe.author_id).first().username
-        tag_list = [Tag.query.filter_by(id=rt.tag_id).first().name for rt in recipe.tags]
-        latest_recipes.append(make_recipe_banner_dict(recipe, author, tag_list, signed_in=signed_in, bookmark_on=False, cart_on=False))
+    chosen_recipes = Recipe.query.filter_by(visibility="Public").all()
+    
+    
+    for recipe in chosen_recipes:
+        author = recipe.author.username
 
-    return render_template("homePage.html", latest_recipes=latest_recipes)
+        bookmark_on = True
+        cart_on = True
+        if signed_in:
+            userId = current_user.id
+            user = User.query.filter_by(id=userId).first()
+
+            bookmark = Bookmark.query.filter_by(user_id=userId, recipe_id=recipe.id).first()
+            cart = ShoppingList.query.filter_by(user_id=userId, recipe_id=recipe.id).first()
+            if not bookmark:
+                bookmark_on = False
+            if not cart:
+                cart_on = False
+
+        tag_list = []
+        
+        for recipeTag in recipe.tags:
+            tag_list.append(Tag.query.filter_by(id=recipeTag.tag_id).first().name)
+
+        recipes_list.append(
+            make_recipe_dict(
+                recipe,
+                author,
+                tag_list,
+
+                appliances=[
+                    Appliance.query.filter_by(id=ra.appliance_id).first().name
+                    for ra in recipe.appliances
+                ],
+
+                ingredients=[
+                    Ingredient.query.filter_by(id=ri.ingredient_id).first().name
+                    for ri in recipe.ingredients
+                ],
+
+                steps=[],
+                bookmark_on=bookmark_on,
+                cart_on=cart_on,
+                signed_in=signed_in,
+                allowed_to_view=True
+            )
+        )
+
+    return render_template("homePage.html", chosen_recipes=recipes_list[::-1])
 
 
 
