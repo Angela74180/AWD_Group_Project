@@ -71,7 +71,7 @@ def index():
             )
         )
 
-    return render_template("homePage.html", chosen_recipes=recipes_list[::-1])
+    return render_template("homePage.html", chosen_recipes=recipes_list)
 
 
 
