@@ -121,3 +121,6 @@ INSERT INTO "step" ("id", "recipe_id", "step_number", "name", "desc", "photo") V
 INSERT INTO "step" ("id", "recipe_id", "step_number", "name", "desc", "photo") VALUES ('19', '5', '3', '4', 'Place 8 spoonsful on a paper-lined baking tray and shape into rounds.', '');
 INSERT INTO "step" ("id", "recipe_id", "step_number", "name", "desc", "photo") VALUES ('20', '5', '4', '5', 'Bake at 200 celcius for 14 minutes.', '');
 INSERT INTO "step" ("id", "recipe_id", "step_number", "name", "desc", "photo") VALUES ('21', '5', '5', '6', 'Slice in half and butter.', '');
+INSERT INTO "review_like" ("id", "user_id", "review_id", "liked_at") VALUES ('1', '1', '1', '2026-05-15 01:19:40.116320');
+INSERT INTO "review_like" ("id", "user_id", "review_id", "liked_at") VALUES ('2', '3', '1', '2026-05-15 01:20:03.304973');
+INSERT INTO "review" ("id", "author_id", "recipe_id", "title", "body", "taste_rating", "accuracy_rating", "timing_rating", "like_count", "created_at", "updated_at") VALUES ('1', '1', '5', 'Review', 'Really Good. Thanks!', '3', '4', '3', '2', '2026-05-15 01:19:18.187195', '2026-05-15 01:20:03.293977');

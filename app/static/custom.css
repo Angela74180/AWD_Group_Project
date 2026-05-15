@@ -790,12 +790,24 @@ button:active {
 
 
 .review-modal-select {
-    width: 100%;
-    padding: 8px 10px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-family: inherit;
-    font-size: 0.95rem;
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 0.95rem;
+}
+
+.review-modal {
+  background-color: white;
+  border: 1px solid rgb(0, 0, 0);
+  padding: 2%;
+}
+.review-card {
+  background-color: white;
+  border: 1px solid rgb(0, 0, 0);
+  padding: 2%;
+  margin: 2%;
 }
 
 .review-card-ratings {
