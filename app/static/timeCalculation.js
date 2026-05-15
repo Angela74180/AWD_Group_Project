@@ -1,3 +1,4 @@
+// This function takes hours and minutes and converts them into a proper sentence
 function calcTime(hours, mins) {
     let sentence = " ";
     if (hours > 1){
