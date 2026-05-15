@@ -354,8 +354,6 @@ def submit_review():
     timing = data.get("timing")
     body = data.get("body")
 
-    print(timing)
-
     if taste != None and (taste > 5 or taste < 0):
         return jsonify({"success": False, "message": "Taste Rating Not Valid"}), 400
 
