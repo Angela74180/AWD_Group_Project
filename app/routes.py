@@ -1,3 +1,8 @@
+# Defines Flask routes for the application, handling both page rendering and JSON API requests
+# Performs database queries and complex data processing to construct recipe, user, and review views
+# Includes authentication checks, form validation, and user-specific state management, e.g. bookmarks, shopping lists, and profile data, 
+# and returns either Jinja-rendered pages or JSON responses for frontend interactivity
+
 from flask import render_template, request, redirect, url_for, session, jsonify, current_app
 from app import db
 from flask_login import login_user, logout_user, login_required, current_user

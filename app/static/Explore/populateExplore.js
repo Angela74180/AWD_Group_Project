@@ -1,3 +1,4 @@
+// Displays recipe banners on the Explore page and shows a message if no recipes match
 
 document.addEventListener("DOMContentLoaded", function () {
     populate(recipes_list);

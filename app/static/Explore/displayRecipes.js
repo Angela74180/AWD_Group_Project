@@ -1,3 +1,6 @@
+// Handles recipe filtering on the Explore page using
+// search text, tags, ingredients, appliances, and other filters
+
 document.addEventListener("DOMContentLoaded", function () {
 
     populate(recipes_list);

@@ -1,3 +1,5 @@
+// Collects the current Explore page filter selections and returns them as an object
+
 function get_search_reqs(){
     let tags = []
     let tags_div = document.getElementById("filter_tags").getElementsByTagName("input")
