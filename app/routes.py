@@ -800,7 +800,7 @@ def signup():
         if password != confirm_password:
             return render_template(
                 'signupPage.html',
-                error="Passwords do not match"
+                error="Password and Confirm Password must be the same"
             )
 
         user = User(username=username, email=email)

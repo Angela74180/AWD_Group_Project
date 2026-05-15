@@ -10,6 +10,7 @@
 <h1>Sign up</h1>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 {% if error %}
     <p class="error-message" style="color:red; font-weight:bold;">
         {{ error }}
@@ -23,6 +24,11 @@
 
 <form name="Sign Up" action="{{ url_for('main.signup') }}" onsubmit="return handleSignUpForm()" method="POST">
 >>>>>>> 2080a614984d315eb377e27b632bbd2113203213
+=======
+<p class="error-message" id="error">{{ error }}</p>
+
+<form name="Sign Up" action="{{ url_for('main.signup') }}" onsubmit="return handleSignUpForm()" method="POST">
+>>>>>>> d89bf3250a3997c4daeef4bc86855b2ff711b1c4
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
     <br>
 
