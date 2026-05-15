@@ -11,6 +11,42 @@ CookBook is a website that allows users to create their own recipes and allows o
 
 
 
+
+Launching the application:
+
+Python3:
+Ensure you have python3 installed.
+
+
+Cloning the Github Repository:
+Open a terminal window and navigate to a location where you would like the repository clone to go.
+In the terminal window, type:
+git clone https://github.com/Angela74180/AWD_Group_Project.git
+
+This will clone the repository.
+Now Navigate into AWD_Group_Project
+cd AWD_Group_Project
+
+
+Creating a venv:
+Run the following code to create a virtual environment:
+python3 -m venv venv
+
+
+Activating the Venv:
+
+Activate the venv. If you are using Linux, use the command:
+source venv/bin/activate
+
+If you are using a Microsoft Windows command prompt window, use the command:
+venv\Scripts\activate
+
+If you are on Windows but are using PowerShell instead of the command prompt, use the command:
+venv\Scripts\Activate.ps1
+
+
+Install Requirements.txt:
+Use the following command to install teh requirements:
 pip install -r requirements.txt
 
 
