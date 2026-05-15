@@ -66,7 +66,8 @@ class BasicTests(unittest.TestCase):
             data={
                 "username": "test",
                 "email": "another@test.com",
-                "password": "123"
+                "password": "123",
+                "confirm_password": "123"
             }
         )
 

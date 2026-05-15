@@ -835,7 +835,7 @@ def signup():
             db.session.rollback()
             return render_template(
                 'signupPage.html',
-                error="Username or email already in use"
+                error="Username or email already exists" 
             )
 
     return render_template('signupPage.html', error="")
