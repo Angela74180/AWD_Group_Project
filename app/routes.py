@@ -795,6 +795,13 @@ def signup():
         username = request.form['username']
         email = request.form['email']
         password = request.form['password']
+        confirm_password = request.form['confirm_password']
+
+        if password != confirm_password:
+            return render_template(
+                'signupPage.html',
+                error="Password and Confirm Password must be the same"
+            )
 
         user = User(username=username, email=email)
         user.set_password(password)
@@ -809,10 +816,10 @@ def signup():
             db.session.rollback()
             return render_template(
                 'signupPage.html',
-                error="Username or email already exists"
+                error="Username or email already in use"
             )
 
-    return render_template('signupPage.html')
+    return render_template('signupPage.html', error="")
 
 
 

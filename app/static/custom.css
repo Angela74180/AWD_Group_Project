@@ -111,7 +111,6 @@ select {
   gap:20px;
   align-items:center;
   margin-bottom:20px;
-  position:relative;
 }
 
 .intro button{
@@ -119,7 +118,7 @@ select {
   margin-right: 10px;
 
   background: white;
-  border: 1px solid #625d5b;
+  border: 1px solid #56534e;
 
   font-family:'DM Sans',sans-serif;
   font-size: 15px;
@@ -129,7 +128,7 @@ select {
 }
 
 .intro button:hover {
-  background: #fff3e0;
+  background: #ececec;
   transform: translateY(-2px);
 }
 
