@@ -1,3 +1,4 @@
+// This function splits time into cooking and prep or combines thme into a total
 function splitTime(timeDict){
     let container = document.getElementById("Time");
 

@@ -2,6 +2,7 @@ let ingredient_id_counter = 0;
 
 // document.addEventListener("DOMContentLoaded", addIngredient);
 
+// This function adds a new ingredient section to the create recipes page
 function addIngredient(ingredientDict) {
     ingredient_id_counter++;
 
@@ -49,11 +50,12 @@ function addIngredient(ingredientDict) {
     container.appendChild(newIngredient);
 }
 
+// This function removes the selected ingredient div from the create recipes page
 function removeIngredient(removeButton) {
     removeButton.target.parentElement.remove();
 }
 
-
+// This function adds a new ingredient input to the filter bar in the explore page
 function makeFilterIngredient(){
     let line = document.createElement("div");
     let remove = document.createElement("button");

@@ -2,6 +2,7 @@ let tag_id_counter = 0;
 
 // document.addEventListener("DOMContentLoaded", addTag);
 
+// This function adds a new tag section to the create recipes page
 function addTag(tagName) {
     tag_id_counter++;
 
@@ -18,10 +19,12 @@ function addTag(tagName) {
     container.appendChild(newTag);
 }
 
+// This function removes the selected tag div from the create recipes page
 function removeTag(removeButton) {
     removeButton.target.parentElement.remove();
 }
 
+// This function adds a new tag input to the filter bar in the explore page
 function makeFilterTag(){
     let line = document.createElement("div");
     let remove = document.createElement("button");

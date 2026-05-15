@@ -1,3 +1,4 @@
+// This function does frontend validation for the recipe form
 function handleRecipeForm() {
     //Time
     let time_split = document.getElementById("timeCheckbox").checked;

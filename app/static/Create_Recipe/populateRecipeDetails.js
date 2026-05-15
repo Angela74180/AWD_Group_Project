@@ -6,8 +6,8 @@ function handleQuotes(str) {
   return str.replace(/&/g, "&amp;").replace(/"/g, "&quot;");
 }
 
+// This function takes a recipe dictionary and inputs the contents into a create recipe page
 function populate(recipe_details_dict) {
-    console.log(recipe_details_dict)
 
     document.getElementById("recipeName").value = handleQuotes(recipe_details_dict["recipeName"]);
     document.getElementById("recipeType").value = handleQuotes(recipe_details_dict["recipeType"]);

@@ -2,6 +2,7 @@ let step_id_counter = 0;
 
 // document.addEventListener("DOMContentLoaded", addStep);
 
+// This function adds a new step section to the create recipes page
 function addStep(stepDict){
     step_id_counter++;
 
@@ -43,6 +44,7 @@ function addStep(stepDict){
     container.appendChild(newStep);
 }
 
+// This function removes the selected step div from the create recipes page
 function removeStep(removeButton){
     removeButton.target.parentElement.remove();
 
