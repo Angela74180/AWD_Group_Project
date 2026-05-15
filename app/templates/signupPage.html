@@ -1,56 +1,37 @@
 {% extends "base.html" %}
 
-{% block title %}Sign Up - CookBook{% endblock %}
-
-{% block scripts %}
-<script src="{{ url_for('static', filename='Login_and_Sign_Up/signup.js') }}"></script>
-{% endblock %}
+{% block title %}Log in - CookBook{% endblock %}
 
 {% block content %}
-<h1>Sign up</h1>
+<h1>Log in</h1>
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 {% if error %}
-    <p class="error-message" style="color:red; font-weight:bold;">
+    <p style="color: red; font-weight: bold;">
         {{ error }}
     </p>
 {% endif %}
 
-
-<form name="Sign Up" action="{{ url_for('main.signup') }}" method="POST">
-=======
 <p class="error-message" id="error">{{ error }}</p>
 
-<form name="Sign Up" action="{{ url_for('main.signup') }}" onsubmit="return handleSignUpForm()" method="POST">
->>>>>>> 2080a614984d315eb377e27b632bbd2113203213
-=======
-<p class="error-message" id="error">{{ error }}</p>
-
-<form name="Sign Up" action="{{ url_for('main.signup') }}" onsubmit="return handleSignUpForm()" method="POST">
->>>>>>> d89bf3250a3997c4daeef4bc86855b2ff711b1c4
+<form name="Log In" action="{{ url_for('main.login') }}" method="POST">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
     <br>
 
     <fieldset class="outer_fieldset">
         <legend>Account</legend>
-        <span style="display: inline-block; width: 130px">Username: </span><input id="username" name="username" type="text" autocomplete="username" required>
+        Username:
+        <input id="username" name="username" type="text" autocomplete="username" required autofocus>
         <br>
         <br>
-        <span style="display: inline-block; width: 130px">Email: </span><input id="email" name="email" type="email" autocomplete="email" required>
-        <br>
-        <br>
-        <span style="display: inline-block; width: 130px">Password: </span><input id="password" name="password" type="password" zzzautocomplete="new-password" required>
-        <br>
-        <br>
-        <span style="display: inline-block; width: 130px">Confirm Password: </span><input id="confirmPassword" name="confirm_password" type="password" zzzautocomplete="new-password" required>
+        Password:
+        <input id="password" name="password" type="password" autocomplete="current-password" required>
     </fieldset>
     <br>
     <br>
 
-    <button type="submit" class="btn btn-primary">Sign up</button>
+    <button type="submit" class="btn btn-primary">Log in</button>
     <br>
     <br>
-    <p>Already have an account? <a href="{{ url_for('main.login') }}">Log in</a></p>
+    <p>Don't have an account? <a href="{{ url_for('main.signup') }}">Sign up</a></p>
 </form>
 {% endblock %}
