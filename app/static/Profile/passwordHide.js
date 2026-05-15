@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function() {
             let input = document.getElementById(btn.dataset.target);
             let showing = input.type === "password";
             input.type = showing ? "text" : "password";
-            btn.textContent = showing ? "🙈" : "👁️";
+            btn.innerHTML = showing ? '<i class="bi bi-eye-slash"></i>' : '<i class="bi bi-eye"></i>';
         });
     }
 

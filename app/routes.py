@@ -23,7 +23,7 @@ def index():
 
     signed_in = current_user.is_authenticated
 
-    chosen_recipes = Recipe.query.filter_by(visibility="Public").all()
+    chosen_recipes = Recipe.query.filter_by(visibility="Public").order_by(db.func.random()).limit(6).all()
     
     
     for recipe in chosen_recipes:
@@ -58,6 +58,7 @@ def index():
                     for ra in recipe.appliances
                 ],
 
+    
                 ingredients=[
                     Ingredient.query.filter_by(id=ri.ingredient_id).first().name
                     for ri in recipe.ingredients
